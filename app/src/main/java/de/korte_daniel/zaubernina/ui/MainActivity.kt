@@ -9,13 +9,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +25,8 @@ import de.korte_daniel.zaubernina.domain.naechstesLevel
 import de.korte_daniel.zaubernina.domain.sterneFuer
 import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
 import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
+import de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirm
+import de.korte_daniel.zaubernina.ui.parent.Elternschloss
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 import de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirm
 import kotlinx.coroutines.launch
@@ -46,6 +47,10 @@ private sealed interface Ansicht {
     data object Reise : Ansicht
     data class Ueben(val level: Int) : Ansicht
     data class Geschafft(val level: Int, val neueSterne: Int) : Ansicht
+
+    /** Die Rechenaufgabe vor dem Elternbereich. */
+    data object Schloss : Ansicht
+    data object Einstellungen : Ansicht
 }
 
 @Composable
@@ -69,9 +74,8 @@ private fun Zaubernina() {
                     is Ansicht.Reise -> ReiseBildschirm(
                         geschafft = fortschritt.geschafft,
                         sterne = fortschritt.sterne,
-                        thema = fortschritt.thema,
                         onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
-                        onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
+                        onElternbereich = { ansicht = Ansicht.Schloss },
                     )
 
                     is Ansicht.Ueben -> UebungsBildschirm(
@@ -95,6 +99,22 @@ private fun Zaubernina() {
                             ansicht = if (naechstes != null) Ansicht.Ueben(naechstes) else Ansicht.Reise
                         },
                         onZurReise = { ansicht = Ansicht.Reise },
+                    )
+
+                    is Ansicht.Schloss -> Elternschloss(
+                        onGeoeffnet = { ansicht = Ansicht.Einstellungen },
+                        onAbbrechen = { ansicht = Ansicht.Reise },
+                    )
+
+                    is Ansicht.Einstellungen -> EinstellungenBildschirm(
+                        thema = fortschritt.thema,
+                        genauigkeit = fortschritt.genauigkeit,
+                        geschafft = fortschritt.geschafft,
+                        sterne = fortschritt.sterne,
+                        onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
+                        onGenauigkeitWechsel = { neu -> bereich.launch { speicher.setzeGenauigkeit(neu) } },
+                        onFortschrittZuruecksetzen = { bereich.launch { speicher.fortschrittZuruecksetzen() } },
+                        onSchliessen = { ansicht = Ansicht.Reise },
                     )
                 }
             }

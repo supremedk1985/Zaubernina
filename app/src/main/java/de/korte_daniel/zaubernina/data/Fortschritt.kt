@@ -76,8 +76,14 @@ class FortschrittSpeicher(private val context: Context) {
         context.speicher.edit { it[SCHLUESSEL_GENAUIGKEIT] = genauigkeit.name }
     }
 
-    /** Für den Elternbereich, wenn er kommt. */
-    suspend fun allesZuruecksetzen() {
-        context.speicher.edit { it.clear() }
+    /**
+     * Setzt NUR den Spielstand zurück, nicht die Einstellungen. Wer den Fortschritt
+     * löscht, will selten auch das Thema und die Genauigkeit neu wählen müssen.
+     */
+    suspend fun fortschrittZuruecksetzen() {
+        context.speicher.edit { p ->
+            p[SCHLUESSEL_GESCHAFFT] = 0
+            p[SCHLUESSEL_STERNE] = 0
+        }
     }
 }

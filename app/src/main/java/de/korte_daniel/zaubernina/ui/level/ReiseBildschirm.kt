@@ -64,9 +64,8 @@ private enum class Knotenzustand { GESCHAFFT, OFFEN, ZU }
 fun ReiseBildschirm(
     geschafft: Int,
     sterne: Int,
-    thema: Thema,
     onLevelWaehlen: (Int) -> Unit,
-    onThemaWechsel: (Thema) -> Unit,
+    onElternbereich: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
@@ -82,6 +81,7 @@ fun ReiseBildschirm(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             ZauberText("Deine Reise", 23.sp, farben.schrift, FontWeight.SemiBold)
+            Row(verticalAlignment = Alignment.CenterVertically) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(7.dp),
@@ -94,6 +94,35 @@ fun ReiseBildschirm(
                     zeichneStern(Offset(size.width / 2f, size.height / 2f), size.width / 2f, farben.akzent)
                 }
                 ZauberText("$sterne", 17.sp, farben.schrift, FontWeight.SemiBold)
+            }
+            // Der Zugang zum Elternbereich: klein, blass und ohne Beschriftung. Dahinter
+            // liegt die Rechenaufgabe — hier soll nichts zum Ausprobieren einladen.
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(44.dp)
+                    .clip(RoundedCornerShape(farben.ecke))
+                    .clickable(onClick = onElternbereich),
+                contentAlignment = Alignment.Center,
+            ) {
+                Canvas(modifier = Modifier.size(19.dp)) {
+                    val mitte = Offset(size.width / 2f, size.height / 2f)
+                    val strich = StrichStil(width = 2f * density, cap = StrokeCap.Round)
+                    drawCircle(farben.schriftSchwach, size.minDimension * 0.24f, mitte, style = strich)
+                    for (i in 0 until 8) {
+                        val w = i * Math.PI.toFloat() / 4f
+                        val innen = size.minDimension * 0.34f
+                        val aussen = size.minDimension * 0.5f
+                        drawLine(
+                            color = farben.schriftSchwach,
+                            start = Offset(mitte.x + kotlin.math.cos(w) * innen, mitte.y + kotlin.math.sin(w) * innen),
+                            end = Offset(mitte.x + kotlin.math.cos(w) * aussen, mitte.y + kotlin.math.sin(w) * aussen),
+                            strokeWidth = 2f * density,
+                            cap = StrokeCap.Round,
+                        )
+                    }
+                }
+            }
             }
         }
 
@@ -146,31 +175,6 @@ fun ReiseBildschirm(
             }
         }
 
-        // BEHELF: Themenwahl. Zieht mit dem Elternbereich um, sobald es ihn gibt.
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Thema.entries.forEach { t ->
-                val aktiv = t == thema
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(farben.ecke))
-                        .background(if (aktiv) farben.akzent else farben.flaeche)
-                        .border(
-                            width = if (farben.flaecheRand == Color.Transparent) 0.dp else 1.5.dp,
-                            color = if (aktiv) Color.Transparent else farben.flaecheRand,
-                            shape = RoundedCornerShape(farben.ecke),
-                        )
-                        .clickable { onThemaWechsel(t) }
-                        .padding(vertical = 13.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    ZauberText(t.anzeigename, 13.sp, if (aktiv) farben.aufAkzent else farben.schriftSchwach)
-                }
-            }
-        }
     }
 }
 
