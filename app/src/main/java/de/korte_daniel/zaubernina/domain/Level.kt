@@ -49,3 +49,25 @@ fun sterneFuer(index: Int, geschafft: Int): Int = if (index == geschafft) 3 else
 
 /** Das nächste Level nach diesem, oder null, wenn die Reise zu Ende ist. */
 fun naechstesLevel(index: Int): Int? = (index + 1).takeIf { it <= LEVEL.lastIndex }
+
+/*
+ * DIE ZAHLEN ZWISCHENDURCH. Nach jedem geschafften Wort liegt die Ziffer des Levels als
+ * freiwilliger Zwischenstopp auf dem Weg — sie sperrt NICHTS (Daniels Entscheidung vom
+ * 2026-08-28), bringt aber beim ersten Schreiben einen Zusatzstern.
+ *
+ * Gemerkt wird ein Bitsatz: Bit i gesetzt = die Ziffer nach Level i ist geschrieben.
+ * Damit gilt derselbe Melk-Schutz wie bei den Wörtern — beim zweiten Mal gibt es nichts.
+ */
+
+/** Eine Zahl ist erreichbar, sobald das Wort davor geschafft ist. */
+fun zahlOffen(index: Int, geschafft: Int): Boolean = index < geschafft
+
+fun zahlIstGeschrieben(zahlen: Int, index: Int): Boolean = (zahlen shr index) and 1 == 1
+
+fun mitZahl(zahlen: Int, index: Int): Int = zahlen or (1 shl index)
+
+/** Ein Zusatzstern, aber nur beim ersten Mal. */
+fun sterneFuerZahl(zahlen: Int, index: Int): Int = if (zahlIstGeschrieben(zahlen, index)) 0 else 1
+
+/** Die Ziffer, die nach Level [index] geübt wird — schlicht die Levelnummer. */
+fun zifferFuer(index: Int): Int = index + 1

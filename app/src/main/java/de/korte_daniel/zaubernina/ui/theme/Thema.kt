@@ -47,6 +47,11 @@ data class ZauberFarben(
     val schriftSchwach: Color,
     val akzent: Color,
     val aufAkzent: Color,
+    /** Die Farbwelt der Zwischendurch-Zahlen — bewusst eine ANDERE als die der Wörter,
+     * damit ein Kind auf einen Blick sieht: das hier ist etwas anderes. */
+    val zahlAkzent: Color,
+    val aufZahlAkzent: Color,
+    val zahlSpur: List<Color>,
     /** Schreiblinien im Hintergrund des Zeichens. Transparent = keine. */
     val schreiblinien: Color,
     val ecke: Dp,
@@ -80,6 +85,9 @@ private val NACHTHIMMEL_FARBEN = ZauberFarben(
     schriftSchwach = Color(0x73FFFFFF),
     akzent = Color(0xFFFFC53D),
     aufAkzent = Color(0xFF241A52),
+    zahlAkzent = Color(0xFF8FD5FF),
+    aufZahlAkzent = Color(0xFF10304F),
+    zahlSpur = listOf(Color(0xFFEAF9FF)),
     schreiblinien = Color.Transparent,
     ecke = 16.dp,
     dunkel = true,
@@ -100,6 +108,9 @@ private val KREIDETAFEL_FARBEN = ZauberFarben(
     schriftSchwach = Color(0x8CF4F1E4),
     akzent = Color(0xFFF5E6A8),
     aufAkzent = Color(0xFF2E3E35),
+    zahlAkzent = Color(0xFFA9D8E8),
+    aufZahlAkzent = Color(0xFF2E3E35),
+    zahlSpur = listOf(Color(0xFFEAF6FA)),
     schreiblinien = Color.Transparent,
     ecke = 8.dp,
     dunkel = true,
@@ -121,6 +132,10 @@ private val PAPIER_FARBEN = ZauberFarben(
     schriftSchwach = Color(0xFFA79E8A),
     akzent = Color(0xFFE0562F),
     aufAkzent = Color(0xFFFFFFFF),
+    zahlAkzent = Color(0xFF3E7EC2),
+    aufZahlAkzent = Color(0xFFFFFFFF),
+    // Blau-lila-Band statt des orange-lila der Buchstaben.
+    zahlSpur = listOf(Color(0xFF3E7EC2), Color(0xFF9B4DCA)),
     schreiblinien = Color(0xFFEFE6D2),
     ecke = 20.dp,
     dunkel = false,
@@ -159,3 +174,18 @@ fun ZauberTheme(thema: Thema, inhalt: @Composable () -> Unit) {
         content = inhalt,
     )
 }
+
+/**
+ * Die Farbwelt für einen Zahlen-Bildschirm: Akzent, Spur und Funken wechseln auf die
+ * Zahlfarbe, alles andere bleibt. Dasselbe Muster wie CurruBikes rainContrastColors —
+ * ein CompositionLocalProvider legt sie lokal über den Bildschirm, das globale Thema
+ * bleibt unangetastet.
+ */
+fun ZauberFarben.fuerZahlen(): ZauberFarben = copy(
+    akzent = zahlAkzent,
+    aufAkzent = aufZahlAkzent,
+    spurSchein = zahlAkzent,
+    spurKern = zahlSpur,
+    funken = listOf(zahlSpur.first(), zahlAkzent, akzent),
+    startpunkt = zahlAkzent.copy(alpha = 0.75f),
+)

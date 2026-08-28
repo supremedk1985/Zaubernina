@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import de.korte_daniel.zaubernina.data.grundschrift.BREITESTE_ZEICHENBREITE
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.domain.Glyph
-import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.logic.StrokeTracker
 import de.korte_daniel.zaubernina.logic.Zug
@@ -58,22 +57,26 @@ import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 
 /**
- * Ein Level schreiben: Buchstabe für Buchstabe, jeder mit Schablone, Startpunkt, Pfeilen
- * und der Zauberlinie unter dem Finger.
+ * Zeichen nachfahren: jedes mit Schablone, Startpunkt, Pfeilen und der Zauberlinie unter
+ * dem Finger. Für ein Wort führt die Kachelzeile oben durch die Buchstaben; für eine
+ * einzelne Zwischendurch-Zahl gibt es keine Kacheln und keinen Zwischenjubel — nach dem
+ * Zeichen geht es direkt weiter (in den Zählmoment).
  *
  * Noch nicht drin: die Stufen „Zeigen" und „Aus dem Kopf", Töne und Haptik.
  */
 @Composable
 fun UebungsBildschirm(
-    level: Level,
+    wort: String,
+    kopfzeile: (buchstabeIndex: Int) -> String,
     genauigkeit: Genauigkeit,
     onZurueck: () -> Unit,
-    onLevelFertig: () -> Unit,
+    onFertig: () -> Unit,
     modifier: Modifier = Modifier,
+    ohneZwischenjubel: Boolean = false,
 ) {
     val farben = ZauberTheme.farben
-    var buchstabeIndex by remember(level) { mutableIntStateOf(0) }
-    val zeichen = level.wort.getOrNull(buchstabeIndex) ?: return
+    var buchstabeIndex by remember(wort) { mutableIntStateOf(0) }
+    val zeichen = wort.getOrNull(buchstabeIndex) ?: return
     val glyphe: Glyph = glyph(zeichen) ?: return
 
     val abgetastet = remember(glyphe) { glyphe.striche.map { it.abtasten(120) } }
@@ -137,20 +140,21 @@ fun UebungsBildschirm(
                 }
             }
             ZauberText(
-                text = "Level ${level.nummer} · Buchstabe ${buchstabeIndex + 1} von ${level.wort.length}",
+                text = kopfzeile(buchstabeIndex),
                 groesse = 15.sp,
                 farbe = farben.schriftSchwach,
             )
             Box(modifier = Modifier.size(46.dp))
         }
 
-        // Das Wort mit dem gerade geübten Buchstaben hervorgehoben.
-        Row(
+        // Das Wort mit dem gerade geübten Buchstaben hervorgehoben — bei einem
+        // einzelnen Zeichen wäre eine einzelne Kachel nur Rauschen.
+        if (wort.length > 1) Row(
             modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            level.wort.forEachIndexed { i, c ->
+            wort.forEachIndexed { i, c ->
                 val aktiv = i == buchstabeIndex
                 Box(
                     modifier = Modifier
@@ -291,8 +295,16 @@ fun UebungsBildschirm(
                 }
             }
 
-            if (buchstabeFertig) {
-                val letzter = buchstabeIndex == level.wort.lastIndex
+            // Ohne Zwischenjubel (Zahlen): direkt weiter, der Zählmoment übernimmt die Bühne.
+            if (buchstabeFertig && ohneZwischenjubel) {
+                LaunchedEffect(buchstabeFertig) {
+                    kotlinx.coroutines.delay(650)
+                    onFertig()
+                }
+            }
+
+            if (buchstabeFertig && !ohneZwischenjubel) {
+                val letzter = buchstabeIndex == wort.lastIndex
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -313,7 +325,7 @@ fun UebungsBildschirm(
                             .background(farben.akzent)
                             .clickable {
                                 if (letzter) {
-                                    onLevelFertig()
+                                    onFertig()
                                 } else {
                                     feld.leeren()
                                     buchstabeIndex++

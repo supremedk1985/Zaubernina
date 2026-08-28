@@ -20713,10 +20713,11 @@ de.korte_daniel.zaubernina.data.Fortschritt:
     public void <init>()
     public final int component1()
     public final int component2()
-    public final de.korte_daniel.zaubernina.ui.theme.Thema component3()
-    public final de.korte_daniel.zaubernina.logic.Genauigkeit component4()
-    public final de.korte_daniel.zaubernina.data.Fortschritt copy(int,int,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit)
-    public static synthetic de.korte_daniel.zaubernina.data.Fortschritt copy$default(de.korte_daniel.zaubernina.data.Fortschritt,int,int,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,int,java.lang.Object)
+    public final int component3()
+    public final de.korte_daniel.zaubernina.ui.theme.Thema component4()
+    public final de.korte_daniel.zaubernina.logic.Genauigkeit component5()
+    public final de.korte_daniel.zaubernina.data.Fortschritt copy(int,int,int,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit)
+    public static synthetic de.korte_daniel.zaubernina.data.Fortschritt copy$default(de.korte_daniel.zaubernina.data.Fortschritt,int,int,int,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,int,java.lang.Object)
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$special$$inlined$map$1$2$1:
     int I$0
     java.lang.Object L$4
@@ -20732,6 +20733,7 @@ de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     public static final java.util.Map getGRUNDSCHRIFT()
     public static final java.util.List getKLEINBUCHSTABEN()
     public static final java.util.List getWOERTER()
+    public static final java.util.List getZIFFERN()
 de.korte_daniel.zaubernina.domain.Glyph:
     public final char component1()
     public final java.lang.String component2()
@@ -20810,6 +20812,17 @@ de.korte_daniel.zaubernina.ui.Ansicht$Ueben:
     public final int component1()
     public final de.korte_daniel.zaubernina.ui.Ansicht$Ueben copy(int)
     public static synthetic de.korte_daniel.zaubernina.ui.Ansicht$Ueben copy$default(de.korte_daniel.zaubernina.ui.Ansicht$Ueben,int,int,java.lang.Object)
+de.korte_daniel.zaubernina.ui.Ansicht$Zaehlen:
+    public static final int $stable
+    public final int component1()
+    public final boolean component2()
+    public final de.korte_daniel.zaubernina.ui.Ansicht$Zaehlen copy(int,boolean)
+    public static synthetic de.korte_daniel.zaubernina.ui.Ansicht$Zaehlen copy$default(de.korte_daniel.zaubernina.ui.Ansicht$Zaehlen,int,boolean,int,java.lang.Object)
+de.korte_daniel.zaubernina.ui.Ansicht$Zahl:
+    public static final int $stable
+    public final int component1()
+    public final de.korte_daniel.zaubernina.ui.Ansicht$Zahl copy(int)
+    public static synthetic de.korte_daniel.zaubernina.ui.Ansicht$Zahl copy$default(de.korte_daniel.zaubernina.ui.Ansicht$Zahl,int,int,java.lang.Object)
 de.korte_daniel.zaubernina.ui.components.Boxabbildung:
     public static final int $stable
     public synthetic void <init>(float,float,float,int,kotlin.jvm.internal.DefaultConstructorMarker)
@@ -20837,9 +20850,12 @@ de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     public final long component13-0d7_KjU()
     public final long component14-0d7_KjU()
     public final long component15-0d7_KjU()
-    public final float component16-D9Ej5fM()
-    public final boolean component17()
+    public final long component16-0d7_KjU()
+    public final java.util.List component17()
+    public final long component18-0d7_KjU()
+    public final float component19-D9Ej5fM()
     public final long component2-0d7_KjU()
+    public final boolean component20()
     public final long component3-0d7_KjU()
     public final java.util.List component4()
     public final long component5-0d7_KjU()
@@ -20847,8 +20863,6 @@ de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     public final long component7-0d7_KjU()
     public final long component8-0d7_KjU()
     public final long component9-0d7_KjU()
-    public final de.korte_daniel.zaubernina.ui.theme.ZauberFarben copy-WtBMID4(java.util.List,long,long,java.util.List,long,java.util.List,long,long,long,long,long,long,long,long,long,float,boolean)
-    public static synthetic de.korte_daniel.zaubernina.ui.theme.ZauberFarben copy-WtBMID4$default(de.korte_daniel.zaubernina.ui.theme.ZauberFarben,java.util.List,long,long,java.util.List,long,java.util.List,long,long,long,long,long,long,long,long,long,float,boolean,int,java.lang.Object)
     public final java.util.List getHintergrund()
 de.korte_daniel.zaubernina.ui.theme.ZauberTheme:
     public static final int $stable
@@ -21133,7 +21147,6 @@ kotlin.annotation.Retention
 kotlin.annotation.Target
 kotlin.collections.AbstractCollection:
     public abstract java.util.Iterator iterator()
-kotlin.collections.AbstractIterator
 kotlin.collections.AbstractList$Companion:
     public final void checkBoundsIndexes$kotlin_stdlib(int,int,int)
 kotlin.collections.AbstractList:
@@ -23224,7 +23237,6 @@ kotlin.collections.CollectionsKt__CollectionsKt:
     public static final java.lang.Object[] collectionToArrayCommonImpl(java.util.Collection)
     public static final java.lang.Object[] collectionToArrayCommonImpl(java.util.Collection,java.lang.Object[])
     private static final boolean containsAll(java.util.Collection,java.util.Collection)
-    public static final kotlin.ranges.IntRange getIndices(java.util.Collection)
     private static final java.lang.Object ifEmpty(java.util.Collection,kotlin.jvm.functions.Function0)
     private static final boolean isNotEmpty(java.util.Collection)
     private static final boolean isNullOrEmpty(java.util.Collection)
@@ -23337,7 +23349,6 @@ kotlin.collections.CollectionsKt___CollectionsKt:
     public static final double averageOfInt(java.lang.Iterable)
     public static final double averageOfLong(java.lang.Iterable)
     public static final double averageOfShort(java.lang.Iterable)
-    public static final java.util.List chunked(java.lang.Iterable,int)
     public static final java.util.List chunked(java.lang.Iterable,int,kotlin.jvm.functions.Function1)
     private static final java.lang.Object component1(java.util.List)
     private static final java.lang.Object component2(java.util.List)
@@ -23537,7 +23548,6 @@ kotlin.collections.CollectionsKt___CollectionsKt:
     public static final java.util.Set toMutableSet(java.lang.Iterable)
     public static final short[] toShortArray(java.util.Collection)
     public static final java.util.Set union(java.lang.Iterable,java.lang.Iterable)
-    public static final java.util.List windowed(java.lang.Iterable,int,int,boolean)
     public static final java.util.List windowed(java.lang.Iterable,int,int,boolean,kotlin.jvm.functions.Function1)
     public static synthetic java.util.List windowed$default(java.lang.Iterable,int,int,boolean,int,java.lang.Object)
     public static synthetic java.util.List windowed$default(java.lang.Iterable,int,int,boolean,kotlin.jvm.functions.Function1,int,java.lang.Object)
@@ -23738,8 +23748,8 @@ kotlin.collections.ReversedList$listIterator$1
 kotlin.collections.ReversedList
 kotlin.collections.ReversedListReadOnly$listIterator$1:
     public final java.util.ListIterator getDelegateIterator()
-kotlin.collections.RingBuffer$iterator$1
-kotlin.collections.RingBuffer
+kotlin.collections.RingBuffer:
+    private final int forward(int,int)
 kotlin.collections.SetsKt:
     private void <init>()
 kotlin.collections.SetsKt__SetsJVMKt:
@@ -23779,9 +23789,9 @@ kotlin.collections.SetsKt___SetsKt:
     public static final java.util.Set plus(java.util.Set,java.lang.Object[])
     private static final java.util.Set plusElement(java.util.Set,java.lang.Object)
 kotlin.collections.ShortIterator
-kotlin.collections.SlidingWindowKt$windowedIterator$1
 kotlin.collections.SlidingWindowKt$windowedSequence$$inlined$Sequence$1
-kotlin.collections.SlidingWindowKt
+kotlin.collections.SlidingWindowKt:
+    public static final kotlin.sequences.Sequence windowedSequence(kotlin.sequences.Sequence,int,int,boolean,boolean)
 kotlin.collections.State
 kotlin.collections.TypeAliasesKt
 kotlin.collections.UArraySortingKt
@@ -30680,7 +30690,8 @@ androidx.compose.runtime.CompositionLocal:
     public abstract androidx.compose.runtime.ValueHolder updatedStateOf$runtime(androidx.compose.runtime.ProvidedValue,androidx.compose.runtime.ValueHolder)
 androidx.compose.runtime.CompositionLocalAccessorScope:
     public abstract java.lang.Object getCurrentValue()
-androidx.compose.runtime.CompositionLocalKt$$InternalSyntheticLambda$2$35d925dfd929598cf1edc3edf7684f36b2f1135d8a211f531a79ac2c4b7efaa2$0
+androidx.compose.runtime.CompositionLocalKt$$InternalSyntheticLambda$2$35d925dfd929598cf1edc3edf7684f36b2f1135d8a211f531a79ac2c4b7efaa2$0:
+    public final synthetic int f$2
 androidx.compose.runtime.CompositionLocalKt:
     public static androidx.compose.runtime.DynamicProvidableCompositionLocal compositionLocalOf$default(kotlin.jvm.functions.Function0)
 androidx.compose.runtime.CompositionLocalMap$Companion:
@@ -31051,7 +31062,6 @@ androidx.compose.runtime.ProvidableCompositionLocal:
     static void <clinit>()
     public abstract androidx.compose.runtime.ProvidedValue provides()
     public final androidx.compose.runtime.ProvidedValue providesDefault(java.lang.Object)
-    public abstract androidx.compose.runtime.ValueHolder updatedStateOf$runtime(androidx.compose.runtime.ProvidedValue,androidx.compose.runtime.ValueHolder)
 androidx.compose.runtime.ProvidedValue:
     public static final int $stable
     public final kotlin.jvm.functions.Function1 compute
@@ -31909,7 +31919,6 @@ androidx.compose.runtime.internal.PersistentCompositionLocalHashMap:
     public final java.lang.Object get()
     public final java.lang.Object getCurrentValue()
     public final bridge androidx.compose.runtime.ValueHolder getOrDefault()
-    public final androidx.compose.runtime.internal.PersistentCompositionLocalHashMap putValue(androidx.compose.runtime.CompositionLocal,androidx.compose.runtime.ValueHolder)
 androidx.compose.runtime.internal.PersistentCompositionLocalMapKt
 androidx.compose.runtime.internal.PlatformOptimizedCancellationException:
     public static final int $stable
@@ -39661,6 +39670,7 @@ de.korte_daniel.zaubernina.data.Fortschritt:
     public static int getGeschafft()
     public static int getSterne()
     public static de.korte_daniel.zaubernina.ui.theme.Thema getThema()
+    public static int getZahlen()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$fortschrittZuruecksetzen$2:
     public int label
     public final java.lang.Object invoke$23()
@@ -39688,6 +39698,11 @@ de.korte_daniel.zaubernina.data.FortschrittSpeicher$special$$inlined$map$1$2$1:
     public java.lang.Object L$1
     public java.lang.Object L$2
     public java.lang.Object L$3
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$zahlGeschrieben$1:
+    public int I$0
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$zahlGeschrieben$2:
+    public int label
+    public final java.lang.Object invoke$23()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher:
     public static final int $stable
     static void <clinit>()
@@ -39695,9 +39710,12 @@ de.korte_daniel.zaubernina.data.FortschrittSpeicher:
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     public static final de.korte_daniel.zaubernina.domain.Glyph A_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph A_KLEIN
+    public static final de.korte_daniel.zaubernina.domain.Glyph DREI
     public static final de.korte_daniel.zaubernina.domain.Glyph D_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph EINS
     public static final java.util.List EIN_PFEIL
     public static final de.korte_daniel.zaubernina.domain.Glyph E_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph FUENF
     public static final java.util.List GROSSBUCHSTABEN
     public static final de.korte_daniel.zaubernina.domain.Glyph H_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph I_GROSS
@@ -39709,13 +39727,19 @@ de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     public static final de.korte_daniel.zaubernina.domain.Glyph N_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph P_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph R_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph SECHS
+    public static final de.korte_daniel.zaubernina.domain.Glyph SIEBEN
     public static final de.korte_daniel.zaubernina.domain.Glyph T_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph VIER
+    public static final java.util.List ZIFFERN
+    public static final de.korte_daniel.zaubernina.domain.Glyph ZWEI
     public static final de.korte_daniel.zaubernina.domain.Glyph glyph(char)
+    public static final de.korte_daniel.zaubernina.domain.GlyphPoint p(float,float)
 de.korte_daniel.zaubernina.domain.Glyph:
     public static final int $stable
     static void <clinit>()
     public final java.util.List getStriche()
-    public static char getZeichen()
+    public final char getZeichen()
 de.korte_daniel.zaubernina.domain.GlyphKt:
     public static final de.korte_daniel.zaubernina.domain.GlyphPoint endpunkt(de.korte_daniel.zaubernina.domain.StrokeSegment)
 de.korte_daniel.zaubernina.domain.GlyphPoint:
@@ -39725,10 +39749,12 @@ de.korte_daniel.zaubernina.domain.GlyphPoint:
 de.korte_daniel.zaubernina.domain.Level:
     public static final int $stable
     static void <clinit>()
-    public final int getNummer()
-    public final java.lang.String getWort()
+    public static int getNummer()
+    public static java.lang.String getWort()
 de.korte_daniel.zaubernina.domain.LevelKt:
     public static final java.lang.Integer naechstesLevel(int)
+    public static final int sterneFuerZahl(int,int)
+    public static final boolean zahlIstGeschrieben(int,int)
 de.korte_daniel.zaubernina.domain.Stroke:
     static void <clinit>()
     public synthetic void <init>(de.korte_daniel.zaubernina.domain.GlyphPoint,java.util.List,java.util.List)
@@ -39769,6 +39795,13 @@ de.korte_daniel.zaubernina.ui.Ansicht$Geschafft:
 de.korte_daniel.zaubernina.ui.Ansicht$Ueben:
     static void <clinit>()
     public final int getLevel()
+de.korte_daniel.zaubernina.ui.Ansicht$Zaehlen:
+    static void <clinit>()
+    public static boolean getBonusStern()
+    public final int getLevel()
+de.korte_daniel.zaubernina.ui.Ansicht$Zahl:
+    static void <clinit>()
+    public final int getLevel()
 de.korte_daniel.zaubernina.ui.ComposableSingletons$MainActivityKt:
     public static final de.korte_daniel.zaubernina.ui.ComposableSingletons$MainActivityKt INSTANCE
     public static kotlin.jvm.functions.Function2 getLambda$-626739097$app()
@@ -39777,14 +39810,19 @@ de.korte_daniel.zaubernina.ui.MainActivity:
     static void <clinit>()
 de.korte_daniel.zaubernina.ui.MainActivityKt$$InternalSyntheticLambda$2$7fc67105ae785c447e1ce4e3231f80bc336425e04b78c6f4235617bbbe3cb146$1:
     public final synthetic int f$0
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$10$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$13$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$11$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$14$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$4$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$15$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$9$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$6$1$1:
     public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$2$1$8$1$1$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt:
+    public static synthetic java.lang.String $r8$lambda$A8a3oQG0m_a0lu5NvkhK-m-mD9U()
+    public static final java.lang.String Zaubernina$lambda$5$1$0$6$0$0()
 de.korte_daniel.zaubernina.ui.components.Boxabbildung:
     static void <clinit>()
     public static float getSkala()
@@ -39820,13 +39858,19 @@ de.korte_daniel.zaubernina.ui.level.GeschafftBildschirmKt$$InternalSyntheticLamb
     public final synthetic int f$6
 de.korte_daniel.zaubernina.ui.level.Knotenzustand:
     public static final synthetic kotlin.enums.EnumEntries $ENTRIES
-de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$4$4f67fe100238b5dbb3cc03d7aabaff77b338d7cdba2152435c7f4e6935466612$3:
-    public final synthetic int f$5
-    public final synthetic int f$6
+de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$4$674d71f3237bfdc138bce01f06fafbfd10c671ca4a5883523d6b2228c46df429$3:
+    public final synthetic int f$7
+    public final synthetic int f$8
 de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$6$90dff334e080feb962a28078d190895e4662420a938287c437dc6777dfdc6a10$1:
     public final synthetic int f$5
     public final synthetic int f$6
+de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$6$e1e1edbaae1b4f7e46f9640ef2ad7c6c61bbcb10f7ce363b0ee57b92bd99de22$1:
+    public final synthetic int f$6
+    public final synthetic int f$7
 de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$WhenMappings
+de.korte_daniel.zaubernina.ui.level.ZaehlBildschirmKt$$InternalSyntheticLambda$5$e340f8a65ee67963902f9e7bbe6ddd594b542ff566d77fbd85cdd4e5934a5866$3:
+    public final synthetic int f$4
+    public final synthetic int f$5
 de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$4$da8f09bd7c3c9216f23968aa7a87446b0bf92b06f32f87f4a583e9e83f2fc7e5$3:
     public final synthetic int f$10
     public final synthetic int f$9
@@ -39853,8 +39897,10 @@ de.korte_daniel.zaubernina.ui.theme.ThemaKt$$InternalSyntheticLambda$3$4c8607f03
 de.korte_daniel.zaubernina.ui.theme.ThemaKt$WhenMappings
 de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     static void <clinit>()
+    public static de.korte_daniel.zaubernina.ui.theme.ZauberFarben copy-jgzQs70()
     public final long getAkzent-0d7_KjU()
     public final long getAufAkzent-0d7_KjU()
+    public static long getAufZahlAkzent-0d7_KjU()
     public final boolean getDunkel()
     public final float getEcke-D9Ej5fM()
     public final long getFlaeche-0d7_KjU()
@@ -39869,22 +39915,17 @@ de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     public static java.util.List getSpurKern()
     public static long getSpurSchein-0d7_KjU()
     public static long getStartpunkt-0d7_KjU()
+    public static long getZahlAkzent-0d7_KjU()
+    public static java.util.List getZahlSpur()
     public static androidx.compose.ui.graphics.Brush hintergrundPinsel-uvyYCjk()
 de.korte_daniel.zaubernina.ui.theme.ZauberTheme
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$15e08491916f6f2338c00ee3b7c31fa8b4423ad1114204409184bf8fc8df1b02$0:
-    public final synthetic int f$5
-    public final synthetic int f$6
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$15e08491916f6f2338c00ee3b7c31fa8b4423ad1114204409184bf8fc8df1b02$1:
-    public final synthetic int f$5
-    public final synthetic int f$6
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$15e08491916f6f2338c00ee3b7c31fa8b4423ad1114204409184bf8fc8df1b02$5:
-    public final synthetic int f$5
-    public final synthetic int f$6
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$1$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$3$1$1$1:
     public java.lang.Object L$1
     public final java.lang.Object invoke$4()
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$3$3$1:
+    public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt:
     public static final int UebungsBildschirm$lambda$1(androidx.compose.runtime.SnapshotMutableIntStateImpl)
     public static final boolean UebungsBildschirm$lambda$20(androidx.compose.runtime.MutableState)
@@ -39921,6 +39962,7 @@ kotlin.ULong$Companion
 kotlin.ULong
 kotlin.UnsafeLazyImpl:
     public final boolean isInitialized()
+kotlin.collections.AbstractIterator
 kotlin.collections.AbstractList$Companion:
     public static void checkElementIndex$kotlin_stdlib()
     public static void checkPositionIndex$kotlin_stdlib()
@@ -40007,10 +40049,27 @@ kotlin.collections.MapsKt__MapWithDefaultKt$$InternalSyntheticThrowCCEIfNotNull$
 kotlin.collections.MapsKt__MapsKt
 kotlin.collections.MapsKt___MapsJvmKt
 kotlin.collections.MapsKt___MapsKt
+kotlin.collections.RingBuffer$iterator$1:
+    public static void computeNext()
+    public static void done()
+    public static void setNext()
+kotlin.collections.RingBuffer:
+    public final void add(java.lang.Object)
+    public static kotlin.collections.RingBuffer expanded()
+    public final boolean isFull()
 kotlin.collections.SetsKt
 kotlin.collections.SetsKt__SetsJVMKt
 kotlin.collections.SetsKt__SetsKt
 kotlin.collections.SetsKt___SetsKt
+kotlin.collections.SlidingWindowKt$windowedIterator$1:
+    public final synthetic boolean $partialWindows
+    public final synthetic boolean $reuseBuffer
+    public final synthetic int $size
+    public final synthetic int $step
+    public int I$2
+    public java.lang.Object L$3
+    public final java.lang.Object invoke$1()
+kotlin.collections.SlidingWindowKt
 kotlin.collections.builders.AbstractMapBuilderEntrySet
 kotlin.collections.builders.ListBuilder$BuilderSubList:
     public final void registerModification$1()

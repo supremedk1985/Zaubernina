@@ -83,3 +83,51 @@ class LevelTest {
         }
     }
 }
+
+/** Die Regeln der freiwilligen Zwischendurch-Zahlen. */
+class ZahlenTest {
+
+    @Test
+    fun `eine Zahl geht erst nach ihrem Wort auf`() {
+        org.junit.Assert.assertFalse(zahlOffen(0, 0))
+        org.junit.Assert.assertTrue(zahlOffen(0, 1))
+        org.junit.Assert.assertFalse(zahlOffen(1, 1))
+    }
+
+    @Test
+    fun `eine Zahl sperrt nichts`() {
+        // Daniels Entscheidung: freiwillig. Das nächste Wort hängt NUR am Wort davor —
+        // hier steht die Gegenprobe, dass keine Zahlfunktion in levelOffen hineinspielt.
+        val geschafft = 2
+        org.junit.Assert.assertTrue(levelOffen(2, geschafft))
+        org.junit.Assert.assertTrue(zahlOffen(0, geschafft) && zahlOffen(1, geschafft))
+    }
+
+    @Test
+    fun `der Zusatzstern kommt nur beim ersten Mal`() {
+        var zahlen = 0
+        org.junit.Assert.assertEquals(1, sterneFuerZahl(zahlen, 0))
+        zahlen = mitZahl(zahlen, 0)
+        org.junit.Assert.assertEquals(0, sterneFuerZahl(zahlen, 0))
+        org.junit.Assert.assertEquals(1, sterneFuerZahl(zahlen, 3))
+    }
+
+    @Test
+    fun `der Bitsatz merkt sich jede Zahl einzeln`() {
+        var zahlen = 0
+        zahlen = mitZahl(zahlen, 0)
+        zahlen = mitZahl(zahlen, 4)
+        org.junit.Assert.assertTrue(zahlIstGeschrieben(zahlen, 0))
+        org.junit.Assert.assertFalse(zahlIstGeschrieben(zahlen, 1))
+        org.junit.Assert.assertTrue(zahlIstGeschrieben(zahlen, 4))
+        // Doppelt setzen ändert nichts.
+        org.junit.Assert.assertEquals(zahlen, mitZahl(zahlen, 0))
+    }
+
+    @Test
+    fun `die Ziffer ist die Levelnummer`() {
+        LEVEL.forEachIndexed { i, level ->
+            org.junit.Assert.assertEquals(level.nummer, zifferFuer(i))
+        }
+    }
+}

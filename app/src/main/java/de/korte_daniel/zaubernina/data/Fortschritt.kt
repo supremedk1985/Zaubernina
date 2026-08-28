@@ -7,7 +7,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import de.korte_daniel.zaubernina.domain.mitZahl
 import de.korte_daniel.zaubernina.domain.nachLevel
+import de.korte_daniel.zaubernina.domain.sterneFuerZahl
 import de.korte_daniel.zaubernina.domain.sterneFuer
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.ui.theme.Thema
@@ -21,6 +23,8 @@ import kotlinx.coroutines.flow.map
 data class Fortschritt(
     /** Wie viele Level geschafft sind. Daraus folgt, was offen ist — siehe domain/Level.kt. */
     val geschafft: Int = 0,
+    /** Bitsatz der geschriebenen Zwischendurch-Zahlen (Bit i = Ziffer nach Level i). */
+    val zahlen: Int = 0,
     val sterne: Int = 0,
     val thema: Thema = Thema.NACHTHIMMEL,
     val genauigkeit: Genauigkeit = Genauigkeit.NORMAL,
@@ -30,6 +34,7 @@ private val Context.speicher: DataStore<Preferences> by preferencesDataStore(nam
 
 private val SCHLUESSEL_GESCHAFFT = intPreferencesKey("geschaffte_level")
 private val SCHLUESSEL_STERNE = intPreferencesKey("sterne")
+private val SCHLUESSEL_ZAHLEN = intPreferencesKey("geschriebene_zahlen")
 private val SCHLUESSEL_THEMA = stringPreferencesKey("thema")
 private val SCHLUESSEL_GENAUIGKEIT = stringPreferencesKey("genauigkeit")
 
@@ -45,6 +50,7 @@ class FortschrittSpeicher(private val context: Context) {
     val fortschritt: Flow<Fortschritt> = context.speicher.data.map { p ->
         Fortschritt(
             geschafft = p[SCHLUESSEL_GESCHAFFT] ?: 0,
+            zahlen = p[SCHLUESSEL_ZAHLEN] ?: 0,
             sterne = p[SCHLUESSEL_STERNE] ?: 0,
             thema = p[SCHLUESSEL_THEMA]?.let { name ->
                 Thema.entries.firstOrNull { it.name == name }
@@ -68,6 +74,16 @@ class FortschrittSpeicher(private val context: Context) {
         }
     }
 
+    /** Eine Zwischendurch-Zahl ist geschrieben: Bit setzen, Zusatzstern nur beim ersten Mal. */
+    suspend fun zahlGeschrieben(index: Int) {
+        context.speicher.edit { p ->
+            val bisher = p[SCHLUESSEL_ZAHLEN] ?: 0
+            val dazu = sterneFuerZahl(bisher, index)
+            p[SCHLUESSEL_ZAHLEN] = mitZahl(bisher, index)
+            if (dazu > 0) p[SCHLUESSEL_STERNE] = (p[SCHLUESSEL_STERNE] ?: 0) + dazu
+        }
+    }
+
     suspend fun setzeThema(thema: Thema) {
         context.speicher.edit { it[SCHLUESSEL_THEMA] = thema.name }
     }
@@ -83,6 +99,7 @@ class FortschrittSpeicher(private val context: Context) {
     suspend fun fortschrittZuruecksetzen() {
         context.speicher.edit { p ->
             p[SCHLUESSEL_GESCHAFFT] = 0
+            p[SCHLUESSEL_ZAHLEN] = 0
             p[SCHLUESSEL_STERNE] = 0
         }
     }

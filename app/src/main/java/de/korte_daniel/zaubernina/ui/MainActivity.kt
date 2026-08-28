@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -23,11 +24,16 @@ import de.korte_daniel.zaubernina.data.FortschrittSpeicher
 import de.korte_daniel.zaubernina.domain.LEVEL
 import de.korte_daniel.zaubernina.domain.naechstesLevel
 import de.korte_daniel.zaubernina.domain.sterneFuer
+import de.korte_daniel.zaubernina.domain.sterneFuerZahl
+import de.korte_daniel.zaubernina.domain.zifferFuer
 import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
 import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
+import de.korte_daniel.zaubernina.ui.level.ZaehlBildschirm
 import de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirm
 import de.korte_daniel.zaubernina.ui.parent.Elternschloss
+import de.korte_daniel.zaubernina.ui.theme.LocalZauberFarben
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
+import de.korte_daniel.zaubernina.ui.theme.fuerZahlen
 import de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirm
 import kotlinx.coroutines.launch
 
@@ -47,6 +53,10 @@ private sealed interface Ansicht {
     data object Reise : Ansicht
     data class Ueben(val level: Int) : Ansicht
     data class Geschafft(val level: Int, val neueSterne: Int) : Ansicht
+
+    /** Eine Zwischendurch-Zahl schreiben, dann zählen. */
+    data class Zahl(val level: Int) : Ansicht
+    data class Zaehlen(val level: Int, val bonusStern: Boolean) : Ansicht
 
     /** Die Rechenaufgabe vor dem Elternbereich. */
     data object Schloss : Ansicht
@@ -73,16 +83,19 @@ private fun Zaubernina() {
                 when (val jetzt = ansicht) {
                     is Ansicht.Reise -> ReiseBildschirm(
                         geschafft = fortschritt.geschafft,
+                        zahlen = fortschritt.zahlen,
                         sterne = fortschritt.sterne,
                         onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
+                        onZahlWaehlen = { ansicht = Ansicht.Zahl(it) },
                         onElternbereich = { ansicht = Ansicht.Schloss },
                     )
 
                     is Ansicht.Ueben -> UebungsBildschirm(
-                        level = LEVEL[jetzt.level],
+                        wort = LEVEL[jetzt.level].wort,
+                        kopfzeile = { i -> "Level ${LEVEL[jetzt.level].nummer} · Buchstabe ${i + 1} von ${LEVEL[jetzt.level].wort.length}" },
                         genauigkeit = fortschritt.genauigkeit,
                         onZurueck = { ansicht = Ansicht.Reise },
-                        onLevelFertig = {
+                        onFertig = {
                             // Die Sterne müssen VOR dem Speichern gerechnet werden — danach
                             // ist das Level schon als geschafft vermerkt und es gäbe keine mehr.
                             val neueSterne = sterneFuer(jetzt.level, fortschritt.geschafft)
@@ -90,6 +103,37 @@ private fun Zaubernina() {
                             ansicht = Ansicht.Geschafft(jetzt.level, neueSterne)
                         },
                     )
+
+                    // Die Zahlen leben in ihrer eigenen Farbwelt — lokal übergelegt,
+                    // das globale Thema bleibt unangetastet (Muster aus CurruBike).
+                    is Ansicht.Zahl -> CompositionLocalProvider(
+                        LocalZauberFarben provides farben.fuerZahlen(),
+                    ) {
+                        UebungsBildschirm(
+                            wort = "${zifferFuer(jetzt.level)}",
+                            kopfzeile = { "Zauberzahl" },
+                            genauigkeit = fortschritt.genauigkeit,
+                            onZurueck = { ansicht = Ansicht.Reise },
+                            onFertig = {
+                                val bonus = sterneFuerZahl(fortschritt.zahlen, jetzt.level) > 0
+                                ansicht = Ansicht.Zaehlen(jetzt.level, bonus)
+                            },
+                            ohneZwischenjubel = true,
+                        )
+                    }
+
+                    is Ansicht.Zaehlen -> CompositionLocalProvider(
+                        LocalZauberFarben provides farben.fuerZahlen(),
+                    ) {
+                        ZaehlBildschirm(
+                            ziffer = zifferFuer(jetzt.level),
+                            bonusStern = jetzt.bonusStern,
+                            onFertig = {
+                                bereich.launch { speicher.zahlGeschrieben(jetzt.level) }
+                                ansicht = Ansicht.Reise
+                            },
+                        )
+                    }
 
                     is Ansicht.Geschafft -> GeschafftBildschirm(
                         levelIndex = jetzt.level,

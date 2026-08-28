@@ -242,6 +242,122 @@ private val A_KLEIN = Glyph(
     ),
 )
 
+
+// ───────────────────────────── Ziffern ─────────────────────────────
+// Gleiche Höhe wie die Großbuchstaben (Oberlinie bis Grundlinie). Die Schreibweisen
+// folgen der üblichen deutschen Schulschreibung: die 1 mit Anstrich, die 7 mit
+// Querstrich. AUCH HIER gilt: Daniel prüft gegen das Schulheft.
+
+/** 1: Anstrich schräg hinauf zur Spitze, dann der Stamm herunter — ein Zug. */
+private val EINS = Glyph(
+    zeichen = '1', name = "Eins",
+    striche = listOf(
+        Stroke(
+            start = p(350f, 320f),
+            segmente = listOf(Linie(p(530f, OBERLINIE)), Linie(p(530f, GRUNDLINIE))),
+            pfeileBei = listOf(0.30f, 0.75f),
+        ),
+    ),
+)
+
+/** 2: Bogen oben, Schwung hinunter nach links, Fuß nach rechts — ein Zug. */
+private val ZWEI = Glyph(
+    zeichen = '2', name = "Zwei",
+    striche = listOf(
+        Stroke(
+            start = p(310f, 360f),
+            segmente = listOf(
+                Bogen(p(310f, 200f), p(420f, OBERLINIE), p(500f, OBERLINIE)),
+                Bogen(p(610f, OBERLINIE), p(690f, 230f), p(690f, 360f)),
+                Bogen(p(690f, 480f), p(560f, 580f), p(310f, GRUNDLINIE)),
+                Linie(p(690f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.22f, 0.72f),
+        ),
+    ),
+)
+
+/** 3: zwei Bögen übereinander — ein Zug. */
+private val DREI = Glyph(
+    zeichen = '3', name = "Drei",
+    striche = listOf(
+        Stroke(
+            start = p(330f, 240f),
+            segmente = listOf(
+                Bogen(p(400f, 120f), p(680f, 130f), p(660f, 330f)),
+                Bogen(p(660f, 470f), p(540f, 500f), p(470f, 500f)),
+                Bogen(p(560f, 500f), p(690f, 540f), p(690f, 670f)),
+                Bogen(p(690f, 850f), p(480f, 900f), p(330f, 770f)),
+            ),
+            pfeileBei = listOf(0.16f, 0.66f),
+        ),
+    ),
+)
+
+/** 4: Schräge hinunter und Querbalken in einem Zug, dann der Stamm. */
+private val VIER = Glyph(
+    zeichen = '4', name = "Vier",
+    striche = listOf(
+        Stroke(
+            start = p(600f, OBERLINIE),
+            segmente = listOf(Linie(p(300f, 580f)), Linie(p(740f, 580f))),
+            pfeileBei = listOf(0.28f, 0.80f),
+        ),
+        zug(p(620f, OBERLINIE), p(620f, GRUNDLINIE)),
+    ),
+)
+
+/** 5: Stamm und Bauch in einem Zug, der Deckel zuletzt. */
+private val FUENF = Glyph(
+    zeichen = '5', name = "Fünf",
+    striche = listOf(
+        Stroke(
+            start = p(370f, OBERLINIE),
+            segmente = listOf(
+                Linie(p(370f, 450f)),
+                Bogen(p(560f, 400f), p(700f, 490f), p(700f, 630f)),
+                Bogen(p(700f, 820f), p(500f, 915f), p(350f, 780f)),
+            ),
+            pfeileBei = listOf(0.16f, 0.68f),
+        ),
+        zug(p(370f, OBERLINIE), p(690f, OBERLINIE), EIN_PFEIL),
+    ),
+)
+
+/** 6: großer Schwung hinunter, unten die Schlaufe — ein Zug. */
+private val SECHS = Glyph(
+    zeichen = '6', name = "Sechs",
+    striche = listOf(
+        Stroke(
+            start = p(640f, 160f),
+            segmente = listOf(
+                Bogen(p(460f, OBERLINIE), p(350f, 330f), p(340f, 540f)),
+                Bogen(p(335f, 720f), p(430f, GRUNDLINIE), p(520f, GRUNDLINIE)),
+                Bogen(p(650f, GRUNDLINIE), p(700f, 750f), p(700f, 650f)),
+                Bogen(p(700f, 520f), p(590f, 470f), p(500f, 480f)),
+                Bogen(p(420f, 490f), p(360f, 540f), p(345f, 600f)),
+            ),
+            pfeileBei = listOf(0.14f, 0.58f),
+        ),
+    ),
+)
+
+/** 7: Deckel und Schräge in einem Zug, dann der deutsche Querstrich. */
+private val SIEBEN = Glyph(
+    zeichen = '7', name = "Sieben",
+    striche = listOf(
+        Stroke(
+            start = p(300f, OBERLINIE),
+            segmente = listOf(Linie(p(700f, OBERLINIE)), Linie(p(430f, GRUNDLINIE))),
+            pfeileBei = listOf(0.24f, 0.72f),
+        ),
+        zug(p(370f, 520f), p(650f, 520f), EIN_PFEIL),
+    ),
+)
+
+/** Die Ziffern der sieben Levelabschnitte. */
+val ZIFFERN: List<Glyph> = listOf(EINS, ZWEI, DREI, VIER, FUENF, SECHS, SIEBEN)
+
 // ───────────────────────────── Bestand ─────────────────────────────
 
 /** Alle Großbuchstaben, die die sieben Namen brauchen: A D E H I L M N P R T. */
@@ -251,7 +367,7 @@ val GROSSBUCHSTABEN: List<Glyph> =
 /** Gezeichnet, aber noch nicht im Einsatz — siehe Hinweis oben. */
 val KLEINBUCHSTABEN: List<Glyph> = listOf(I_KLEIN, N_KLEIN, A_KLEIN)
 
-val GRUNDSCHRIFT: Map<Char, Glyph> = (GROSSBUCHSTABEN + KLEINBUCHSTABEN).associateBy { it.zeichen }
+val GRUNDSCHRIFT: Map<Char, Glyph> = (GROSSBUCHSTABEN + KLEINBUCHSTABEN + ZIFFERN).associateBy { it.zeichen }
 
 /**
  * Die Wörter, die geübt werden — vorerst in Großbuchstaben, so wie die meisten

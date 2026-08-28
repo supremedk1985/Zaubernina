@@ -36,6 +36,9 @@ import de.korte_daniel.zaubernina.domain.LEVEL
 import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.domain.levelIstGeschafft
 import de.korte_daniel.zaubernina.domain.levelOffen
+import de.korte_daniel.zaubernina.domain.zahlIstGeschrieben
+import de.korte_daniel.zaubernina.domain.zahlOffen
+import de.korte_daniel.zaubernina.domain.zifferFuer
 import de.korte_daniel.zaubernina.ui.components.sternPunkte
 import de.korte_daniel.zaubernina.ui.theme.Thema
 import de.korte_daniel.zaubernina.ui.theme.ZauberFarben
@@ -63,8 +66,10 @@ private enum class Knotenzustand { GESCHAFFT, OFFEN, ZU }
 @Composable
 fun ReiseBildschirm(
     geschafft: Int,
+    zahlen: Int,
     sterne: Int,
     onLevelWaehlen: (Int) -> Unit,
+    onZahlWaehlen: (Int) -> Unit,
     onElternbereich: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -150,6 +155,36 @@ fun ReiseBildschirm(
                         pathEffect = gestrichelt,
                     )
                 }
+            }
+
+            // Die Zwischendurch-Zahlen: kleine Knoten auf halbem Weg zwischen den
+            // Wortknoten — bewusst kleiner, die Wörter bleiben die Reise. Die Ziffer
+            // nach dem LETZTEN Wort wird über den Knoten hinaus verlängert.
+            LEVEL.indices.forEach { i ->
+                val (ax1, ay1) = knotenAnteil(i, anzahl)
+                val (zx, zy) = if (i < anzahl - 1) {
+                    val (ax2, ay2) = knotenAnteil(i + 1, anzahl)
+                    (ax1 + ax2) / 2f to (ay1 + ay2) / 2f
+                } else {
+                    // Hinter dem letzten Wort wird verlängert — aber eingeklemmt, damit
+                    // die 7 nicht in die Überschrift ragt.
+                    val (ax0, ay0) = knotenAnteil(i - 1, anzahl)
+                    (ax1 + (ax1 - ax0) * 0.55f).coerceIn(0.1f, 0.9f) to
+                        (ay1 + (ay1 - ay0) * 0.55f).coerceAtLeast(0.045f)
+                }
+                val geschrieben = zahlIstGeschrieben(zahlen, i)
+                val offen = zahlOffen(i, geschafft)
+                Zahlknoten(
+                    ziffer = zifferFuer(i),
+                    geschrieben = geschrieben,
+                    offen = offen,
+                    farben = farben,
+                    onClick = { if (offen) onZahlWaehlen(i) },
+                    modifier = Modifier.offset(
+                        x = breite * zx - 30.dp,
+                        y = hoehe * zy - 30.dp,
+                    ),
+                )
             }
 
             LEVEL.forEachIndexed { i, level ->
@@ -282,4 +317,70 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.zeichneSchloss(
         lineTo(mitte.x + r, mitte.y - h * 0.15f)
     }
     drawPath(buegel, farbe, style = StrichStil(width = groesse * 0.24f, cap = StrokeCap.Round))
+}
+
+/**
+ * Ein Zwischendurch-Zahl-Knoten. Trägt in der Zahlfarbe des Themas seine Ziffer — und
+ * solange sie noch nicht geschrieben ist, einen kleinen Stern als Anreiz („da gibt es
+ * noch etwas zu holen"). KEIN Schloss: die Zahl ist freiwillig und sperrt nichts.
+ */
+@Composable
+private fun Zahlknoten(
+    ziffer: Int,
+    geschrieben: Boolean,
+    offen: Boolean,
+    farben: ZauberFarben,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .size(60.dp)
+            .clip(CircleShape)
+            .clickable(enabled = offen, onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(modifier = Modifier.fillMaxSize()) {
+            val mitte = Offset(size.width / 2f, size.height / 2f)
+            when {
+                geschrieben -> {
+                    drawCircle(farben.zahlAkzent, size.minDimension * 0.36f, mitte, alpha = 0.25f)
+                    drawCircle(farben.zahlAkzent, size.minDimension * 0.30f, mitte)
+                }
+                offen -> {
+                    drawCircle(farben.zahlAkzent, size.minDimension * 0.34f, mitte, alpha = 0.16f)
+                    drawCircle(
+                        color = farben.zahlAkzent,
+                        radius = size.minDimension * 0.30f,
+                        center = mitte,
+                        style = StrichStil(width = 3f * density),
+                    )
+                    // Der Anreiz: ein kleiner Stern oben rechts am Knoten.
+                    zeichneStern(
+                        Offset(size.width * 0.86f, size.height * 0.16f),
+                        size.minDimension * 0.11f,
+                        farben.zahlAkzent,
+                    )
+                }
+                else -> {
+                    drawCircle(
+                        color = farben.schrift.copy(alpha = 0.16f),
+                        radius = size.minDimension * 0.26f,
+                        center = mitte,
+                        style = StrichStil(width = 2.5f * density),
+                    )
+                }
+            }
+        }
+        ZauberText(
+            text = "$ziffer",
+            groesse = if (offen || geschrieben) 19.sp else 16.sp,
+            gewicht = FontWeight.SemiBold,
+            farbe = when {
+                geschrieben -> farben.aufZahlAkzent
+                offen -> farben.zahlAkzent
+                else -> farben.schrift.copy(alpha = 0.24f)
+            },
+        )
+    }
 }

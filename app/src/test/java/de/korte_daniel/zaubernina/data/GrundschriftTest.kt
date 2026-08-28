@@ -17,6 +17,22 @@ import org.junit.Test
 class GrundschriftTest {
 
     @Test
+    fun `alle Ziffern der sieben Levelabschnitte sind gezeichnet`() {
+        for (z in '1'..'7') {
+            assertNotNull("Ziffer '$z' ist nicht gezeichnet", glyph(z))
+        }
+    }
+
+    @Test
+    fun `auch Ziffern stehen zwischen Oberlinie und Grundlinie`() {
+        for (z in '1'..'7') {
+            val alle = glyph(z)!!.striche.flatMap { it.abtasten(60) }
+            assertTrue("$z beginnt bei ${alle.minOf { it.y }}", alle.minOf { it.y } in 130f..165f)
+            assertTrue("$z endet bei ${alle.maxOf { it.y }}", alle.maxOf { it.y } in 835f..890f)
+        }
+    }
+
+    @Test
     fun `jeder Buchstabe jedes Uebungswortes ist gezeichnet`() {
         for (wort in WOERTER) {
             for (zeichen in wort) {
