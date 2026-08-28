@@ -1,30 +1,30 @@
 [
     {
-        "merged": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-debug-35:/xml_backup_rules.xml.flat",
-        "source": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-main-37:/xml/backup_rules.xml"
+        "merged": "de.korte_daniel.zaubernina.app-debug-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-37:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-debug-35:/xml_data_extraction_rules.xml.flat",
-        "source": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-main-37:/xml/data_extraction_rules.xml"
+        "merged": "de.korte_daniel.zaubernina.app-debug-35:/xml_data_extraction_rules.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-37:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-debug-35:/xml_backup_rules.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-37:/xml/backup_rules.xml"
     },
     {
         "merged": "de.korte_daniel.zaubernina.app-debug-35:/font_fredoka.ttf.flat",
         "source": "de.korte_daniel.zaubernina.app-main-37:/font/fredoka.ttf"
     },
     {
-        "merged": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-debug-35:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-main-37:/mipmap-anydpi-v26/ic_launcher.xml"
-    },
-    {
         "merged": "de.korte_daniel.zaubernina.app-debug-35:/font_patrick_hand.ttf.flat",
         "source": "de.korte_daniel.zaubernina.app-main-37:/font/patrick_hand.ttf"
     },
     {
-        "merged": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-debug-35:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "/home/daniel/.gradle/daemon/9.2.1/de.korte_daniel.zaubernina.app-main-37:/drawable/ic_launcher_foreground.xml"
-    },
-    {
         "merged": "de.korte_daniel.zaubernina.app-debug-35:/font_baloo2.ttf.flat",
         "source": "de.korte_daniel.zaubernina.app-main-37:/font/baloo2.ttf"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-debug-35:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-37:/drawable/ic_launcher_foreground.xml"
     }
 ]

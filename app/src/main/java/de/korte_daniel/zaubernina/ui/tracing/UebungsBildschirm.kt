@@ -71,6 +71,7 @@ fun UebungsBildschirm(
     genauigkeit: Genauigkeit,
     onThemaWechsel: (Thema) -> Unit,
     onBuchstabeFertig: () -> Unit,
+    onWortWechsel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
@@ -119,8 +120,12 @@ fun UebungsBildschirm(
     ) {
 
         // Das Wort mit dem gerade geübten Buchstaben hervorgehoben.
+        // BEHELF: Antippen wechselt zum nächsten Wort. Ersetzt später die Auswahlseite.
         Row(
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .clickable(onClick = onWortWechsel),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {

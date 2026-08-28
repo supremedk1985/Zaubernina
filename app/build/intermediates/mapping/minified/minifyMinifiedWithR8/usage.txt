@@ -19433,7 +19433,9 @@ de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     private static final float GRUNDLINIE
     private static final float MITTELLINIE
     private static final float OBERLINIE
+    public static final java.util.List getGROSSBUCHSTABEN()
     public static final java.util.Map getGRUNDSCHRIFT()
+    public static final java.util.List getKLEINBUCHSTABEN()
 de.korte_daniel.zaubernina.domain.Glyph:
     public final char component1()
     public final java.lang.String component2()
@@ -36412,11 +36414,23 @@ androidx.window.reflection.ReflectionUtils
 com.google.common.util.concurrent.ListenableFuture
 de.korte_daniel.zaubernina.R$font
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
+    public static final de.korte_daniel.zaubernina.domain.Glyph A_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph A_KLEIN
-    public static final de.korte_daniel.zaubernina.domain.Glyph I
+    public static final de.korte_daniel.zaubernina.domain.Glyph D_GROSS
+    public static final java.util.List EIN_PFEIL
+    public static final de.korte_daniel.zaubernina.domain.Glyph E_GROSS
+    public static final java.util.List GROSSBUCHSTABEN
+    public static final de.korte_daniel.zaubernina.domain.Glyph H_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph I_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph I_KLEIN
+    public static final java.util.List KLEINBUCHSTABEN
+    public static final de.korte_daniel.zaubernina.domain.Glyph L_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph M_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph N_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph N_KLEIN
+    public static final de.korte_daniel.zaubernina.domain.Glyph P_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph R_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph T_GROSS
 de.korte_daniel.zaubernina.domain.Glyph:
     public static final int $stable
     static void <clinit>()
@@ -36430,6 +36444,7 @@ de.korte_daniel.zaubernina.domain.GlyphPoint:
     public static float getY()
 de.korte_daniel.zaubernina.domain.Stroke:
     static void <clinit>()
+    public synthetic void <init>(de.korte_daniel.zaubernina.domain.GlyphPoint,java.util.List,java.util.List)
     public final java.util.List abtasten()
     public static java.util.List getPfeileBei()
     public static java.util.List getSegmente()
@@ -36527,15 +36542,15 @@ de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     public static long getStartpunkt-0d7_KjU()
     public static androidx.compose.ui.graphics.Brush hintergrundPinsel-uvyYCjk()
 de.korte_daniel.zaubernina.ui.theme.ZauberTheme
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$9141700b66a606b0c2af59086b9045345ce52bbbe7e90cf5669991c58b833182$0:
-    public final synthetic int f$7
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$c1ad3c1e7e26cda223452da1d6978bcc40debff39906ad6b76aeb673feb365d0$0:
     public final synthetic int f$8
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$9141700b66a606b0c2af59086b9045345ce52bbbe7e90cf5669991c58b833182$1:
-    public final synthetic int f$7
+    public final synthetic int f$9
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$c1ad3c1e7e26cda223452da1d6978bcc40debff39906ad6b76aeb673feb365d0$1:
     public final synthetic int f$8
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$9141700b66a606b0c2af59086b9045345ce52bbbe7e90cf5669991c58b833182$5:
-    public final synthetic int f$7
+    public final synthetic int f$9
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$$InternalSyntheticLambda$4$c1ad3c1e7e26cda223452da1d6978bcc40debff39906ad6b76aeb673feb365d0$5:
     public final synthetic int f$8
+    public final synthetic int f$9
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$1$1:
     public final java.lang.Object invoke$2()
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$2$1$1$1:

@@ -41,8 +41,9 @@ private fun Zaubernina() {
     var thema by remember { mutableStateOf(Thema.NACHTHIMMEL) }
     val genauigkeit = Genauigkeit.NORMAL
 
-    val wort = WOERTER.first()
+    var wortIndex by remember { mutableIntStateOf(0) }
     var buchstabeIndex by remember { mutableIntStateOf(0) }
+    val wort = WOERTER[wortIndex]
 
     ZauberTheme(thema) {
         val farben = ZauberTheme.farben
@@ -60,6 +61,10 @@ private fun Zaubernina() {
                     onThemaWechsel = { thema = it },
                     onBuchstabeFertig = {
                         buchstabeIndex = (buchstabeIndex + 1) % wort.length
+                    },
+                    onWortWechsel = {
+                        wortIndex = (wortIndex + 1) % WOERTER.size
+                        buchstabeIndex = 0
                     },
                 )
             }
