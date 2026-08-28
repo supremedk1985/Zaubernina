@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.data.GrundschriftTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-28T20:47:33.260Z" hostname="nexus" time="0.058">
+<testsuite name="de.korte_daniel.zaubernina.data.GrundschriftTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:20:57.068Z" hostname="nexus" time="0.074">
   <properties/>
-  <testcase name="alle Ziffern der sieben Levelabschnitte sind gezeichnet" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.03"/>
-  <testcase name="Grossbuchstaben stehen zwischen Oberlinie und Grundlinie" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.005"/>
-  <testcase name="jeder Buchstabe jedes Uebungswortes ist gezeichnet" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.001"/>
+  <testcase name="Grossbuchstaben stehen zwischen Oberlinie und Grundlinie" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.044"/>
+  <testcase name="alle zehn Ziffern sind gezeichnet" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.001"/>
+  <testcase name="das komplette grosse Alphabet ist gezeichnet" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.0"/>
+  <testcase name="jeder Buchstabe jedes Uebungswortes ist gezeichnet" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.002"/>
   <testcase name="jeder Strich beginnt dort wo das Kind ihn beginnen soll" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.003"/>
-  <testcase name="alle Punkte liegen in der Zeichenbox" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.011"/>
+  <testcase name="alle Punkte liegen in der Zeichenbox" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.014"/>
   <testcase name="auch Ziffern stehen zwischen Oberlinie und Grundlinie" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.001"/>
-  <testcase name="kein Strich ist zu kurz zum Nachfahren" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.005"/>
+  <testcase name="kein Strich ist zu kurz zum Nachfahren" classname="de.korte_daniel.zaubernina.data.GrundschriftTest" time="0.007"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

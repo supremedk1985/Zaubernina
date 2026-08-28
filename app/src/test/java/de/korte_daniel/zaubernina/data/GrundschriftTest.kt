@@ -17,15 +17,25 @@ import org.junit.Test
 class GrundschriftTest {
 
     @Test
-    fun `alle Ziffern der sieben Levelabschnitte sind gezeichnet`() {
-        for (z in '1'..'7') {
+    fun `alle zehn Ziffern sind gezeichnet`() {
+        for (z in '0'..'9') {
             assertNotNull("Ziffer '$z' ist nicht gezeichnet", glyph(z))
         }
     }
 
     @Test
+    fun `das komplette grosse Alphabet ist gezeichnet`() {
+        for (b in 'A'..'Z') {
+            assertNotNull("Buchstabe '$b' ist nicht gezeichnet", glyph(b))
+        }
+        for (b in "ÄÖÜ") {
+            assertNotNull("Umlaut '$b' ist nicht gezeichnet", glyph(b))
+        }
+    }
+
+    @Test
     fun `auch Ziffern stehen zwischen Oberlinie und Grundlinie`() {
-        for (z in '1'..'7') {
+        for (z in '0'..'9') {
             val alle = glyph(z)!!.striche.flatMap { it.abtasten(60) }
             assertTrue("$z beginnt bei ${alle.minOf { it.y }}", alle.minOf { it.y } in 130f..165f)
             assertTrue("$z endet bei ${alle.maxOf { it.y }}", alle.maxOf { it.y } in 835f..890f)
@@ -81,8 +91,16 @@ class GrundschriftTest {
             val alle = glyphe.striche.flatMap { it.abtasten(60) }
             val oben = alle.minOf { it.y }
             val unten = alle.maxOf { it.y }
-            assertTrue("$zeichen beginnt bei $oben statt an der Oberlinie 150", oben in 145f..155f)
-            assertTrue("$zeichen endet bei $unten statt an der Grundlinie 850", unten in 845f..855f)
+            if (zeichen in "ÄÖÜ") {
+                // Die Umlautpunkte liegen ÜBER der Oberlinie — der Grundbuchstabe selbst
+                // wird über die Nicht-Tupfer-Striche geprüft.
+                val koerper = glyphe.striche.filterNot { it.tupfer }.flatMap { it.abtasten(60) }
+                assertTrue("$zeichen: Punkte fehlen oben", oben < 120f)
+                assertTrue("$zeichen beginnt bei ${koerper.minOf { it.y }}", koerper.minOf { it.y } in 145f..155f)
+            } else {
+                assertTrue("$zeichen beginnt bei $oben statt an der Oberlinie 150", oben in 145f..155f)
+            }
+            assertTrue("$zeichen endet bei $unten statt an der Grundlinie 850", unten in 840f..860f)
         }
     }
 

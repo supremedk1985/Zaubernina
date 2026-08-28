@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.LevelTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-08-28T20:47:33.326Z" hostname="nexus" time="0.003">
+<testsuite name="de.korte_daniel.zaubernina.domain.LevelTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:20:57.150Z" hostname="nexus" time="0.003">
   <properties/>
   <testcase name="nach dem letzten Level kommt keines mehr" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
   <testcase name="ein geschafftes Level oeffnet genau das naechste" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
@@ -7,7 +7,7 @@
   <testcase name="ein altes Level noch einmal zu spielen aendert nichts" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="die Reise hat Level ab Nummer eins und keine Luecken" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="am Anfang ist nur das erste Level offen" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
-  <testcase name="sind alle geschafft ist auch alles offen und alles hat einen Stern" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
+  <testcase name="sind alle geschafft ist auch alles offen und alles hat einen Stern" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="Sterne gibt es nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

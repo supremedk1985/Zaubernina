@@ -26,8 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
-import de.korte_daniel.zaubernina.domain.LEVEL
-import de.korte_daniel.zaubernina.domain.naechstesLevel
+import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.ui.components.zeichneWortLeuchtend
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
@@ -41,6 +40,7 @@ import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
  */
 @Composable
 fun GeschafftBildschirm(
+    levelListe: List<Level>,
     levelIndex: Int,
     neueSterne: Int,
     onWeiter: () -> Unit,
@@ -48,8 +48,8 @@ fun GeschafftBildschirm(
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
-    val level = LEVEL[levelIndex]
-    val naechstes = naechstesLevel(levelIndex)
+    val level = levelListe[levelIndex]
+    val naechstes = (levelIndex + 1).takeIf { it <= levelListe.lastIndex }
     val zeichen = remember(level) { level.wort.mapNotNull { glyph(it) } }
 
     Column(
@@ -125,7 +125,7 @@ fun GeschafftBildschirm(
                 Column(modifier = Modifier.weight(1f)) {
                     ZauberText("JETZT KOMMT", 12.sp, farben.schriftSchwach)
                     ZauberText(
-                        text = "Level ${LEVEL[naechstes].nummer} · ${LEVEL[naechstes].wort}",
+                        text = "Level ${levelListe[naechstes].nummer} · ${levelListe[naechstes].wort}",
                         groesse = 20.sp,
                         farbe = farben.schrift,
                         gewicht = FontWeight.SemiBold,

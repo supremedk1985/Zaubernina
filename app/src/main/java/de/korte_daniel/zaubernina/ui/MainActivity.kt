@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,18 +20,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
-import de.korte_daniel.zaubernina.data.Fortschritt
 import de.korte_daniel.zaubernina.data.FortschrittSpeicher
-import de.korte_daniel.zaubernina.domain.LEVEL
-import de.korte_daniel.zaubernina.domain.naechstesLevel
-import de.korte_daniel.zaubernina.domain.sterneFuer
+import de.korte_daniel.zaubernina.data.Zustand
+import de.korte_daniel.zaubernina.domain.levelFuer
 import de.korte_daniel.zaubernina.domain.sterneFuerZahl
+import de.korte_daniel.zaubernina.domain.woerterFuer
 import de.korte_daniel.zaubernina.domain.zifferFuer
 import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
 import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
 import de.korte_daniel.zaubernina.ui.level.ZaehlBildschirm
 import de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirm
 import de.korte_daniel.zaubernina.ui.parent.Elternschloss
+import de.korte_daniel.zaubernina.ui.rechnen.RechnenBildschirm
+import de.korte_daniel.zaubernina.ui.start.StartBildschirm
 import de.korte_daniel.zaubernina.ui.theme.LocalZauberFarben
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 import de.korte_daniel.zaubernina.ui.theme.fuerZahlen
@@ -50,6 +52,8 @@ class MainActivity : ComponentActivity() {
 
 /** Wo die App gerade steht. Bewusst eine kleine versiegelte Klasse statt einer Navigations-Bibliothek. */
 private sealed interface Ansicht {
+    /** Wer übt heute? Immer der erste Bildschirm — Daniels Vorgabe. */
+    data object Start : Ansicht
     data object Reise : Ansicht
     data class Ueben(val level: Int) : Ansicht
     data class Geschafft(val level: Int, val neueSterne: Int) : Ansicht
@@ -57,6 +61,9 @@ private sealed interface Ansicht {
     /** Eine Zwischendurch-Zahl schreiben, dann zählen. */
     data class Zahl(val level: Int) : Ansicht
     data class Zaehlen(val level: Int, val bonusStern: Boolean) : Ansicht
+
+    /** Der Rechenmodus. */
+    data object Rechnen : Ansicht
 
     /** Die Rechenaufgabe vor dem Elternbereich. */
     data object Schloss : Ansicht
@@ -68,11 +75,21 @@ private fun Zaubernina() {
     val context = LocalContext.current
     val speicher = remember { FortschrittSpeicher(context) }
     val bereich = rememberCoroutineScope()
-    val fortschritt by speicher.fortschritt.collectAsState(initial = Fortschritt())
+    val zustand by speicher.zustand.collectAsState(initial = Zustand())
 
-    var ansicht by remember { mutableStateOf<Ansicht>(Ansicht.Reise) }
+    LaunchedEffect(Unit) { speicher.stelleErstenBenutzerSicher() }
 
-    ZauberTheme(fortschritt.thema) {
+    var ansicht by remember { mutableStateOf<Ansicht>(Ansicht.Start) }
+    var aktiverId by remember { mutableStateOf<Int?>(null) }
+
+    // Der aktive Benutzer und seine Reise. Solange die Ablage noch lädt oder niemand
+    // gewählt ist, bleibt die App auf dem Startbildschirm.
+    val aktiver = aktiverId?.let { zustand.daten(it) }
+    val woerter = aktiver?.let { woerterFuer(it.paket, zustand.eigeneWoerter) } ?: emptyList()
+    val levelListe = levelFuer(woerter)
+    val stand = aktiver?.aktuellerStand
+
+    ZauberTheme(zustand.thema) {
         val farben = ZauberTheme.farben
         Box(
             modifier = Modifier
@@ -81,28 +98,57 @@ private fun Zaubernina() {
         ) {
             Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
                 when (val jetzt = ansicht) {
-                    is Ansicht.Reise -> ReiseBildschirm(
-                        geschafft = fortschritt.geschafft,
-                        zahlen = fortschritt.zahlen,
-                        sterne = fortschritt.sterne,
-                        onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
-                        onZahlWaehlen = { ansicht = Ansicht.Zahl(it) },
-                        onElternbereich = { ansicht = Ansicht.Schloss },
-                    )
-
-                    is Ansicht.Ueben -> UebungsBildschirm(
-                        wort = LEVEL[jetzt.level].wort,
-                        kopfzeile = { i -> "Level ${LEVEL[jetzt.level].nummer} · Buchstabe ${i + 1} von ${LEVEL[jetzt.level].wort.length}" },
-                        genauigkeit = fortschritt.genauigkeit,
-                        onZurueck = { ansicht = Ansicht.Reise },
-                        onFertig = {
-                            // Die Sterne müssen VOR dem Speichern gerechnet werden — danach
-                            // ist das Level schon als geschafft vermerkt und es gäbe keine mehr.
-                            val neueSterne = sterneFuer(jetzt.level, fortschritt.geschafft)
-                            bereich.launch { speicher.levelGeschafft(jetzt.level) }
-                            ansicht = Ansicht.Geschafft(jetzt.level, neueSterne)
+                    is Ansicht.Start -> StartBildschirm(
+                        benutzer = zustand.benutzer,
+                        onWaehlen = { id ->
+                            aktiverId = id
+                            ansicht = Ansicht.Reise
                         },
                     )
+
+                    is Ansicht.Reise -> {
+                        if (aktiver == null || stand == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            ReiseBildschirm(
+                                level = levelListe,
+                                geschafft = stand.geschafft,
+                                zahlen = stand.zahlen,
+                                sterne = aktiver.sterne,
+                                benutzerName = aktiver.benutzer.name,
+                                avatar = aktiver.benutzer.avatar,
+                                onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
+                                onZahlWaehlen = { ansicht = Ansicht.Zahl(it) },
+                                onElternbereich = { ansicht = Ansicht.Schloss },
+                                onRechnen = { ansicht = Ansicht.Rechnen },
+                                onBenutzerWechsel = {
+                                    aktiverId = null
+                                    ansicht = Ansicht.Start
+                                },
+                            )
+                        }
+                    }
+
+                    is Ansicht.Ueben -> {
+                        val level = levelListe.getOrNull(jetzt.level)
+                        if (level == null || aktiver == null || stand == null) {
+                            ansicht = Ansicht.Reise
+                        } else {
+                            UebungsBildschirm(
+                                wort = level.wort,
+                                kopfzeile = { i -> "Level ${level.nummer} · Buchstabe ${i + 1} von ${level.wort.length}" },
+                                genauigkeit = zustand.genauigkeit,
+                                onZurueck = { ansicht = Ansicht.Reise },
+                                onFertig = {
+                                    val neueSterne = if (jetzt.level == stand.geschafft) 3 else 0
+                                    bereich.launch {
+                                        speicher.levelGeschafft(aktiver.benutzer.id, aktiver.paket, jetzt.level, levelListe.size)
+                                    }
+                                    ansicht = Ansicht.Geschafft(jetzt.level, neueSterne)
+                                },
+                            )
+                        }
+                    }
 
                     // Die Zahlen leben in ihrer eigenen Farbwelt — lokal übergelegt,
                     // das globale Thema bleibt unangetastet (Muster aus CurruBike).
@@ -112,10 +158,10 @@ private fun Zaubernina() {
                         UebungsBildschirm(
                             wort = "${zifferFuer(jetzt.level)}",
                             kopfzeile = { "Zauberzahl" },
-                            genauigkeit = fortschritt.genauigkeit,
+                            genauigkeit = zustand.genauigkeit,
                             onZurueck = { ansicht = Ansicht.Reise },
                             onFertig = {
-                                val bonus = sterneFuerZahl(fortschritt.zahlen, jetzt.level) > 0
+                                val bonus = stand != null && sterneFuerZahl(stand.zahlen, jetzt.level) > 0
                                 ansicht = Ansicht.Zaehlen(jetzt.level, bonus)
                             },
                             ohneZwischenjubel = true,
@@ -129,17 +175,36 @@ private fun Zaubernina() {
                             ziffer = zifferFuer(jetzt.level),
                             bonusStern = jetzt.bonusStern,
                             onFertig = {
-                                bereich.launch { speicher.zahlGeschrieben(jetzt.level) }
+                                aktiver?.let { a ->
+                                    bereich.launch { speicher.zahlGeschrieben(a.benutzer.id, a.paket, jetzt.level) }
+                                }
                                 ansicht = Ansicht.Reise
                             },
                         )
                     }
 
+                    is Ansicht.Rechnen -> CompositionLocalProvider(
+                        LocalZauberFarben provides farben.fuerZahlen(),
+                    ) {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            RechnenBildschirm(
+                                klasse = aktiver.klasse,
+                                genauigkeit = zustand.genauigkeit,
+                                richtigBisher = aktiver.rechenRichtig,
+                                onRichtig = { bereich.launch { speicher.rechenaufgabeRichtig(aktiver.benutzer.id) } },
+                                onZurueck = { ansicht = Ansicht.Reise },
+                            )
+                        }
+                    }
+
                     is Ansicht.Geschafft -> GeschafftBildschirm(
+                        levelListe = levelListe,
                         levelIndex = jetzt.level,
                         neueSterne = jetzt.neueSterne,
                         onWeiter = {
-                            val naechstes = naechstesLevel(jetzt.level)
+                            val naechstes = (jetzt.level + 1).takeIf { it <= levelListe.lastIndex }
                             ansicht = if (naechstes != null) Ansicht.Ueben(naechstes) else Ansicht.Reise
                         },
                         onZurReise = { ansicht = Ansicht.Reise },
@@ -150,16 +215,43 @@ private fun Zaubernina() {
                         onAbbrechen = { ansicht = Ansicht.Reise },
                     )
 
-                    is Ansicht.Einstellungen -> EinstellungenBildschirm(
-                        thema = fortschritt.thema,
-                        genauigkeit = fortschritt.genauigkeit,
-                        geschafft = fortschritt.geschafft,
-                        sterne = fortschritt.sterne,
-                        onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
-                        onGenauigkeitWechsel = { neu -> bereich.launch { speicher.setzeGenauigkeit(neu) } },
-                        onFortschrittZuruecksetzen = { bereich.launch { speicher.fortschrittZuruecksetzen() } },
-                        onSchliessen = { ansicht = Ansicht.Reise },
-                    )
+                    is Ansicht.Einstellungen -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            EinstellungenBildschirm(
+                                aktiverBenutzer = aktiver,
+                                alleBenutzer = zustand.benutzer,
+                                thema = zustand.thema,
+                                genauigkeit = zustand.genauigkeit,
+                                eigeneWoerter = zustand.eigeneWoerter,
+                                onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
+                                onGenauigkeitWechsel = { neu -> bereich.launch { speicher.setzeGenauigkeit(neu) } },
+                                onPaketWechsel = { neu -> bereich.launch { speicher.setzePaket(aktiver.benutzer.id, neu) } },
+                                onKlasseWechsel = { neu -> bereich.launch { speicher.setzeKlasse(aktiver.benutzer.id, neu) } },
+                                onWortHinzu = { wort ->
+                                    bereich.launch { speicher.setzeEigeneWoerter(zustand.eigeneWoerter + wort) }
+                                },
+                                onWortWeg = { wort ->
+                                    bereich.launch { speicher.setzeEigeneWoerter(zustand.eigeneWoerter - wort) }
+                                },
+                                onBenutzerNeu = { name, avatar ->
+                                    bereich.launch { speicher.benutzerAnlegen(name, avatar) }
+                                },
+                                onBenutzerLoeschen = { id ->
+                                    bereich.launch { speicher.benutzerLoeschen(id) }
+                                    if (id == aktiverId) {
+                                        aktiverId = null
+                                        ansicht = Ansicht.Start
+                                    }
+                                },
+                                onFortschrittZuruecksetzen = {
+                                    bereich.launch { speicher.fortschrittZuruecksetzen(aktiver.benutzer.id) }
+                                },
+                                onSchliessen = { ansicht = Ansicht.Reise },
+                            )
+                        }
+                    }
                 }
             }
         }

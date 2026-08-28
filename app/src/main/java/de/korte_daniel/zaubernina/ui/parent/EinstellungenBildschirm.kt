@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,11 +26,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.korte_daniel.zaubernina.domain.LEVEL
+import de.korte_daniel.zaubernina.data.BenutzerDaten
+import de.korte_daniel.zaubernina.domain.Avatar
+import de.korte_daniel.zaubernina.domain.Klasse
+import de.korte_daniel.zaubernina.domain.Paket
+import de.korte_daniel.zaubernina.domain.bereinigeWort
+import de.korte_daniel.zaubernina.domain.woerterFuer
+import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.logic.Genauigkeit
+import de.korte_daniel.zaubernina.ui.components.AvatarBild
+import de.korte_daniel.zaubernina.ui.theme.LocalZauberSchrift
 import de.korte_daniel.zaubernina.ui.theme.Thema
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
@@ -37,21 +48,35 @@ import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 /**
  * Der Elternbereich. Liegt hinter dem [Elternschloss] und sieht absichtlich nüchtern aus —
  * kein Funkeln, keine großen Knöpfe. Was hier steht, soll ein Kind nicht anziehen.
+ *
+ * Hier ist der einzige Ort mit Systemtastatur (Name und eigene Wörter) — im Kindteil der
+ * App gibt es keine.
  */
 @Composable
 fun EinstellungenBildschirm(
+    aktiverBenutzer: BenutzerDaten,
+    alleBenutzer: List<BenutzerDaten>,
     thema: Thema,
     genauigkeit: Genauigkeit,
-    geschafft: Int,
-    sterne: Int,
+    eigeneWoerter: List<String>,
     onThemaWechsel: (Thema) -> Unit,
     onGenauigkeitWechsel: (Genauigkeit) -> Unit,
+    onPaketWechsel: (Paket) -> Unit,
+    onKlasseWechsel: (Klasse) -> Unit,
+    onWortHinzu: (String) -> Unit,
+    onWortWeg: (String) -> Unit,
+    onBenutzerNeu: (String, Avatar) -> Unit,
+    onBenutzerLoeschen: (Int) -> Unit,
     onFortschrittZuruecksetzen: () -> Unit,
     onSchliessen: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
     var loeschenBestaetigen by remember { mutableStateOf(false) }
+    var neuerName by remember { mutableStateOf("") }
+    var neuerAvatar by remember { mutableStateOf(Avatar.MOND) }
+    var neuesWort by remember { mutableStateOf("") }
+    var wortFehler by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -76,14 +101,187 @@ fun EinstellungenBildschirm(
                 ZauberText("✕", 19.sp, farben.schrift)
             }
         }
-
-        Abschnitt("AUSSEHEN", farben.schriftSchwach)
         ZauberText(
-            text = "Wie die App aussieht, während dein Kind schreibt.",
+            text = "Eingestellt wird gerade: ${aktiverBenutzer.benutzer.name}",
             groesse = 14.sp,
             farbe = farben.schriftSchwach,
-            modifier = Modifier.padding(bottom = 10.dp),
         )
+
+        // ───────── Wortpaket ─────────
+        Abschnitt("WORTPAKET", farben.schriftSchwach)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Paket.entries.forEach { paket ->
+                val woerter = woerterFuer(paket, eigeneWoerter)
+                Wahlzeile(
+                    titel = paket.anzeigename,
+                    beschreibung = "${paket.beschreibung} · ${woerter.size} Wörter",
+                    gewaehlt = paket == aktiverBenutzer.paket,
+                    onClick = { onPaketWechsel(paket) },
+                )
+            }
+        }
+
+        // ───────── Eigene Wörter ─────────
+        Abschnitt("EIGENE WÖRTER", farben.schriftSchwach)
+        ZauberText(
+            text = "Bis zu 10 Wörter, je höchstens 12 Buchstaben. Umlaute gehen, ß wird zu SS.",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        if (eigeneWoerter.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.padding(bottom = 8.dp)) {
+                eigeneWoerter.forEach { wort ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                            .background(farben.flaeche)
+                            .padding(horizontal = 14.dp, vertical = 9.dp),
+                    ) {
+                        ZauberText(wort, 16.sp, farben.schrift, modifier = Modifier.weight(1f))
+                        ZauberText(
+                            text = "entfernen",
+                            groesse = 13.sp,
+                            farbe = Color(0xFFE06A6A),
+                            modifier = Modifier.clickable { onWortWeg(wort) },
+                        )
+                    }
+                }
+            }
+        }
+        if (eigeneWoerter.size < 10) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Eingabefeld(
+                    wert = neuesWort,
+                    hinweis = "Neues Wort …",
+                    onWert = { neuesWort = it; wortFehler = false },
+                    modifier = Modifier.weight(1f),
+                )
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                        .background(farben.akzent)
+                        .clickable {
+                            val sauber = bereinigeWort(neuesWort) { glyph(it) != null }
+                            if (sauber != null) {
+                                onWortHinzu(sauber)
+                                neuesWort = ""
+                            } else {
+                                wortFehler = true
+                            }
+                        }
+                        .padding(horizontal = 18.dp, vertical = 12.dp),
+                ) {
+                    ZauberText("Dazu", 15.sp, farben.aufAkzent, FontWeight.SemiBold)
+                }
+            }
+            if (wortFehler) {
+                ZauberText(
+                    text = "Das geht nicht — nur Buchstaben, höchstens 12.",
+                    groesse = 13.sp,
+                    farbe = Color(0xFFE06A6A),
+                    modifier = Modifier.padding(top = 6.dp),
+                )
+            }
+        }
+
+        // ───────── Rechnen ─────────
+        Abschnitt("RECHNEN", farben.schriftSchwach)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Klasse.entries.forEach { klasse ->
+                Wahlzeile(
+                    titel = klasse.anzeigename,
+                    beschreibung = klasse.beschreibung,
+                    gewaehlt = klasse == aktiverBenutzer.klasse,
+                    onClick = { onKlasseWechsel(klasse) },
+                )
+            }
+        }
+
+        // ───────── Benutzer ─────────
+        Abschnitt("KINDER", farben.schriftSchwach)
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            alleBenutzer.forEach { daten ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                        .background(farben.flaeche)
+                        .padding(horizontal = 14.dp, vertical = 10.dp),
+                ) {
+                    AvatarBild(daten.benutzer.avatar, farben.akzent, Modifier.size(26.dp))
+                    Column(modifier = Modifier.weight(1f)) {
+                        ZauberText(daten.benutzer.name, 16.sp, farben.schrift, FontWeight.Medium)
+                        ZauberText("${daten.sterne} Sterne", 12.sp, farben.schriftSchwach)
+                    }
+                    if (alleBenutzer.size > 1) {
+                        ZauberText(
+                            text = "löschen",
+                            groesse = 13.sp,
+                            farbe = Color(0xFFE06A6A),
+                            modifier = Modifier.clickable { onBenutzerLoeschen(daten.benutzer.id) },
+                        )
+                    }
+                }
+            }
+        }
+        ZauberText(
+            text = "Neues Kind:",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
+            modifier = Modifier.padding(top = 12.dp, bottom = 6.dp),
+        )
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Eingabefeld(
+                wert = neuerName,
+                hinweis = "Name …",
+                onWert = { neuerName = it },
+                modifier = Modifier.weight(1f),
+            )
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                    .background(farben.akzent)
+                    .clickable {
+                        if (neuerName.isNotBlank()) {
+                            onBenutzerNeu(neuerName, neuerAvatar)
+                            neuerName = ""
+                        }
+                    }
+                    .padding(horizontal = 18.dp, vertical = 12.dp),
+            ) {
+                ZauberText("Anlegen", 15.sp, farben.aufAkzent, FontWeight.SemiBold)
+            }
+        }
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(top = 10.dp),
+        ) {
+            Avatar.entries.forEach { avatar ->
+                Box(
+                    modifier = Modifier
+                        .size(46.dp)
+                        .clip(CircleShape)
+                        .background(if (avatar == neuerAvatar) farben.akzent.copy(alpha = 0.22f) else farben.flaeche)
+                        .border(
+                            width = 2.dp,
+                            color = if (avatar == neuerAvatar) farben.akzent else Color.Transparent,
+                            shape = CircleShape,
+                        )
+                        .clickable { neuerAvatar = avatar },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    AvatarBild(avatar, farben.akzent, Modifier.size(26.dp))
+                }
+            }
+        }
+
+        // ───────── Aussehen und Genauigkeit ─────────
+        Abschnitt("AUSSEHEN", farben.schriftSchwach)
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Thema.entries.forEach { t ->
                 Wahlzeile(
@@ -96,12 +294,6 @@ fun EinstellungenBildschirm(
         }
 
         Abschnitt("GENAUIGKEIT", farben.schriftSchwach)
-        ZauberText(
-            text = "Wie genau die Linie getroffen werden muss. Zu genau frustriert, zu leicht lernt nichts.",
-            groesse = 14.sp,
-            farbe = farben.schriftSchwach,
-            modifier = Modifier.padding(bottom = 10.dp),
-        )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.fillMaxWidth()) {
             listOf(
                 Genauigkeit.LEICHT to "Leicht",
@@ -128,10 +320,12 @@ fun EinstellungenBildschirm(
             }
         }
 
-        Abschnitt("FORTSCHRITT", farben.schriftSchwach)
+        // ───────── Fortschritt ─────────
+        Abschnitt("FORTSCHRITT VON ${aktiverBenutzer.benutzer.name.uppercase()}", farben.schriftSchwach)
         ZauberText(
-            text = "$geschafft von ${LEVEL.size} Leveln geschafft · $sterne Sterne",
-            groesse = 15.sp,
+            text = "${aktiverBenutzer.aktuellerStand.geschafft} Level im aktuellen Paket · " +
+                "${aktiverBenutzer.sterne} Sterne · ${aktiverBenutzer.rechenRichtig} Rechenaufgaben",
+            groesse = 14.sp,
             farbe = farben.schrift,
             modifier = Modifier.padding(bottom = 10.dp),
         )
@@ -162,7 +356,8 @@ fun EinstellungenBildschirm(
         ZauberText(
             text = "Diese App hat keinen Internetzugang — die Berechtigung fehlt im Programm. " +
                 "Sie kann nichts senden. Es werden keine Daten erhoben, gespeichert oder " +
-                "übertragen. Keine Werbung, keine Käufe.",
+                "übertragen. Keine Werbung, keine Käufe. Auch deshalb sind die Avatare " +
+                "gemalte Bilder und keine Fotos.",
             groesse = 13.sp,
             farbe = farben.schriftSchwach,
             modifier = Modifier.padding(bottom = 16.dp),
@@ -179,6 +374,34 @@ private fun Abschnitt(titel: String, farbe: Color) {
         gewicht = FontWeight.Medium,
         modifier = Modifier.padding(top = 26.dp, bottom = 6.dp),
     )
+}
+
+@Composable
+private fun Eingabefeld(wert: String, hinweis: String, onWert: (String) -> Unit, modifier: Modifier = Modifier) {
+    val farben = ZauberTheme.farben
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(farben.ecke * 0.7f))
+            .background(farben.flaeche)
+            .border(1.5.dp, farben.schrift.copy(alpha = 0.15f), RoundedCornerShape(farben.ecke * 0.7f))
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+    ) {
+        if (wert.isEmpty()) {
+            ZauberText(hinweis, 15.sp, farben.schriftSchwach.copy(alpha = 0.6f))
+        }
+        BasicTextField(
+            value = wert,
+            onValueChange = onWert,
+            singleLine = true,
+            textStyle = TextStyle(
+                color = farben.schrift,
+                fontSize = 15.sp,
+                fontFamily = LocalZauberSchrift.current,
+            ),
+            cursorBrush = SolidColor(farben.akzent),
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
 }
 
 @Composable

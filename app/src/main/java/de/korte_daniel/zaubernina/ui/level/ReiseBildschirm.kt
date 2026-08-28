@@ -32,7 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.korte_daniel.zaubernina.domain.LEVEL
+import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.domain.levelIstGeschafft
 import de.korte_daniel.zaubernina.domain.levelOffen
@@ -65,12 +65,17 @@ private enum class Knotenzustand { GESCHAFFT, OFFEN, ZU }
 
 @Composable
 fun ReiseBildschirm(
+    level: List<Level>,
     geschafft: Int,
     zahlen: Int,
     sterne: Int,
+    benutzerName: String,
+    avatar: Avatar,
     onLevelWaehlen: (Int) -> Unit,
     onZahlWaehlen: (Int) -> Unit,
     onElternbereich: () -> Unit,
+    onRechnen: () -> Unit,
+    onBenutzerWechsel: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
@@ -85,7 +90,29 @@ fun ReiseBildschirm(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            ZauberText("Deine Reise", 23.sp, farben.schrift, FontWeight.SemiBold)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(farben.ecke))
+                    .clickable(onClick = onBenutzerWechsel)
+                    .padding(end = 8.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(farben.akzent.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    de.korte_daniel.zaubernina.ui.components.AvatarBild(
+                        avatar = avatar,
+                        farbe = farben.akzent,
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+                ZauberText(benutzerName, 22.sp, farben.schrift, FontWeight.SemiBold)
+            }
             Row(verticalAlignment = Alignment.CenterVertically) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -136,7 +163,7 @@ fun ReiseBildschirm(
         ) {
             val breite = maxWidth
             val hoehe = maxHeight
-            val anzahl = LEVEL.size
+            val anzahl = level.size
 
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val punkte = (0 until anzahl).map { i ->
@@ -160,7 +187,7 @@ fun ReiseBildschirm(
             // Die Zwischendurch-Zahlen: kleine Knoten auf halbem Weg zwischen den
             // Wortknoten — bewusst kleiner, die Wörter bleiben die Reise. Die Ziffer
             // nach dem LETZTEN Wort wird über den Knoten hinaus verlängert.
-            LEVEL.indices.forEach { i ->
+            level.indices.filter { zifferFuer(it) <= 9 }.forEach { i ->
                 val (ax1, ay1) = knotenAnteil(i, anzahl)
                 val (zx, zy) = if (i < anzahl - 1) {
                     val (ax2, ay2) = knotenAnteil(i + 1, anzahl)
@@ -187,7 +214,7 @@ fun ReiseBildschirm(
                 )
             }
 
-            LEVEL.forEachIndexed { i, level ->
+            level.forEachIndexed { i, einLevel ->
                 val (ax, ay) = knotenAnteil(i, anzahl)
                 val zustand = when {
                     levelIstGeschafft(i, geschafft) -> Knotenzustand.GESCHAFFT
@@ -196,7 +223,7 @@ fun ReiseBildschirm(
                 }
                 val spaltenBreite = 132.dp
                 Levelknoten(
-                    level = level,
+                    level = einLevel,
                     zustand = zustand,
                     farben = farben,
                     onClick = { if (zustand != Knotenzustand.ZU) onLevelWaehlen(i) },
@@ -210,6 +237,38 @@ fun ReiseBildschirm(
             }
         }
 
+        // Der Moduswechsel: Schreiben ist die Reise, Rechnen der zweite Raum.
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(farben.ecke))
+                    .background(farben.akzent)
+                    .padding(vertical = 13.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                ZauberText("Schreiben", 15.sp, farben.aufAkzent, FontWeight.SemiBold)
+            }
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(farben.ecke))
+                    .background(farben.flaeche)
+                    .border(
+                        width = if (farben.flaecheRand == Color.Transparent) 0.dp else 1.5.dp,
+                        color = farben.flaecheRand,
+                        shape = RoundedCornerShape(farben.ecke),
+                    )
+                    .clickable(onClick = onRechnen)
+                    .padding(vertical = 13.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                ZauberText("Rechnen", 15.sp, farben.zahlAkzent, FontWeight.SemiBold)
+            }
+        }
     }
 }
 
