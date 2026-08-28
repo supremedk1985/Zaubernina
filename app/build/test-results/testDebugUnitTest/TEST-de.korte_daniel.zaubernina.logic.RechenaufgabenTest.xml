@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:20:57.179Z" hostname="nexus" time="0.042">
+<testsuite name="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:30:06.405Z" hostname="nexus" time="0.034">
   <properties/>
-  <testcase name="die Vorschlaege sind drei verschiedene und enthalten die Loesung" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.02"/>
+  <testcase name="die Vorschlaege sind drei verschiedene und enthalten die Loesung" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.013"/>
   <testcase name="Klasse 1 bleibt im Zehnerraum und nie negativ" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.006"/>
   <testcase name="Klasse 2 bleibt im Zwanzigerraum und nie negativ" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.005"/>
-  <testcase name="die falschen Vorschlaege liegen nah an der Loesung" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.002"/>
+  <testcase name="die falschen Vorschlaege liegen nah an der Loesung" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.001"/>
   <testcase name="Vorschule zaehlt Mengen von eins bis sechs" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.004"/>
   <testcase name="die Loesung steht nicht immer an derselben Stelle" classname="de.korte_daniel.zaubernina.logic.RechenaufgabenTest" time="0.005"/>
   <system-out><![CDATA[]]></system-out>

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:20:57.223Z" hostname="nexus" time="0.006">
+<testsuite name="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:30:06.441Z" hostname="nexus" time="0.004">
   <properties/>
-  <testcase name="Genauigkeit wirkt - was leicht durchgeht faellt bei genau durch" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.001"/>
+  <testcase name="Genauigkeit wirkt - was leicht durchgeht faellt bei genau durch" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
   <testcase name="eine Abkuerzung quer ueber den Bogen wird nicht anerkannt" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
-  <testcase name="ein Sprung weiter als die Vorausschau wird nicht anerkannt" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
-  <testcase name="daneben behaelt den Fortschritt und man kann zurueckkommen" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.001"/>
+  <testcase name="ein Sprung weiter als die Vorausschau wird nicht anerkannt" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.001"/>
+  <testcase name="daneben behaelt den Fortschritt und man kann zurueckkommen" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
   <testcase name="rueckwaerts zaehlt nicht" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
   <testcase name="der Anteil waechst monoton" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
-  <testcase name="ein stillstehender Finger schreibt nichts" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.001"/>
+  <testcase name="ein stillstehender Finger schreibt nichts" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.002"/>
   <testcase name="kurz vor Schluss loslassen zaehlt trotzdem" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
   <testcase name="nur der Startpunkt beginnt den Strich" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>
   <testcase name="ein Wisch ohne Startberuehrung beginnt nichts" classname="de.korte_daniel.zaubernina.logic.StrokeTrackerTest" time="0.0"/>

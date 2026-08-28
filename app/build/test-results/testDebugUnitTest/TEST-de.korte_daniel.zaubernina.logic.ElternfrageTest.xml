@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.logic.ElternfrageTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:20:57.163Z" hostname="nexus" time="0.014">
+<testsuite name="de.korte_daniel.zaubernina.logic.ElternfrageTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-28T21:30:06.387Z" hostname="nexus" time="0.016">
   <properties/>
-  <testcase name="die Loesung ist immer zweistellig" classname="de.korte_daniel.zaubernina.logic.ElternfrageTest" time="0.009"/>
+  <testcase name="die Loesung ist immer zweistellig" classname="de.korte_daniel.zaubernina.logic.ElternfrageTest" time="0.011"/>
   <testcase name="die Aufgabe steht als Text da" classname="de.korte_daniel.zaubernina.logic.ElternfrageTest" time="0.0"/>
   <testcase name="die Pruefung nimmt nur die richtige Zahl" classname="de.korte_daniel.zaubernina.logic.ElternfrageTest" time="0.0"/>
   <testcase name="keine Aufgabe ist fuer ein Schulkind zu leicht" classname="de.korte_daniel.zaubernina.logic.ElternfrageTest" time="0.002"/>

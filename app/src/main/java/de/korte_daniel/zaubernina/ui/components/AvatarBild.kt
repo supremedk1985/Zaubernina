@@ -32,16 +32,15 @@ fun AvatarBild(avatar: Avatar, farbe: Color, modifier: Modifier = Modifier) {
             }
 
             Avatar.MOND -> {
-                val pfad = Path().apply {
-                    // Sichel: großer Bogen minus versetzter Bogen.
-                    arcTo(Rect(m.x - r * 0.9f, m.y - r * 0.9f, m.x + r * 0.9f, m.y + r * 0.9f), -70f, 220f, true)
-                    arcTo(
-                        Rect(m.x - r * 0.55f, m.y - r * 0.95f, m.x + r * 1.15f, m.y + r * 0.75f),
-                        150f, -220f, false,
-                    )
-                    close()
+                // Sichel = großer Kreis minus versetzter Kreis. Die Pfad-Differenz ist
+                // sauberer als zwei Bögen von Hand — die sahen zerbrochen aus.
+                val voll = Path().apply {
+                    addOval(Rect(m.x - r * 0.85f, m.y - r * 0.85f, m.x + r * 0.85f, m.y + r * 0.85f))
                 }
-                drawPath(pfad, farbe)
+                val abzug = Path().apply {
+                    addOval(Rect(m.x - r * 0.55f, m.y - r * 1.05f, m.x + r * 1.05f, m.y + r * 0.55f))
+                }
+                drawPath(Path.combine(androidx.compose.ui.graphics.PathOperation.Difference, voll, abzug), farbe)
             }
 
             Avatar.HERZ -> {

@@ -148,9 +148,15 @@ fun UebungsBildschirm(
         }
 
         // Das Wort mit dem gerade geübten Buchstaben hervorgehoben — bei einem
-        // einzelnen Zeichen wäre eine einzelne Kachel nur Rauschen.
-        if (wort.length > 1) Row(
+        // einzelnen Zeichen wäre eine einzelne Kachel nur Rauschen. Die Kachelgröße
+        // rechnet sich aus der Wortlänge: SCHMETTERLING hat 13 Buchstaben, und eine
+        // feste Größe liefe bei allem über 7 aus dem Bild.
+        if (wort.length > 1) androidx.compose.foundation.layout.BoxWithConstraints(
             modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+        ) {
+            val kachel = ((maxWidth - 6.dp * (wort.length - 1)) / wort.length).coerceAtMost(54.dp)
+            Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -159,7 +165,7 @@ fun UebungsBildschirm(
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 3.dp)
-                        .size(if (aktiv) 54.dp else 46.dp)
+                        .size(if (aktiv) kachel else kachel * 0.88f)
                         .clip(RoundedCornerShape(farben.ecke))
                         .background(
                             when {
@@ -170,9 +176,10 @@ fun UebungsBildschirm(
                         ),
                     contentAlignment = Alignment.Center,
                 ) {
+                    val basis = (kachel.value * 0.46f).coerceIn(11f, 25f)
                     ZauberText(
                         text = c.toString(),
-                        groesse = if (aktiv) 25.sp else 21.sp,
+                        groesse = (if (aktiv) basis else basis * 0.86f).sp,
                         gewicht = if (aktiv) FontWeight.SemiBold else FontWeight.Medium,
                         farbe = when {
                             aktiv -> farben.schrift
@@ -182,6 +189,7 @@ fun UebungsBildschirm(
                     )
                 }
             }
+        }
         }
 
         Box(

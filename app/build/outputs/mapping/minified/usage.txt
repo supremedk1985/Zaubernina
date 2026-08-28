@@ -8743,9 +8743,9 @@ androidx.compose.ui.graphics.AndroidPath:
     public void addArc(androidx.compose.ui.geometry.Rect,float,float)
     public void addArcRad(androidx.compose.ui.geometry.Rect,float,float)
     public void addOval(androidx.compose.ui.geometry.Rect)
-    public void addOval(androidx.compose.ui.geometry.Rect,androidx.compose.ui.graphics.Path$Direction)
     public void addRect(androidx.compose.ui.geometry.Rect)
     public void addRoundRect(androidx.compose.ui.geometry.RoundRect)
+    public void arcTo(androidx.compose.ui.geometry.Rect,float,float,boolean)
     public boolean isConvex()
     public static synthetic void isConvex$annotations()
     public void quadraticBezierTo(float,float,float,float)
@@ -9225,8 +9225,6 @@ androidx.compose.ui.graphics.PaintingStyle:
     public java.lang.String toString()
     public static java.lang.String toString-impl(int)
     public final synthetic int unbox-impl()
-androidx.compose.ui.graphics.Path$Companion:
-    public final androidx.compose.ui.graphics.Path combine-xh6zSI8(int,androidx.compose.ui.graphics.Path,androidx.compose.ui.graphics.Path)
 androidx.compose.ui.graphics.Path$DefaultImpls
 androidx.compose.ui.graphics.Path$Direction:
     public static kotlin.enums.EnumEntries getEntries()
@@ -9246,11 +9244,10 @@ androidx.compose.ui.graphics.Path:
     public abstract void addArc(androidx.compose.ui.geometry.Rect,float,float)
     public abstract void addArcRad(androidx.compose.ui.geometry.Rect,float,float)
     public synthetic abstract void addOval(androidx.compose.ui.geometry.Rect)
-    public abstract void addOval(androidx.compose.ui.geometry.Rect,androidx.compose.ui.graphics.Path$Direction)
-    public static synthetic void addOval$default(androidx.compose.ui.graphics.Path,androidx.compose.ui.geometry.Rect,androidx.compose.ui.graphics.Path$Direction,int,java.lang.Object)
     public synthetic abstract void addRect(androidx.compose.ui.geometry.Rect)
     public synthetic abstract void addRoundRect(androidx.compose.ui.geometry.RoundRect)
     public androidx.compose.ui.graphics.Path and(androidx.compose.ui.graphics.Path)
+    public abstract void arcTo(androidx.compose.ui.geometry.Rect,float,float,boolean)
     public void arcToRad(androidx.compose.ui.geometry.Rect,float,float,boolean)
     public abstract boolean isConvex()
     public androidx.compose.ui.graphics.PathIterator iterator()
@@ -25266,7 +25263,6 @@ kotlin.ranges.RangesKt___RangesKt:
     public static final short coerceAtLeast(short,short)
     public static final byte coerceAtMost(byte,byte)
     public static final double coerceAtMost(double,double)
-    public static final java.lang.Comparable coerceAtMost(java.lang.Comparable,java.lang.Comparable)
     public static final short coerceAtMost(short,short)
     public static final byte coerceIn(byte,byte,byte)
     public static final int coerceIn(int,kotlin.ranges.ClosedRange)
@@ -30805,6 +30801,7 @@ androidx.compose.foundation.layout.Arrangement:
     public static final androidx.compose.foundation.layout.Arrangement INSTANCE
     public static final androidx.compose.foundation.layout.Arrangement$HorizontalOrVertical SpaceAround
     public static final androidx.compose.foundation.layout.Arrangement$HorizontalOrVertical SpaceEvenly
+    public static androidx.compose.foundation.layout.Arrangement$HorizontalOrVertical getCenter()
     public static androidx.compose.foundation.layout.Arrangement$SpaceBetween$1 getSpaceBetween()
     public static androidx.compose.foundation.layout.Arrangement$Horizontal getStart()
     public static androidx.compose.foundation.layout.Arrangement$Vertical getTop()
@@ -30824,14 +30821,13 @@ androidx.compose.foundation.layout.BoxScope
 androidx.compose.foundation.layout.BoxScopeInstance
 androidx.compose.foundation.layout.BoxWithConstraintsKt$$InternalSyntheticLambda$5$6a5361cd12ae9a6036f5a38ecc9a948cfb8e0652a2fbd181439e7c89c72371f6$1:
     public final synthetic boolean f$2
-    public final synthetic int f$4
     public final synthetic int f$5
 androidx.compose.foundation.layout.BoxWithConstraintsScope
 androidx.compose.foundation.layout.BoxWithConstraintsScopeImpl:
     public final synthetic androidx.compose.foundation.layout.BoxScopeInstance $$delegate_0
     public static long getConstraints-msEJaDk()
     public static float getMaxHeight-D9Ej5fM()
-    public static float getMaxWidth-D9Ej5fM()
+    public final float getMaxWidth-D9Ej5fM()
 androidx.compose.foundation.layout.ColumnMeasurePolicy$$InternalSyntheticLambda$5$93799c5b77012d168efd67c43296083bb51e28a72c984b9c422e3047cc6c12be$0:
     public final synthetic int f$3
 androidx.compose.foundation.layout.ColumnMeasurePolicy:
@@ -34784,10 +34780,10 @@ androidx.compose.ui.graphics.AndroidPath:
     public static final int $stable
     public android.graphics.Matrix mMatrix
     static void <clinit>()
+    public final void addOval()
     public final void addPath-Uv8p0NA()
     public final void addRect()
     public final void addRoundRect()
-    public final void arcTo()
     public final int getFillType-Rg-k1Os()
     public static android.graphics.Path getInternalPath()
     public final boolean isEmpty()
@@ -34811,8 +34807,6 @@ androidx.compose.ui.graphics.AndroidPathMeasure:
     public static long getTangent-tuRUvjQ()
 androidx.compose.ui.graphics.AndroidPathMeasure_androidKt
 androidx.compose.ui.graphics.AndroidPath_androidKt$WhenMappings
-androidx.compose.ui.graphics.AndroidPath_androidKt:
-    public static final android.graphics.Path$Direction access$toPlatformPathDirection()
 androidx.compose.ui.graphics.AndroidShader_androidKt:
     public static final int countTransparentColors()
     public static final int[] makeTransparentColors(java.util.List)
@@ -35010,14 +35004,16 @@ androidx.compose.ui.graphics.Paint
 androidx.compose.ui.graphics.PaintingStyle$Companion
 androidx.compose.ui.graphics.PaintingStyle
 androidx.compose.ui.graphics.Path$Companion
-androidx.compose.ui.graphics.Path$Direction
+androidx.compose.ui.graphics.Path$Direction:
+    public static final synthetic kotlin.enums.EnumEntries $ENTRIES
+    public static final enum androidx.compose.ui.graphics.Path$Direction Clockwise
 androidx.compose.ui.graphics.Path:
     public static final androidx.compose.ui.graphics.Path$Companion Companion
     static void <clinit>()
+    public abstract void addOval()
     public abstract void addPath-Uv8p0NA()
     public abstract void addRect()
     public abstract void addRoundRect()
-    public abstract void arcTo()
     public abstract void close()
     public abstract void cubicTo(float,float,float,float,float,float)
     public abstract androidx.compose.ui.geometry.Rect getBounds()
@@ -39574,7 +39570,6 @@ androidx.compose.ui.text.font.FontVariation$Settings:
 androidx.compose.ui.text.font.FontVariation
 androidx.compose.ui.text.font.FontWeight$Companion:
     public static androidx.compose.ui.text.font.FontWeight getBold()
-    public static androidx.compose.ui.text.font.FontWeight getMedium()
     public static androidx.compose.ui.text.font.FontWeight getNormal()
     public static androidx.compose.ui.text.font.FontWeight getW400()
     public static androidx.compose.ui.text.font.FontWeight getW500()
