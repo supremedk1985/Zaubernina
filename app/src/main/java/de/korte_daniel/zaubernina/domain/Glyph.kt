@@ -40,6 +40,13 @@ data class Stroke(
     val start: GlyphPoint,
     val segmente: List<StrokeSegment>,
     val pfeileBei: List<Float> = listOf(0.42f, 0.82f),
+    /**
+     * Ein Tupfer statt eines Zugs: der Punkt auf dem i, die Punkte über ä ö ü. Er wird
+     * getippt, nicht nachgefahren, und deshalb als gefüllter Kreis gezeichnet statt als
+     * Linie. Ohne diese Unterscheidung wäre ein Punkt nicht zu schaffen — eine
+     * Berührung ohne Bewegung kommt in keinem Strich ans Ziel.
+     */
+    val tupfer: Boolean = false,
 ) {
     /**
      * Zerlegt den Strich in ungefähr gleich weit auseinanderliegende Stützpunkte — die

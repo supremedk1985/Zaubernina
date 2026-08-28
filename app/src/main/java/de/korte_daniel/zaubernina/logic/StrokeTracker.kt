@@ -51,6 +51,8 @@ class StrokeTracker(
     private val toleranz: Float = Genauigkeit.NORMAL.toleranz,
     private val vorausschau: Int = 12,
     private val startToleranz: Float = toleranz * 1.35f,
+    /** Punkt auf dem i: ein Tippen genügt, es wird nichts nachgefahren. */
+    private val tupfer: Boolean = false,
 ) {
     init {
         require(punkte.size >= 2) { "Ein Strich braucht mindestens zwei Punkte" }
@@ -72,12 +74,21 @@ class StrokeTracker(
     /** Der Finger geht auf den Bildschirm. Zählt nur, wenn er den Startpunkt trifft. */
     fun senke(p: GlyphPoint): Zug {
         if (zustand == Zug.FERTIG) return zustand
-        zustand = if (abstand(p, punkte.first()) <= startToleranz) {
-            fortschritt = 0
-            Zug.LAEUFT
-        } else {
-            fortschritt = -1
-            Zug.WARTET
+        val getroffen = abstand(p, punkte.first()) <= startToleranz
+        zustand = when {
+            // Ein Tupfer ist mit dem Tippen erledigt.
+            getroffen && tupfer -> {
+                fortschritt = punkte.lastIndex
+                Zug.FERTIG
+            }
+            getroffen -> {
+                fortschritt = 0
+                Zug.LAEUFT
+            }
+            else -> {
+                fortschritt = -1
+                Zug.WARTET
+            }
         }
         return zustand
     }

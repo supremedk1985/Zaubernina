@@ -2,6 +2,9 @@ de.korte_daniel.zaubernina
 color fenster_hintergrund
 color ic_launcher_background
 drawable ic_launcher_foreground
+font baloo2
+font fredoka
+font patrick_hand
 mipmap ic_launcher
 string app_name
 string cd_elternbereich
