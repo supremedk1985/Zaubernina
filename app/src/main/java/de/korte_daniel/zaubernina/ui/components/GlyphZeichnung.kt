@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke as StrichStil
+import de.korte_daniel.zaubernina.domain.Glyph
 import de.korte_daniel.zaubernina.domain.GlyphPoint
 import de.korte_daniel.zaubernina.domain.Stroke
 import de.korte_daniel.zaubernina.domain.StrokeSegment
@@ -29,22 +30,28 @@ private const val BAND_UNTEN = 1040f
 /**
  * Legt das Zeichen so groß wie möglich in die Fläche.
  *
- * Zwei verschiedene Bezugsgrößen, und das mit Absicht:
- *   - SENKRECHT das feste Schriftband (Oberlinie bis Unterlinie), nicht die Höhe des
- *     einzelnen Zeichens. Sonst wäre ein kleines "a" so groß wie ein großes "N", und das
- *     Kind bekäme ein falsches Gefühl für die Größenverhältnisse.
- *   - WAAGERECHT die tatsächliche Breite des Zeichens, damit ein schmales "i" den
- *     Bildschirm genauso ausfüllt wie ein breites "m".
+ * Der MASSSTAB ist für alle Zeichen gleich, die POSITION nicht:
+ *   - Senkrecht bezieht er sich auf das feste Schriftband (Oberlinie bis Unterlinie),
+ *     nicht auf die Höhe des einzelnen Zeichens. Sonst wäre ein kleines "a" so groß wie
+ *     ein großes "N".
+ *   - Waagerecht auf [bezugsBreite], also die Breite des BREITESTEN Zeichens — nicht auf
+ *     die des gerade gezeigten. Das war der erste Entwurf, und er war falsch: das I ist
+ *     unendlich schmal, wurde deshalb nur von der Höhe begrenzt und erschien HÖHER als das
+ *     N daneben. Zwei Großbuchstaben müssen gleich hoch sein, sonst lernt ein Kind eine
+ *     falsche Größenordnung.
+ *
+ * Zentriert wird dagegen auf der eigenen Mitte des Zeichens, damit ein schmales I in der
+ * Bildmitte steht und nicht am Rand.
  */
 fun boxabbildungFuer(
     breiteVonBis: ClosedFloatingPointRange<Float>,
+    bezugsBreite: Float,
     flaecheBreite: Float,
     flaecheHoehe: Float,
 ): Boxabbildung {
     val rand = SCHABLONE_BREITE * 0.7f
-    val zeichenBreite = (breiteVonBis.endInclusive - breiteVonBis.start) + rand * 2f
     val bandHoehe = BAND_UNTEN - BAND_OBEN
-    val skala = minOf(flaecheBreite / zeichenBreite, flaecheHoehe / bandHoehe)
+    val skala = minOf(flaecheBreite / (bezugsBreite + rand * 2f), flaecheHoehe / bandHoehe)
 
     val mitteBoxX = (breiteVonBis.start + breiteVonBis.endInclusive) / 2f
     val mitteBoxY = (BAND_OBEN + BAND_UNTEN) / 2f
@@ -258,4 +265,43 @@ fun DrawScope.zeichneSchreiblinien(ab: Boxabbildung, farben: ZauberFarben) {
     linie(150f, false)
     linie(400f, true)
     linie(850f, false)
+}
+
+/**
+ * Zeichnet ein ganzes Wort leuchtend nebeneinander — für den Level-Abschluss.
+ *
+ * Die Buchstaben behalten ihre Größenverhältnisse zueinander (alle auf demselben
+ * Schriftband), nur der gemeinsame Maßstab passt sich der Fläche an.
+ */
+fun DrawScope.zeichneWortLeuchtend(zeichen: List<Glyph>, farben: ZauberFarben) {
+    if (zeichen.isEmpty()) return
+    val ABSTAND = 130f // Boxeinheiten zwischen zwei Buchstaben
+    val BAND_MITTE = 500f
+    val BAND_HOEHE = 830f
+
+    val spannen = zeichen.map { g ->
+        val punkte = g.striche.flatMap { it.abtasten(40) }
+        punkte.minOf { it.x } to punkte.maxOf { it.x }
+    }
+    val gesamt = spannen.sumOf { (links, rechts) -> (rechts - links).toDouble() }.toFloat() +
+        ABSTAND * (zeichen.size - 1)
+    val skala = minOf(
+        size.width / (gesamt + SCHABLONE_BREITE * 1.4f),
+        size.height / (BAND_HOEHE + SCHABLONE_BREITE * 1.4f),
+    )
+
+    var x = (size.width - gesamt * skala) / 2f
+    val versatzY = size.height / 2f - BAND_MITTE * skala
+    zeichen.forEachIndexed { i, glyphe ->
+        val (links, rechts) = spannen[i]
+        val ab = Boxabbildung(skala = skala, versatzX = x - links * skala, versatzY = versatzY)
+        for (strich in glyphe.striche) {
+            if (strich.tupfer) {
+                zeichneTupfer(ab.zumSchirm(strich.start), ab, farben.spurKern.first())
+            } else {
+                zeichneSpur(strich.zuPath(ab), ab, farben)
+            }
+        }
+        x += (rechts - links) * skala + ABSTAND * skala
+    }
 }

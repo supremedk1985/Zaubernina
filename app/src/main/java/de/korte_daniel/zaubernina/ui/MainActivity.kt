@@ -5,23 +5,30 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import de.korte_daniel.zaubernina.data.grundschrift.WOERTER
-import de.korte_daniel.zaubernina.logic.Genauigkeit
-import de.korte_daniel.zaubernina.ui.theme.Thema
+import androidx.compose.ui.platform.LocalContext
+import de.korte_daniel.zaubernina.data.Fortschritt
+import de.korte_daniel.zaubernina.data.FortschrittSpeicher
+import de.korte_daniel.zaubernina.domain.LEVEL
+import de.korte_daniel.zaubernina.domain.naechstesLevel
+import de.korte_daniel.zaubernina.domain.sterneFuer
+import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
+import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 import de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirm
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,18 +41,23 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/** Wo die App gerade steht. Bewusst eine kleine versiegelte Klasse statt einer Navigations-Bibliothek. */
+private sealed interface Ansicht {
+    data object Reise : Ansicht
+    data class Ueben(val level: Int) : Ansicht
+    data class Geschafft(val level: Int, val neueSterne: Int) : Ansicht
+}
+
 @Composable
 private fun Zaubernina() {
-    // Noch im Speicher statt in DataStore: die Themenwahl wandert mit dem Elternbereich
-    // in die dauerhafte Ablage.
-    var thema by remember { mutableStateOf(Thema.NACHTHIMMEL) }
-    val genauigkeit = Genauigkeit.NORMAL
+    val context = LocalContext.current
+    val speicher = remember { FortschrittSpeicher(context) }
+    val bereich = rememberCoroutineScope()
+    val fortschritt by speicher.fortschritt.collectAsState(initial = Fortschritt())
 
-    var wortIndex by remember { mutableIntStateOf(0) }
-    var buchstabeIndex by remember { mutableIntStateOf(0) }
-    val wort = WOERTER[wortIndex]
+    var ansicht by remember { mutableStateOf<Ansicht>(Ansicht.Reise) }
 
-    ZauberTheme(thema) {
+    ZauberTheme(fortschritt.thema) {
         val farben = ZauberTheme.farben
         Box(
             modifier = Modifier
@@ -53,20 +65,38 @@ private fun Zaubernina() {
                 .drawBehind { drawRect(farben.hintergrundPinsel(size)) },
         ) {
             Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
-                UebungsBildschirm(
-                    wort = wort,
-                    buchstabeIndex = buchstabeIndex,
-                    thema = thema,
-                    genauigkeit = genauigkeit,
-                    onThemaWechsel = { thema = it },
-                    onBuchstabeFertig = {
-                        buchstabeIndex = (buchstabeIndex + 1) % wort.length
-                    },
-                    onWortWechsel = {
-                        wortIndex = (wortIndex + 1) % WOERTER.size
-                        buchstabeIndex = 0
-                    },
-                )
+                when (val jetzt = ansicht) {
+                    is Ansicht.Reise -> ReiseBildschirm(
+                        geschafft = fortschritt.geschafft,
+                        sterne = fortschritt.sterne,
+                        thema = fortschritt.thema,
+                        onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
+                        onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
+                    )
+
+                    is Ansicht.Ueben -> UebungsBildschirm(
+                        level = LEVEL[jetzt.level],
+                        genauigkeit = fortschritt.genauigkeit,
+                        onZurueck = { ansicht = Ansicht.Reise },
+                        onLevelFertig = {
+                            // Die Sterne müssen VOR dem Speichern gerechnet werden — danach
+                            // ist das Level schon als geschafft vermerkt und es gäbe keine mehr.
+                            val neueSterne = sterneFuer(jetzt.level, fortschritt.geschafft)
+                            bereich.launch { speicher.levelGeschafft(jetzt.level) }
+                            ansicht = Ansicht.Geschafft(jetzt.level, neueSterne)
+                        },
+                    )
+
+                    is Ansicht.Geschafft -> GeschafftBildschirm(
+                        levelIndex = jetzt.level,
+                        neueSterne = jetzt.neueSterne,
+                        onWeiter = {
+                            val naechstes = naechstesLevel(jetzt.level)
+                            ansicht = if (naechstes != null) Ansicht.Ueben(naechstes) else Ansicht.Reise
+                        },
+                        onZurReise = { ansicht = Ansicht.Reise },
+                    )
+                }
             }
         }
     }

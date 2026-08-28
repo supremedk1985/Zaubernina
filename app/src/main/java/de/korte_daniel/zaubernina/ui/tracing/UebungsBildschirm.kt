@@ -1,7 +1,7 @@
 package de.korte_daniel.zaubernina.ui.tracing
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,14 +36,16 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.korte_daniel.zaubernina.data.grundschrift.BREITESTE_ZEICHENBREITE
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.domain.Glyph
+import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.logic.StrokeTracker
 import de.korte_daniel.zaubernina.logic.Zug
-import de.korte_daniel.zaubernina.ui.components.boxabbildungFuer
-import de.korte_daniel.zaubernina.ui.components.SCHABLONE_BREITE
 import de.korte_daniel.zaubernina.ui.components.Funkenfeld
+import de.korte_daniel.zaubernina.ui.components.SCHABLONE_BREITE
+import de.korte_daniel.zaubernina.ui.components.boxabbildungFuer
 import de.korte_daniel.zaubernina.ui.components.sternPunkte
 import de.korte_daniel.zaubernina.ui.components.teilPfad
 import de.korte_daniel.zaubernina.ui.components.zeichneHilfen
@@ -50,47 +54,40 @@ import de.korte_daniel.zaubernina.ui.components.zeichneSchreiblinien
 import de.korte_daniel.zaubernina.ui.components.zeichneSpur
 import de.korte_daniel.zaubernina.ui.components.zeichneTupfer
 import de.korte_daniel.zaubernina.ui.components.zuPath
-import de.korte_daniel.zaubernina.ui.theme.Thema
-import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
-import androidx.compose.foundation.Canvas
+import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 
 /**
- * Der Kernbildschirm: ein Zeichen groß in der Mitte, Schablone mit Startpunkt und Pfeilen,
- * und die Zauberlinie unter dem Finger.
+ * Ein Level schreiben: Buchstabe für Buchstabe, jeder mit Schablone, Startpunkt, Pfeilen
+ * und der Zauberlinie unter dem Finger.
  *
- * Noch nicht drin (kommt nach der ersten Rückmeldung): die Stufen „Zeigen" und „Aus dem
- * Kopf", Töne, Haptik, die Zeichenauswahl und der Elternbereich. Die Themenwahl unten ist
- * ein Behelf zum Ausprobieren — sie gehört später in den Elternbereich.
+ * Noch nicht drin: die Stufen „Zeigen" und „Aus dem Kopf", Töne und Haptik.
  */
 @Composable
 fun UebungsBildschirm(
-    wort: String,
-    buchstabeIndex: Int,
-    thema: Thema,
+    level: Level,
     genauigkeit: Genauigkeit,
-    onThemaWechsel: (Thema) -> Unit,
-    onBuchstabeFertig: () -> Unit,
-    onWortWechsel: () -> Unit,
+    onZurueck: () -> Unit,
+    onLevelFertig: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
-    val zeichen = wort.getOrNull(buchstabeIndex) ?: return
+    var buchstabeIndex by remember(level) { mutableIntStateOf(0) }
+    val zeichen = level.wort.getOrNull(buchstabeIndex) ?: return
     val glyphe: Glyph = glyph(zeichen) ?: return
 
     val abgetastet = remember(glyphe) { glyphe.striche.map { it.abtasten(120) } }
-    // Die tatsächliche Breite dieses Zeichens — sie bestimmt, wie groß es gezeigt wird.
     val zeichenBreite = remember(glyphe) {
         val alle = abgetastet.flatten()
         alle.minOf { it.x }..alle.maxOf { it.x }
     }
-    var strichIndex by remember(glyphe) { mutableIntStateOf(0) }
-    var anteil by remember(glyphe) { mutableFloatStateOf(0f) }
-    var zustand by remember(glyphe) { mutableStateOf(Zug.WARTET) }
-    var finger by remember(glyphe) { mutableStateOf<Offset?>(null) }
-    var glypheFertig by remember(glyphe) { mutableStateOf(false) }
+    var strichIndex by remember(glyphe, buchstabeIndex) { mutableIntStateOf(0) }
+    var anteil by remember(glyphe, buchstabeIndex) { mutableFloatStateOf(0f) }
+    var zustand by remember(glyphe, buchstabeIndex) { mutableStateOf(Zug.WARTET) }
+    var finger by remember(glyphe, buchstabeIndex) { mutableStateOf<Offset?>(null) }
+    var buchstabeFertig by remember(glyphe, buchstabeIndex) { mutableStateOf(false) }
 
-    val tracker = remember(glyphe, strichIndex, genauigkeit) {
+    val tracker = remember(glyphe, buchstabeIndex, strichIndex, genauigkeit) {
         StrokeTracker(
             punkte = abgetastet[strichIndex],
             toleranz = genauigkeit.toleranz,
@@ -113,48 +110,85 @@ fun UebungsBildschirm(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        // Das Wort mit dem gerade geübten Buchstaben hervorgehoben.
-        // BEHELF: Antippen wechselt zum nächsten Wort. Ersetzt später die Auswahlseite.
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-                .clickable(onClick = onWortWechsel),
+            modifier = Modifier.fillMaxWidth().height(50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(CircleShape)
+                    .background(farben.flaeche)
+                    .clickable(onClick = onZurueck),
+                contentAlignment = Alignment.Center,
+            ) {
+                Canvas(modifier = Modifier.size(20.dp)) {
+                    val pfad = Path().apply {
+                        moveTo(size.width * 0.68f, size.height * 0.12f)
+                        lineTo(size.width * 0.30f, size.height * 0.5f)
+                        lineTo(size.width * 0.68f, size.height * 0.88f)
+                    }
+                    drawPath(pfad, farben.schrift, style = StrichStil(width = 2.4f * density))
+                }
+            }
+            ZauberText(
+                text = "Level ${level.nummer} · Buchstabe ${buchstabeIndex + 1} von ${level.wort.length}",
+                groesse = 15.sp,
+                farbe = farben.schriftSchwach,
+            )
+            Box(modifier = Modifier.size(46.dp))
+        }
+
+        // Das Wort mit dem gerade geübten Buchstaben hervorgehoben.
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            wort.forEachIndexed { i, c ->
-                ZauberText(
-                    text = c.toString(),
-                    groesse = 30.sp,
-                    gewicht = if (i == buchstabeIndex) FontWeight.SemiBold else FontWeight.Medium,
-                    farbe = when {
-                        i == buchstabeIndex -> farben.akzent
-                        i < buchstabeIndex -> farben.schrift
-                        else -> farben.schriftSchwach
-                    },
-                    modifier = Modifier.padding(horizontal = 3.dp),
-                )
+            level.wort.forEachIndexed { i, c ->
+                val aktiv = i == buchstabeIndex
+                Box(
+                    modifier = Modifier
+                        .padding(horizontal = 3.dp)
+                        .size(if (aktiv) 54.dp else 46.dp)
+                        .clip(RoundedCornerShape(farben.ecke))
+                        .background(
+                            when {
+                                aktiv -> farben.schrift.copy(alpha = 0.13f)
+                                i < buchstabeIndex -> farben.akzent.copy(alpha = 0.18f)
+                                else -> farben.flaeche
+                            },
+                        ),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    ZauberText(
+                        text = c.toString(),
+                        groesse = if (aktiv) 25.sp else 21.sp,
+                        gewicht = if (aktiv) FontWeight.SemiBold else FontWeight.Medium,
+                        farbe = when {
+                            aktiv -> farben.schrift
+                            i < buchstabeIndex -> farben.akzent
+                            else -> farben.schriftSchwach.copy(alpha = 0.55f)
+                        },
+                    )
+                }
             }
         }
 
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier = Modifier.fillMaxWidth().weight(1f),
             contentAlignment = Alignment.Center,
         ) {
             Canvas(
                 modifier = Modifier
                     .fillMaxSize()
-                    .pointerInput(glyphe, strichIndex, genauigkeit, zeichenBreite) {
-                        val ab = boxabbildungFuer(zeichenBreite, size.width.toFloat(), size.height.toFloat())
+                    .pointerInput(glyphe, buchstabeIndex, strichIndex, genauigkeit, zeichenBreite) {
+                        val ab = boxabbildungFuer(zeichenBreite, BREITESTE_ZEICHENBREITE, size.width.toFloat(), size.height.toFloat())
                         awaitEachGesture {
                             val down = awaitFirstDown()
                             zustand = tracker.senke(ab.zurBox(down.position))
@@ -186,7 +220,7 @@ fun UebungsBildschirm(
                                     anteil = 0f
                                     zustand = Zug.WARTET
                                 } else {
-                                    glypheFertig = true
+                                    buchstabeFertig = true
                                 }
                             } else {
                                 zustand = tracker.hebe()
@@ -197,25 +231,20 @@ fun UebungsBildschirm(
                     },
             ) {
                 @Suppress("UNUSED_EXPRESSION") takt // Abhängigkeit: neu zeichnen bei jedem Bild
-                val ab = boxabbildungFuer(zeichenBreite, size.width, size.height)
+                val ab = boxabbildungFuer(zeichenBreite, BREITESTE_ZEICHENBREITE, size.width, size.height)
 
                 zeichneSchreiblinien(ab, farben)
 
-                // Schablonen aller Striche — auch der noch nicht geschriebenen.
-                glyphe.striche.forEachIndexed { i, strich ->
+                glyphe.striche.forEach { strich ->
                     if (strich.tupfer) {
-                        drawCircle(
-                            color = farben.schablone,
-                            radius = ab.laenge(SCHABLONE_BREITE / 2f),
-                            center = ab.zumSchirm(strich.start),
-                        )
+                        drawCircle(farben.schablone, ab.laenge(SCHABLONE_BREITE / 2f), ab.zumSchirm(strich.start))
                     } else {
                         zeichneSchablone(strich.zuPath(ab), ab, farben)
                     }
                 }
 
-                // Fertig geschriebene Striche stehen voll da.
-                for (i in 0 until strichIndex) {
+                val fertigeStriche = if (buchstabeFertig) glyphe.striche.size else strichIndex
+                for (i in 0 until fertigeStriche) {
                     val strich = glyphe.striche[i]
                     if (strich.tupfer) {
                         zeichneTupfer(ab.zumSchirm(strich.start), ab, farben.spurKern.first())
@@ -223,23 +252,13 @@ fun UebungsBildschirm(
                         zeichneSpur(strich.zuPath(ab), ab, farben)
                     }
                 }
-                if (glypheFertig) {
-                    val strich = glyphe.striche.last()
-                    if (strich.tupfer) {
-                        zeichneTupfer(ab.zumSchirm(strich.start), ab, farben.spurKern.first())
-                    } else {
-                        zeichneSpur(strich.zuPath(ab), ab, farben)
-                    }
-                }
 
-                // Der laufende Strich, so weit er geschrieben ist.
-                if (!glypheFertig) {
+                if (!buchstabeFertig) {
                     val strich = glyphe.striche[strichIndex]
                     val deckkraft = if (zustand == Zug.DANEBEN) 0.4f else 1f
                     if (!strich.tupfer && anteil > 0f) {
                         zeichneSpur(teilPfad(strich.zuPath(ab), anteil), ab, farben, deckkraft)
                     }
-                    // Hilfen nur für den Strich, der gerade dran ist.
                     if (strich.tupfer) {
                         drawCircle(
                             color = farben.startpunkt,
@@ -252,13 +271,11 @@ fun UebungsBildschirm(
                     }
                 }
 
-                // Der leuchtende Kopf unter dem Finger.
                 finger?.takeIf { zustand == Zug.LAEUFT || zustand == Zug.FERTIG }?.let { f ->
                     drawCircle(farben.spurSchein, ab.laenge(74f), f, alpha = 0.45f)
                     drawCircle(farben.spurKern.first(), ab.laenge(42f), f)
                 }
 
-                // Die Funken.
                 for (funke in feld.funken) {
                     val punkte = sternPunkte(
                         Offset(funke.x, funke.y),
@@ -274,7 +291,8 @@ fun UebungsBildschirm(
                 }
             }
 
-            if (glypheFertig) {
+            if (buchstabeFertig) {
+                val letzter = buchstabeIndex == level.wort.lastIndex
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
@@ -283,10 +301,10 @@ fun UebungsBildschirm(
                         .padding(horizontal = 34.dp, vertical = 26.dp),
                 ) {
                     ZauberText(
-                        text = "Toll gemacht!",
-                        groesse = 34.sp,
-                        gewicht = FontWeight.Bold,
+                        text = if (letzter) "Fertig!" else "Toll gemacht!",
+                        groesse = 32.sp,
                         farbe = farben.schrift,
+                        gewicht = FontWeight.Bold,
                     )
                     Box(
                         modifier = Modifier
@@ -294,53 +312,22 @@ fun UebungsBildschirm(
                             .clip(RoundedCornerShape(farben.ecke))
                             .background(farben.akzent)
                             .clickable {
-                                glypheFertig = false
-                                strichIndex = 0
-                                anteil = 0f
-                                zustand = Zug.WARTET
-                                feld.leeren()
-                                onBuchstabeFertig()
+                                if (letzter) {
+                                    onLevelFertig()
+                                } else {
+                                    feld.leeren()
+                                    buchstabeIndex++
+                                }
                             }
                             .padding(horizontal = 30.dp, vertical = 15.dp),
                     ) {
                         ZauberText(
-                            text = "Weiter",
-                            groesse = 21.sp,
-                            gewicht = FontWeight.Bold,
+                            text = if (letzter) "Zeig mir das Wort" else "Weiter",
+                            groesse = 20.sp,
                             farbe = farben.aufAkzent,
+                            gewicht = FontWeight.Bold,
                         )
                     }
-                }
-            }
-        }
-
-        // BEHELF: Themenwahl zum Ausprobieren. Gehört später in den Elternbereich.
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Thema.entries.forEach { t ->
-                val aktiv = t == thema
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .clip(RoundedCornerShape(farben.ecke))
-                        .background(if (aktiv) farben.akzent else farben.flaeche)
-                        .border(
-                            width = if (farben.flaecheRand == Color.Transparent) 0.dp else 1.5.dp,
-                            color = if (aktiv) Color.Transparent else farben.flaecheRand,
-                            shape = RoundedCornerShape(farben.ecke),
-                        )
-                        .clickable { onThemaWechsel(t) }
-                        .padding(vertical = 13.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    ZauberText(
-                        text = t.anzeigename,
-                        groesse = 13.sp,
-                        gewicht = FontWeight.Medium,
-                        farbe = if (aktiv) farben.aufAkzent else farben.schriftSchwach,
-                    )
                 }
             }
         }

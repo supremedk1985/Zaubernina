@@ -255,8 +255,22 @@ val GRUNDSCHRIFT: Map<Char, Glyph> = (GROSSBUCHSTABEN + KLEINBUCHSTABEN).associa
 
 /**
  * Die Wörter, die geübt werden — vorerst in Großbuchstaben, so wie die meisten
- * Erstklässler anfangen. Später im Elternbereich erweiterbar.
+ * Erstklässler anfangen.
+ *
+ * Die REIHENFOLGE steht nicht hier, sondern in domain/Level.kt: dort ist sie die Reise.
+ * Diese Liste ist nur die Prüfliste "welche Wörter müssen zeichenbar sein" und wird
+ * daraus abgeleitet, damit beide nicht auseinanderlaufen können.
  */
-val WOERTER: List<String> = listOf("NINA", "LEA", "MIRA", "PAPA", "MAMA", "DANIEL", "NATHALIE")
+val WOERTER: List<String> get() = de.korte_daniel.zaubernina.domain.LEVEL.map { it.wort }
 
 fun glyph(zeichen: Char): Glyph? = GRUNDSCHRIFT[zeichen]
+
+/**
+ * Die Breite des breitesten Zeichens. Sie ist der gemeinsame Bezug für die Darstellung:
+ * Alle Zeichen werden mit DEMSELBEN Maßstab gezeigt, damit ein schmales I nicht größer
+ * wirkt als ein breites N.
+ */
+val BREITESTE_ZEICHENBREITE: Float = GRUNDSCHRIFT.values.maxOf { glyphe ->
+    val punkte = glyphe.striche.flatMap { it.abtasten(40) }
+    punkte.maxOf { it.x } - punkte.minOf { it.x }
+}
