@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Schmales Android-Thema: alles Sichtbare macht Compose. Der Fensterhintergrund
+         ist nur das, was in der Zehntelsekunde vor dem ersten Bild zu sehen ist. -->
+    <style name="Theme.Zaubernina" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/fenster_hintergrund</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

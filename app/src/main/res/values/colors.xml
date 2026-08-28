@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Nur für das App-Symbol und den Fensterhintergrund vor dem ersten Compose-Bild.
+         Die eigentlichen Farben der App stehen in ui/theme/ und wechseln mit dem Thema. -->
+    <color name="ic_launcher_background">#1A1240</color>
+    <color name="fenster_hintergrund">#0A0C22</color>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Zaubernina</string>
+
+    <!-- Übungsbildschirm -->
+    <string name="stufe_zeigen">Schau gut zu</string>
+    <string name="stufe_nachfahren">Fahr die Linie nach</string>
+    <string name="stufe_aus_dem_kopf">Jetzt du ganz allein</string>
+    <string name="hoer_mal">Hör mal</string>
+
+    <!-- Jubel -->
+    <string name="jubel_titel">Toll gemacht!</string>
+    <string name="jubel_stern">Ein Stern dazu</string>
+    <string name="jubel_nochmal">Nochmal</string>
+    <string name="jubel_weiter">Weiter</string>
+
+    <!-- Beschreibungen für die Sprachausgabe -->
+    <string name="cd_startseite">Zurück zur Auswahl</string>
+    <string name="cd_elternbereich">Elternbereich</string>
+    <string name="cd_sterne">Gesammelte Sterne</string>
+</resources>
