@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/font_fredoka.ttf.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/font/fredoka.ttf"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/xml_backup_rules.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/font_baloo2.ttf.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/font/baloo2.ttf"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/font_patrick_hand.ttf.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/font/patrick_hand.ttf"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "de.korte_daniel.zaubernina.app-minified-33:/xml_data_extraction_rules.xml.flat",
+        "source": "de.korte_daniel.zaubernina.app-main-34:/xml/data_extraction_rules.xml"
+    }
+]

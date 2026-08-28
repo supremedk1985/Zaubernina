@@ -34,7 +34,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.material3.Text
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.domain.Glyph
 import de.korte_daniel.zaubernina.logic.Genauigkeit
@@ -53,6 +52,7 @@ import de.korte_daniel.zaubernina.ui.components.zeichneTupfer
 import de.korte_daniel.zaubernina.ui.components.zuPath
 import de.korte_daniel.zaubernina.ui.theme.Thema
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
+import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import androidx.compose.foundation.Canvas
 
 /**
@@ -74,7 +74,6 @@ fun UebungsBildschirm(
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
-    val schriftart = ZauberTheme.schrift
     val zeichen = wort.getOrNull(buchstabeIndex) ?: return
     val glyphe: Glyph = glyph(zeichen) ?: return
 
@@ -126,12 +125,11 @@ fun UebungsBildschirm(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             wort.forEachIndexed { i, c ->
-                Text(
+                ZauberText(
                     text = c.toString(),
-                    fontFamily = schriftart,
-                    fontSize = 30.sp,
-                    fontWeight = if (i == buchstabeIndex) FontWeight.SemiBold else FontWeight.Medium,
-                    color = when {
+                    groesse = 30.sp,
+                    gewicht = if (i == buchstabeIndex) FontWeight.SemiBold else FontWeight.Medium,
+                    farbe = when {
                         i == buchstabeIndex -> farben.akzent
                         i < buchstabeIndex -> farben.schrift
                         else -> farben.schriftSchwach
@@ -279,12 +277,11 @@ fun UebungsBildschirm(
                         .background(if (farben.dunkel) Color(0xCC0A0C22) else Color(0xE6FFF9EE))
                         .padding(horizontal = 34.dp, vertical = 26.dp),
                 ) {
-                    Text(
-                        "Toll gemacht!",
-                        fontFamily = schriftart,
-                        fontSize = 34.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = farben.schrift,
+                    ZauberText(
+                        text = "Toll gemacht!",
+                        groesse = 34.sp,
+                        gewicht = FontWeight.Bold,
+                        farbe = farben.schrift,
                     )
                     Box(
                         modifier = Modifier
@@ -301,12 +298,11 @@ fun UebungsBildschirm(
                             }
                             .padding(horizontal = 30.dp, vertical = 15.dp),
                     ) {
-                        Text(
-                            "Weiter",
-                            fontFamily = schriftart,
-                            fontSize = 21.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = farben.aufAkzent,
+                        ZauberText(
+                            text = "Weiter",
+                            groesse = 21.sp,
+                            gewicht = FontWeight.Bold,
+                            farbe = farben.aufAkzent,
                         )
                     }
                 }
@@ -334,12 +330,11 @@ fun UebungsBildschirm(
                         .padding(vertical = 13.dp),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Text(
-                        t.anzeigename,
-                        fontFamily = schriftart,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium,
-                        color = if (aktiv) farben.aufAkzent else farben.schriftSchwach,
+                    ZauberText(
+                        text = t.anzeigename,
+                        groesse = 13.sp,
+                        gewicht = FontWeight.Medium,
+                        farbe = if (aktiv) farben.aufAkzent else farben.schriftSchwach,
                     )
                 }
             }

@@ -30,6 +30,21 @@ android {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+        // Der Build, der aufs Handy geht. Übernimmt die komplette Release-Konfiguration
+        // (dieselben R8-Regeln), signiert aber mit dem Debug-Schlüssel und trägt dieselbe
+        // App-ID wie debug — er ersetzt die Entwicklungsfassung also als Update.
+        //
+        // Ohne ihn wären es 31 MB, davon 31 MB unverkleinerte Compose-Bibliothek. Das ist
+        // zugleich der einzige Weg, die Verkleinerung ohne Release-Schlüssel auf einem
+        // Gerät auszuprobieren: R8-Fehler zeigen sich erst zur Laufzeit, nicht beim Bauen.
+        create("minified") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".debug"
+            versionNameSuffix = "-schlank"
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFile("proguard-rules-lesbar.pro")
+            matchingFallbacks += listOf("release")
+        }
     }
 
     compileOptions {
@@ -63,7 +78,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.graphics)
     implementation(libs.compose.foundation)
-    implementation(libs.compose.material3)
     implementation(libs.compose.ui.tooling.preview)
     debugImplementation(libs.compose.ui.tooling)
 
@@ -74,16 +88,17 @@ dependencies {
     testImplementation(libs.coroutines.test)
 }
 
-// Veröffentlicht das Debug-APK nach jedem assembleDebug unter der festen Adresse
-// http://192.168.178.10/zaubernina-debug.apk (nginx-Webroot auf nexus). Auf fremden
-// Rechnern tut die Aufgabe nichts.
+// Veröffentlicht den verkleinerten Build unter der festen Adresse
+// http://192.168.178.10/zaubernina.apk (nginx-Webroot auf nexus). Bewusst NICHT der
+// Debug-Build: der ist rund siebenmal so groß und nur für den Emulator gedacht.
+// Auf fremden Rechnern tut die Aufgabe nichts.
 val nexusWebroot = file("/opt/stacks/web/html")
-val veroeffentlicheDebugApk = tasks.register<Copy>("veroeffentlicheDebugApk") {
+val veroeffentlicheApk = tasks.register<Copy>("veroeffentlicheApk") {
     onlyIf { nexusWebroot.isDirectory }
-    from(layout.buildDirectory.file("outputs/apk/debug/app-debug.apk"))
+    from(layout.buildDirectory.file("outputs/apk/minified/app-minified.apk"))
     into(nexusWebroot)
-    rename { "zaubernina-debug.apk" }
+    rename { "zaubernina.apk" }
 }
-tasks.matching { it.name == "assembleDebug" }.configureEach {
-    finalizedBy(veroeffentlicheDebugApk)
+tasks.matching { it.name == "assembleMinified" }.configureEach {
+    finalizedBy(veroeffentlicheApk)
 }

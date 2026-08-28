@@ -1,0 +1,30 @@
+<variant
+    name="minified"
+    package="de.korte_daniel.zaubernina"
+    minSdkVersion="29"
+    targetSdkVersion="36.0"
+    shrinking="true"
+    mergedManifest="build/intermediates/merged_manifest/minified/processMinifiedMainManifest/AndroidManifest.xml"
+    manifestMergeReport="build/outputs/logs/manifest-merger-minified-report.txt"
+    proguardFiles="build/intermediates/default_proguard_files/global/proguard-android-optimize.txt-9.0.1:proguard-rules.pro:proguard-rules-lesbar.pro"
+    partialResultsDir="build/intermediates/lint_vital_partial_results/minified/lintVitalAnalyzeMinified/out">
+  <buildFeatures/>
+  <sourceProviders>
+    <sourceProvider
+        manifests="src/main/AndroidManifest.xml"
+        javaDirectories="src/main/java:src/minified/java:src/main/kotlin:src/minified/kotlin"
+        resDirectories="src/main/res:src/minified/res"
+        assetsDirectories="src/main/assets:src/minified/assets"/>
+  </sourceProviders>
+  <testSourceProviders>
+  </testSourceProviders>
+  <testFixturesSourceProviders>
+  </testFixturesSourceProviders>
+  <artifact
+      classOutputs="build/intermediates/javac/minified/compileMinifiedJavaWithJavac/classes:build/intermediates/built_in_kotlinc/minified/compileMinifiedKotlin/classes:build/intermediates/compile_r_class_jar/minified/generateMinifiedRFile/R.jar"
+      type="MAIN"
+      applicationId="de.korte_daniel.zaubernina.debug"
+      generatedSourceFolders="build/generated/ap_generated_sources/minified/out"
+      desugaredMethodsFiles="/home/daniel/.gradle/caches/9.2.1/transforms/98d083d2e62141ac8b5d1f7058512b82/transformed/D8BackportedDesugaredMethods.txt">
+  </artifact>
+</variant>

@@ -1,0 +1,148 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="de.korte_daniel.zaubernina.debug"
+4    android:versionCode="1"
+5    android:versionName="0.1-schlank" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="29"
+9        android:targetSdkVersion="36" />
+10
+11    <permission
+11-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:22:5-24:47
+12        android:name="de.korte_daniel.zaubernina.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+12-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:23:9-81
+13        android:protectionLevel="signature" />
+13-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:24:9-44
+14
+15    <uses-permission android:name="de.korte_daniel.zaubernina.debug.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+15-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:26:5-97
+15-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:26:22-94
+16    <!--
+17      ABSICHTLICH LEER: Hier steht kein einziges <uses-permission>, insbesondere kein
+18      android.permission.INTERNET. Die App KANN damit nichts senden — das ist keine
+19      Zusage, sondern eine Eigenschaft des Programms, und sie ist im Play Store
+20      nachprüfbar. Wer hier etwas hinzufügt, hebt genau diese Eigenschaft auf.
+21    -->
+22    <application
+22-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:11:5-30:19
+23        android:allowBackup="true"
+23-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:12:9-35
+24        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+24-->[androidx.core:core:1.17.0] /home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/AndroidManifest.xml:28:18-86
+25        android:dataExtractionRules="@xml/data_extraction_rules"
+25-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:13:9-65
+26        android:extractNativeLibs="false"
+27        android:fullBackupContent="@xml/backup_rules"
+27-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:14:9-54
+28        android:icon="@mipmap/ic_launcher"
+28-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:15:9-43
+29        android:label="@string/app_name"
+29-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:16:9-41
+30        android:supportsRtl="false"
+30-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:17:9-36
+31        android:theme="@style/Theme.Zaubernina" >
+31-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:18:9-48
+32        <activity
+32-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:20:9-29:20
+33            android:name="de.korte_daniel.zaubernina.ui.MainActivity"
+33-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:21:13-44
+34            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|uiMode"
+34-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:23:13-94
+35            android:exported="true"
+35-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:22:13-36
+36            android:theme="@style/Theme.Zaubernina" >
+36-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:24:13-52
+37            <intent-filter>
+37-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:25:13-28:29
+38                <action android:name="android.intent.action.MAIN" />
+38-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:26:17-69
+38-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:26:25-66
+39
+40                <category android:name="android.intent.category.LAUNCHER" />
+40-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:27:17-77
+40-->/home/daniel/Zaubernina/app/src/main/AndroidManifest.xml:27:27-74
+41            </intent-filter>
+42        </activity>
+43
+44        <uses-library
+44-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:23:9-25:40
+45            android:name="androidx.window.extensions"
+45-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:24:13-54
+46            android:required="false" />
+46-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:25:13-37
+47        <uses-library
+47-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:26:9-28:40
+48            android:name="androidx.window.sidecar"
+48-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:27:13-51
+49            android:required="false" />
+49-->[androidx.window:window:1.5.0] /home/daniel/.gradle/caches/9.2.1/transforms/3fd7dbf98bc7d0a8aa556068cf6ddc95/transformed/window-1.5.0/AndroidManifest.xml:28:13-37
+50
+51        <provider
+51-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+52            android:name="androidx.startup.InitializationProvider"
+52-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:25:13-67
+53            android:authorities="de.korte_daniel.zaubernina.debug.androidx-startup"
+53-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:26:13-68
+54            android:exported="false" >
+54-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:27:13-37
+55            <meta-data
+55-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+56                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+56-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:30:17-75
+57                android:value="androidx.startup" />
+57-->[androidx.emoji2:emoji2:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/d72841af404916cc5240a160346cef16/transformed/emoji2-1.4.0/AndroidManifest.xml:31:17-49
+58            <meta-data
+58-->[androidx.lifecycle:lifecycle-process:2.10.0] /home/daniel/.gradle/caches/9.2.1/transforms/a5d8839c3677a51ddd3adbbe63d06523/transformed/lifecycle-process-2.10.0/AndroidManifest.xml:29:13-31:52
+59                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+59-->[androidx.lifecycle:lifecycle-process:2.10.0] /home/daniel/.gradle/caches/9.2.1/transforms/a5d8839c3677a51ddd3adbbe63d06523/transformed/lifecycle-process-2.10.0/AndroidManifest.xml:30:17-78
+60                android:value="androidx.startup" />
+60-->[androidx.lifecycle:lifecycle-process:2.10.0] /home/daniel/.gradle/caches/9.2.1/transforms/a5d8839c3677a51ddd3adbbe63d06523/transformed/lifecycle-process-2.10.0/AndroidManifest.xml:31:17-49
+61            <meta-data
+61-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:29:13-31:52
+62                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+62-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:30:17-85
+63                android:value="androidx.startup" />
+63-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:31:17-49
+64        </provider>
+65
+66        <receiver
+66-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:34:9-52:20
+67            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+67-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:35:13-76
+68            android:directBootAware="false"
+68-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:36:13-44
+69            android:enabled="true"
+69-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:37:13-35
+70            android:exported="true"
+70-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:38:13-36
+71            android:permission="android.permission.DUMP" >
+71-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:39:13-57
+72            <intent-filter>
+72-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:40:13-42:29
+73                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+73-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:17-91
+73-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:41:25-88
+74            </intent-filter>
+75            <intent-filter>
+75-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:43:13-45:29
+76                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+76-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:17-85
+76-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:44:25-82
+77            </intent-filter>
+78            <intent-filter>
+78-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:46:13-48:29
+79                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+79-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:17-88
+79-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:47:25-85
+80            </intent-filter>
+81            <intent-filter>
+81-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:49:13-51:29
+82                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+82-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:17-95
+82-->[androidx.profileinstaller:profileinstaller:1.4.0] /home/daniel/.gradle/caches/9.2.1/transforms/2e40853957cc79c88a695f960c1274a3/transformed/profileinstaller-1.4.0/AndroidManifest.xml:50:25-92
+83            </intent-filter>
+84        </receiver>
+85    </application>
+86
+87</manifest>

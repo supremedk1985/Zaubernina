@@ -1,0 +1,60 @@
+{
+    "logs": [
+        {
+            "outputFile": "de.korte_daniel.zaubernina.app-mergeMinifiedResources-31:/values-pt-rPT/values-pt-rPT.xml",
+            "map": [
+                {
+                    "source": "/home/daniel/.gradle/caches/9.2.1/transforms/0c6f33b234c1f4b58d56b5759f99cc5e/transformed/core-1.17.0/res/values-pt-rPT/values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,152,254,353,453,560,666,787",
+                        "endColumns": "96,101,98,99,106,105,120,100",
+                        "endOffsets": "147,249,348,448,555,661,782,883"
+                    },
+                    "to": {
+                        "startLines": "4,5,6,7,8,9,10,27",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "337,434,536,635,735,842,948,2449",
+                        "endColumns": "96,101,98,99,106,105,120,100",
+                        "endOffsets": "429,531,630,730,837,943,1064,2545"
+                    }
+                },
+                {
+                    "source": "/home/daniel/.gradle/caches/9.2.1/transforms/3ccb8204da639a4c40290238f94a7884/transformed/ui/res/values-pt-rPT/values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "107,219,314,397,494,593,679,758,855,946,1033,1118,1208,1284,1369,1445,1524,1599,1675,1747",
+                        "endColumns": "111,94,82,96,98,85,78,96,90,86,84,89,75,84,75,78,74,75,71,125",
+                        "endOffsets": "214,309,392,489,588,674,753,850,941,1028,1113,1203,1279,1364,1440,1519,1594,1670,1742,1868"
+                    },
+                    "to": {
+                        "startLines": "3,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30",
+                        "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
+                        "startOffsets": "225,1069,1164,1247,1344,1443,1529,1608,1705,1796,1883,1968,2058,2134,2219,2295,2374,2550,2626,2698",
+                        "endColumns": "111,94,82,96,98,85,78,96,90,86,84,89,75,84,75,78,74,75,71,121",
+                        "endOffsets": "332,1159,1242,1339,1438,1524,1603,1700,1791,1878,1963,2053,2129,2214,2290,2369,2444,2621,2693,2815"
+                    }
+                },
+                {
+                    "source": "/home/daniel/.gradle/caches/9.2.1/transforms/279fba3ac281a418b3fed79fe89d0be0/transformed/foundation/res/values-pt-rPT/values-pt-rPT.xml",
+                    "from": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,175,262",
+                        "endColumns": "119,86,88",
+                        "endOffsets": "170,257,346"
+                    },
+                    "to": {
+                        "startLines": "2,31,32",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "105,2820,2907",
+                        "endColumns": "119,86,88",
+                        "endOffsets": "220,2902,2991"
+                    }
+                }
+            ]
+        }
+    ]
+}

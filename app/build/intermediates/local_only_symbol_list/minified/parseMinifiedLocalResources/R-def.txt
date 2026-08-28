@@ -1,0 +1,24 @@
+R_DEF: Internal format may change without notice
+local
+color fenster_hintergrund
+color ic_launcher_background
+drawable ic_launcher_foreground
+font baloo2
+font fredoka
+font patrick_hand
+mipmap ic_launcher
+string app_name
+string cd_elternbereich
+string cd_startseite
+string cd_sterne
+string hoer_mal
+string jubel_nochmal
+string jubel_stern
+string jubel_titel
+string jubel_weiter
+string stufe_aus_dem_kopf
+string stufe_nachfahren
+string stufe_zeigen
+style Theme.Zaubernina
+xml backup_rules
+xml data_extraction_rules
