@@ -12,18 +12,30 @@ enum class Paket(val anzeigename: String, val beschreibung: String) {
     EIGENE("Eigene", "Deine eigene Wortliste aus dem Elternbereich"),
 }
 
-/** Kurz und mit einfachen Formen — viele Geraden, wenige Bögen. */
+/**
+ * Kurz und mit einfachen Formen. Erweitert am 2026-08-29: NEUE WÖRTER IMMER HINTEN
+ * ANHÄNGEN, nie mittendrin einfügen — der Fortschritt merkt sich nur, WIE VIELE Level
+ * geschafft sind. Wer mitten in der Liste einfügt, verschiebt einem Kind die Reise.
+ */
 private val SCHNECKE_WOERTER = listOf(
     "OMA", "OPA", "BALL", "AUTO", "HAUS", "HUND", "KATZE", "SONNE", "MOND", "STERN",
+    // die zweite Runde: Tiere und Kurzes, wieder von leicht nach schwerer
+    "KUH", "EIS", "BÄR", "ENTE", "MAUS", "IGEL", "BAUM", "EULE", "FISCH", "VOGEL",
 )
 
-/** Die sieben Namen der Familie — das ursprüngliche Spiel. */
-private val STANDARD_WOERTER = listOf("NINA", "MAMA", "PAPA", "LEA", "MIRA", "DANIEL", "NATHALIE")
+/** Erst die sieben Namen der Familie — das ursprüngliche Spiel —, dann der Rest der Familie. */
+private val STANDARD_WOERTER = listOf(
+    "NINA", "MAMA", "PAPA", "LEA", "MIRA", "DANIEL", "NATHALIE",
+    "OMA", "OPA", "TANTE", "ONKEL", "FAMILIE",
+)
 
 /** Lang und mit den schweren Buchstaben (S, G, W, Z …). */
 private val FUCHS_WOERTER = listOf(
     "FUCHS", "SCHULE", "FLUGZEUG", "REGENBOGEN", "GEBURTSTAG", "PURZELBAUM",
     "WEIHNACHTEN", "KINDERGARTEN", "ZAUBERNINA", "SCHMETTERLING",
+    // die zweite Runde: Tiere, Feste und Zungenbrecher fürs Auge
+    "ELEFANT", "PINGUIN", "GIRAFFE", "KROKODIL", "NIKOLAUS", "OSTERHASE",
+    "FEUERWEHR", "SPIELPLATZ", "LUFTBALLON", "SCHOKOLADE", "PRINZESSIN", "DINOSAURIER",
 )
 
 /**

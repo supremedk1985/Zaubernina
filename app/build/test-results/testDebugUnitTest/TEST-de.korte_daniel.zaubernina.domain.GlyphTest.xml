@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.GlyphTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T16:34:44.546Z" hostname="nexus" time="0.005">
+<testsuite name="de.korte_daniel.zaubernina.domain.GlyphTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T17:15:35.830Z" hostname="nexus" time="0.005">
   <properties/>
   <testcase name="Abtastung beginnt am Start und endet am Ende" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.0"/>
   <testcase name="Abtastung liefert ungefaehr die gewuenschte Punktzahl" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.0"/>
