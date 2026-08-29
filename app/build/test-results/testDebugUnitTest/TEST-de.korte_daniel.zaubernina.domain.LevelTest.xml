@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.LevelTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-08-29T14:29:27.082Z" hostname="nexus" time="0.009">
+<testsuite name="de.korte_daniel.zaubernina.domain.LevelTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-08-29T15:12:01.273Z" hostname="nexus" time="0.002">
   <properties/>
-  <testcase name="nach dem letzten Level kommt keines mehr" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.006"/>
-  <testcase name="ein geschafftes Level oeffnet genau das naechste" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
-  <testcase name="das letzte Level laesst sich nicht melken" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
+  <testcase name="nach dem letzten Level kommt keines mehr" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
+  <testcase name="ein geschafftes Level oeffnet genau das naechste" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
+  <testcase name="das letzte Level laesst sich nicht melken" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="ein altes Level noch einmal zu spielen aendert nichts" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
-  <testcase name="die Reise hat Level ab Nummer eins und keine Luecken" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
+  <testcase name="die Reise hat Level ab Nummer eins und keine Luecken" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="am Anfang ist nur das erste Level offen" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>
   <testcase name="sind alle geschafft ist auch alles offen und alles hat einen Stern" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.001"/>
   <testcase name="Sterne gibt es nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.LevelTest" time="0.0"/>

@@ -5,6 +5,8 @@ import de.korte_daniel.zaubernina.data.grundschrift.WOERTER
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.domain.BOX
 import de.korte_daniel.zaubernina.domain.abstand
+import de.korte_daniel.zaubernina.logic.Genauigkeit
+import de.korte_daniel.zaubernina.logic.StrokeTracker
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -108,6 +110,25 @@ class GrundschriftTest {
                 assertTrue("$zeichen beginnt bei $oben statt an der Oberlinie 150", oben in 145f..155f)
             }
             assertTrue("$zeichen endet bei $unten statt an der Grundlinie 850", unten in 840f..860f)
+        }
+    }
+
+    @Test
+    fun `jeder Strich laesst sich sauber nachfahren`() {
+        // Ein Finger, der die Linie exakt entlangfährt, muss JEDEN Strich fertig
+        // schreiben können. Das klingt selbstverständlich, ist es aber nicht: die
+        // Zickzack-Buchstaben (A M N V W) kehren an ihren Spitzen scharf um, und der
+        // Tracker darf an so einer Kehre weder hängen bleiben noch vorzeitig auf den
+        // Rückweg springen. Genau dafür ist dieser Test da — er hätte auch jeden
+        // Zeichenfehler gefangen, bei dem ein Strich sich selbst überlappt.
+        for ((zeichen, glyphe) in GRUNDSCHRIFT) {
+            glyphe.striche.forEachIndexed { i, strich ->
+                val punkte = strich.abtasten(120)
+                val tracker = StrokeTracker(punkte, toleranz = Genauigkeit.NORMAL.toleranz, tupfer = strich.tupfer)
+                tracker.senke(punkte.first())
+                for (p in punkte) tracker.ziehe(p)
+                assertTrue("$zeichen, Strich ${i + 1}: sauberes Nachfahren wird nicht fertig", tracker.fertig)
+            }
         }
     }
 

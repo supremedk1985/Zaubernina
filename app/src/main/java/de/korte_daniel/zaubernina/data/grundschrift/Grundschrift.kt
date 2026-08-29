@@ -26,11 +26,18 @@ import de.korte_daniel.zaubernina.domain.StrokeSegment.Linie
  *
  *   - Abstriche zuerst, Querstriche DANACH (T: Stamm vor Deckel; H „in der Regel beide
  *     Abstriche, danach der Querstrich")
- *   - Zickzack-Buchstaben (V W M, auch A) laufen als EIN Zug mit Haltepunkten — beim N
- *     wird der rechte Stamm als AUFSTRICH nach oben geschrieben
+ *   - Zickzack-Buchstaben (A M N V W) laufen als EIN Zug mit Haltepunkten an den Spitzen
+ *     (Bewegungsgruppe V „Zickzacklinie"). A, M und N beginnen dabei UNTEN LINKS mit
+ *     einem Aufstrich — so lehren es auch die Schreiblehrgänge (sofatutor, bayerische
+ *     Druckschrift): „Du beginnst auf der unteren Schreiblinie und ziehst einen geraden
+ *     Strich nach oben." Korrigiert am 2026-08-29 nach Daniels zweitem Einspruch; die
+ *     Kartei nennt für M/N auch eine Variante mit Stamm-Abstrich zuerst, die Schule
+ *     schreibt sie aber in einem Zug von unten.
  *   - Ovale gegen den Uhrzeigersinn (C O Q G, Ziffer 0); B D P R Bögen im Uhrzeigersinn,
  *     bei R hängen Bogen und Bein in einem Zug
- *   - Mittel-Querstriche (E F H) und die Zackentiefen von M/W liegen auf der Mittellinie
+ *   - Mittel-Querstriche (E F H) und die M-Zacke liegen auf der Mittellinie; die
+ *     W-Mittelspitze reicht dagegen bis ganz OBEN (Kartei-Zeichnung und sofatutor:
+ *     „zwei große V direkt nebeneinander")
  *   - Punkte und Umlautpunkte zuletzt
  *
  * Ziffern nach dem Ziffernschreibkurs (Merksprüche, schulimpulse.de) — alle bestätigt.
@@ -130,35 +137,49 @@ private val L_GROSS = Glyph(
 )
 
 /**
- * M: linker Stamm herunter; dann in EINEM Zug vom Anfangspunkt: Diagonale hinunter bis
- * zur MITTELLINIE, hinauf, und der rechte Stamm gerade herunter (Kartei: „Folge von vier
- * Auf- und Abstrichen", die Zacke reicht nur „bis zur oberen Grenze des Mittelbandes").
+ * M: EIN Zug, beginnend UNTEN LINKS — Aufstrich gerade hinauf, Diagonale hinunter bis
+ * zur MITTELLINIE, Diagonale hinauf, rechter Stamm gerade herunter. So lehrt es der
+ * Schreiblehrgang (sofatutor: „Du beginnst auf der unteren Schreiblinie des
+ * Erdgeschosses und ziehst einen geraden Strich nach oben … schräg nach rechts unten
+ * bis zur oberen Schreiblinie des Erdgeschosses …"), und die Grundschrift-Kartei nennt
+ * genau diesen Anfangspunkt als gleichwertige Variante. Die Zackentiefe Mittellinie
+ * steht in Kartei UND Lehrgang („obere Grenze des Mittelbandes").
  */
 private val M_GROSS = Glyph(
     zeichen = 'M', name = "M",
     striche = listOf(
-        zug(p(230f, OBERLINIE), p(230f, GRUNDLINIE)),
         Stroke(
-            start = p(230f, OBERLINIE),
-            segmente = listOf(Linie(p(500f, MITTELLINIE)), Linie(p(770f, OBERLINIE)), Linie(p(770f, GRUNDLINIE))),
-            pfeileBei = listOf(0.2f, 0.55f, 0.9f),
+            start = p(230f, GRUNDLINIE),
+            segmente = listOf(
+                Linie(p(230f, OBERLINIE)),
+                Linie(p(500f, MITTELLINIE)),
+                Linie(p(770f, OBERLINIE)),
+                Linie(p(770f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.12f, 0.38f, 0.62f, 0.88f),
         ),
     ),
 )
 
 /**
- * N: linker Stamm herunter; dann in EINEM Zug: Diagonale hinunter und der rechte Stamm
- * als AUFSTRICH gerade nach oben (Kartei: „nach einem kurzen Haltepunkt folgt der letzte
- * Aufstrich gerade nach oben"). Der rechte Stamm wird beim N von unten geschrieben.
+ * N: EIN Zug, beginnend UNTEN LINKS — Aufstrich gerade hinauf, Diagonale hinunter,
+ * rechter Stamm als Aufstrich gerade hinauf. So lehrt es der Schreiblehrgang
+ * (sofatutor: „Du ziehst einen geraden Strich zur oberen Schreiblinie des Dachs. Von
+ * dort malst du einen schrägen Strich nach rechts unten … Zum Schluss zeichnest du
+ * wieder einen geraden Strich nach oben."). Der Schluss-Aufstrich steht wörtlich auch
+ * in der Grundschrift-Kartei; nur der Anfang ist dort als Abstrich-Variante notiert.
  */
 private val N_GROSS = Glyph(
     zeichen = 'N', name = "N",
     striche = listOf(
-        zug(p(250f, OBERLINIE), p(250f, GRUNDLINIE)),
         Stroke(
-            start = p(250f, OBERLINIE),
-            segmente = listOf(Linie(p(750f, GRUNDLINIE)), Linie(p(750f, OBERLINIE))),
-            pfeileBei = listOf(0.26f, 0.76f),
+            start = p(250f, GRUNDLINIE),
+            segmente = listOf(
+                Linie(p(250f, OBERLINIE)),
+                Linie(p(750f, GRUNDLINIE)),
+                Linie(p(750f, OBERLINIE)),
+            ),
+            pfeileBei = listOf(0.16f, 0.5f, 0.84f),
         ),
     ),
 )
@@ -396,8 +417,11 @@ private val V_GROSS = Glyph(
 )
 
 /**
- * W: zweimal hinunter und hinauf — ein Zug. Die mittlere Zacke reicht nur bis zur
- * MITTELLINIE (Kartei: „Aufstrich bis zur oberen Grenze des Mittelbandes").
+ * W: zweimal hinunter und hinauf — ein Zug, „zwei große V direkt nebeneinander"
+ * (sofatutor). Die Mittelspitze reicht bis ganz OBEN zur Oberlinie — so steht das W
+ * auch in der Grundschrift-Buchstabentafel (nachgemessen: Mittelspitze auf gleicher
+ * Höhe wie die äußeren Spitzen). Die frühere Fassung mit Mittelspitze auf der
+ * Mittellinie war eine Fehldeutung des Kartei-Textes zum M.
  */
 private val W_GROSS = Glyph(
     zeichen = 'W', name = "W",
@@ -406,7 +430,7 @@ private val W_GROSS = Glyph(
             start = p(180f, OBERLINIE),
             segmente = listOf(
                 Linie(p(340f, GRUNDLINIE)),
-                Linie(p(500f, MITTELLINIE)),
+                Linie(p(500f, OBERLINIE)),
                 Linie(p(660f, GRUNDLINIE)),
                 Linie(p(820f, OBERLINIE)),
             ),

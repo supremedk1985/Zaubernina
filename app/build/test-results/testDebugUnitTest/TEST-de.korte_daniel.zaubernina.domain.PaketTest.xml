@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.PaketTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-08-29T14:29:27.096Z" hostname="nexus" time="0.009">
+<testsuite name="de.korte_daniel.zaubernina.domain.PaketTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-08-29T15:12:01.276Z" hostname="nexus" time="0.004">
   <properties/>
-  <testcase name="levelFuer nummeriert ab eins" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.0"/>
-  <testcase name="bereinigeWort macht gross und laesst nur Gezeichnetes durch" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.006"/>
-  <testcase name="leere eigene Liste faellt auf die Schnecke zurueck" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.002"/>
+  <testcase name="levelFuer nummeriert ab eins" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.001"/>
+  <testcase name="bereinigeWort macht gross und laesst nur Gezeichnetes durch" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.001"/>
+  <testcase name="leere eigene Liste faellt auf die Schnecke zurueck" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.0"/>
   <testcase name="jedes Wort jedes Pakets ist komplett zeichenbar" classname="de.korte_daniel.zaubernina.domain.PaketTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

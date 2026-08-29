@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.ZahlenTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T14:29:27.113Z" hostname="nexus" time="0.002">
+<testsuite name="de.korte_daniel.zaubernina.domain.ZahlenTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T15:12:01.281Z" hostname="nexus" time="0.001">
   <properties/>
-  <testcase name="der Zusatzstern kommt nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.001"/>
-  <testcase name="eine Zahl geht erst nach ihrem Wort auf" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.001"/>
+  <testcase name="der Zusatzstern kommt nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
+  <testcase name="eine Zahl geht erst nach ihrem Wort auf" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
   <testcase name="eine Zahl sperrt nichts" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
-  <testcase name="der Bitsatz merkt sich jede Zahl einzeln" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
+  <testcase name="der Bitsatz merkt sich jede Zahl einzeln" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.001"/>
   <testcase name="die Ziffer ist die Levelnummer" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
