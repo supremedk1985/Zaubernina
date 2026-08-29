@@ -73,6 +73,9 @@ fun UebungsBildschirm(
     onFertig: () -> Unit,
     modifier: Modifier = Modifier,
     ohneZwischenjubel: Boolean = false,
+    // Texte des Abschluss-Jubels — das Alphabet sagt "Weiter" statt "Zeig mir das Wort".
+    jubelLetzter: String = "Fertig!",
+    knopfLetzter: String = "Zeig mir das Wort",
 ) {
     val farben = ZauberTheme.farben
     var buchstabeIndex by remember(wort) { mutableIntStateOf(0) }
@@ -215,7 +218,16 @@ fun UebungsBildschirm(
                             while (!tracker.fertig) {
                                 val ereignis = awaitPointerEvent()
                                 val wechsel = ereignis.changes.firstOrNull() ?: break
-                                if (!wechsel.pressed) break
+                                if (!wechsel.pressed) {
+                                    // Die letzten Bewegungs-Frames vor dem Anheben gehen im
+                                    // Ereignis-Batching unter — die Endposition des Anhebens
+                                    // muss deshalb noch als Zug zählen. Ohne das scheiterte
+                                    // ein kurzer Strich (A-Querbalken) bei 87 %, obwohl der
+                                    // Finger sein Ende erreicht hatte.
+                                    zustand = tracker.ziehe(ab.zurBox(wechsel.position))
+                                    anteil = tracker.anteil
+                                    break
+                                }
                                 zustand = tracker.ziehe(ab.zurBox(wechsel.position))
                                 anteil = tracker.anteil
                                 finger = wechsel.position
@@ -321,7 +333,7 @@ fun UebungsBildschirm(
                         .padding(horizontal = 34.dp, vertical = 26.dp),
                 ) {
                     ZauberText(
-                        text = if (letzter) "Fertig!" else "Toll gemacht!",
+                        text = if (letzter) jubelLetzter else "Toll gemacht!",
                         groesse = 32.sp,
                         farbe = farben.schrift,
                         gewicht = FontWeight.Bold,
@@ -342,7 +354,7 @@ fun UebungsBildschirm(
                             .padding(horizontal = 30.dp, vertical = 15.dp),
                     ) {
                         ZauberText(
-                            text = if (letzter) "Zeig mir das Wort" else "Weiter",
+                            text = if (letzter) knopfLetzter else "Weiter",
                             groesse = 20.sp,
                             farbe = farben.aufAkzent,
                             gewicht = FontWeight.Bold,

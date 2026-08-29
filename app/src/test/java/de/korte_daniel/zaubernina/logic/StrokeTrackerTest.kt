@@ -183,6 +183,44 @@ class StrokeTrackerTest {
     }
 
     @Test
+    fun `ein kurzer Strich wird auch fertig wenn die letzten Frames fehlen`() {
+        // Der Querbalken des A: 360 Einheiten. Ereignis-Batching verschluckt die letzten
+        // Bewegungen — der Tracker bekommt 85 % und dann direkt die Endposition des
+        // Anhebens. Das MUSS reichen: geometrisch fehlt weniger als der Toleranzradius.
+        val quer = Stroke(
+            start = GlyphPoint(320f, 620f),
+            segmente = listOf(StrokeSegment.Linie(GlyphPoint(680f, 620f))),
+        )
+        val punkte = quer.abtasten(120)
+        val t = StrokeTracker(punkte, toleranz = Genauigkeit.NORMAL.toleranz)
+        t.senke(punkte.first())
+        for (i in 1..16) t.ziehe(punkte[i * 6])   // bis Index 96 von 119 (~80 %)
+        assertFalse("Bei 80 % darf noch nichts fertig sein", t.fertig)
+        // Die Endposition des Anhebens zählt als letzter Zug:
+        assertEquals(Zug.FERTIG, t.ziehe(GlyphPoint(672f, 620f)))
+    }
+
+    @Test
+    fun `das O wird nicht durch eine Beruehrung am Start fertig`() {
+        // Anfang = Ende: Die Ziel-Nachsicht darf erst nach der halben Strecke greifen.
+        val griff = 225f * 0.5523f
+        val o = Stroke(
+            start = GlyphPoint(450f, 400f),
+            segmente = listOf(
+                StrokeSegment.Bogen(GlyphPoint(450f - griff, 400f), GlyphPoint(225f, 625f - griff), GlyphPoint(225f, 625f)),
+                StrokeSegment.Bogen(GlyphPoint(225f, 625f + griff), GlyphPoint(450f - griff, 850f), GlyphPoint(450f, 850f)),
+                StrokeSegment.Bogen(GlyphPoint(450f + griff, 850f), GlyphPoint(675f, 625f + griff), GlyphPoint(675f, 625f)),
+                StrokeSegment.Bogen(GlyphPoint(675f, 625f - griff), GlyphPoint(450f + griff, 400f), GlyphPoint(450f, 400f)),
+            ),
+        )
+        val punkte = o.abtasten(120)
+        val t = StrokeTracker(punkte, toleranz = Genauigkeit.NORMAL.toleranz)
+        t.senke(punkte.first())
+        assertEquals(Zug.LAEUFT, t.ziehe(punkte[4]))
+        assertFalse("Am Start darf nichts fertig sein", t.fertig)
+    }
+
+    @Test
     fun `der Anteil waechst monoton`() {
         val punkte = geraderStrich.abtasten(120)
         val t = tracker()

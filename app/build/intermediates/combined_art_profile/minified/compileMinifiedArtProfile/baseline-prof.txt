@@ -650,7 +650,7 @@ HSPLandroidx/compose/foundation/ScrollState;->dispatchRawDelta(F)F
 HSPLandroidx/compose/foundation/ScrollState;->getCanScrollBackward()Z
 HSPLandroidx/compose/foundation/ScrollState;->getCanScrollForward()Z
 HSPLandroidx/compose/foundation/ScrollState;->isScrollInProgress()Z
-HSPLandroidx/compose/foundation/ScrollState;->scroll(Landroidx/compose/foundation/MutatePriority;Landroidx/datastore/core/DataStoreImpl$data$1;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
+HSPLandroidx/compose/foundation/ScrollState;->scroll(Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 Landroidx/compose/foundation/ScrollableAreaElement;
 HSPLandroidx/compose/foundation/ScrollableAreaElement;-><init>(Landroidx/compose/foundation/ScrollState;Landroidx/compose/foundation/gestures/Orientation;Landroidx/compose/ui/draw/DrawResult;Z)V
 HSPLandroidx/compose/foundation/ScrollableAreaElement;->create()Landroidx/compose/ui/Modifier$Node;
@@ -723,7 +723,6 @@ HSPLandroidx/compose/foundation/gestures/DefaultFlingBehavior$performFling$2;->i
 HSPLandroidx/compose/foundation/gestures/DefaultFlingBehavior$performFling$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
 Landroidx/compose/foundation/gestures/DefaultFlingBehavior;
 HSPLandroidx/compose/foundation/gestures/DefaultFlingBehavior;-><init>(Landroidx/compose/ui/draw/DrawResult;)V
-HSPLandroidx/datastore/core/DataStoreImpl$data$1;-><init>(Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;I)V
 Landroidx/compose/foundation/gestures/DefaultScrollableState$scrollScope$1;
 Landroidx/compose/foundation/gestures/ScrollScope;
 HSPLandroidx/compose/foundation/gestures/DefaultScrollableState$scrollScope$1;-><init>(Landroidx/compose/foundation/gestures/DefaultScrollableState;)V
@@ -732,7 +731,7 @@ Landroidx/compose/foundation/gestures/DefaultScrollableState;
 HSPLandroidx/compose/foundation/gestures/DefaultScrollableState;-><init>(Lkotlin/jvm/functions/Function1;)V
 HSPLandroidx/compose/foundation/gestures/DefaultScrollableState;->dispatchRawDelta(F)F
 HSPLandroidx/compose/foundation/gestures/DefaultScrollableState;->isScrollInProgress()Z
-HSPLandroidx/compose/foundation/gestures/DefaultScrollableState;->scroll(Landroidx/compose/foundation/MutatePriority;Landroidx/datastore/core/DataStoreImpl$data$1;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
+HSPLandroidx/compose/foundation/gestures/DefaultScrollableState;->scroll(Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 Landroidx/compose/foundation/gestures/DragDetectionState$AwaitDown$AwaitTouchSlop;
 HSPLandroidx/compose/foundation/gestures/DragDetectionState$AwaitDown$AwaitTouchSlop;-><clinit>()V
 HSPLandroidx/compose/foundation/gestures/DragDetectionState$AwaitDown$AwaitTouchSlop;->valueOf(Ljava/lang/String;)Landroidx/compose/foundation/gestures/DragDetectionState$AwaitDown$AwaitTouchSlop;
@@ -912,6 +911,14 @@ HSPLandroidx/compose/foundation/gestures/PressGestureScopeImpl;->toPx-0680j_4(F)
 HSPLandroidx/compose/foundation/gestures/PressGestureScopeImpl;->toSize-XkaWNTQ(J)J
 HSPLandroidx/compose/foundation/gestures/PressGestureScopeImpl;->toSp-0xMU5do(F)J
 HSPLandroidx/compose/foundation/gestures/PressGestureScopeImpl;->toSp-kPz2Gy4(F)J
+Landroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$1;
+HSPLandroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$1;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+Landroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$2;
+HSPLandroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$2;-><init>(Lkotlin/jvm/internal/Ref$FloatRef;FLkotlin/coroutines/Continuation;)V
+HSPLandroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$2;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
+HSPLandroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+HSPLandroidx/compose/foundation/gestures/ScrollExtensionsKt$scrollBy$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
+HSPLkotlin/math/MathKt;->scrollBy(Landroidx/compose/foundation/gestures/ScrollableState;FLkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 Landroidx/compose/foundation/gestures/ScrollingLogic;
 HSPLandroidx/compose/foundation/gestures/ScrollingLogic;->doFlingAnimation-QWom1Mo(JLkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/gestures/ScrollScope;->scrollBy(F)F
@@ -947,6 +954,7 @@ HSPLandroidx/compose/foundation/gestures/ScrollableNestedScrollConnection$onPost
 Landroidx/compose/foundation/gestures/ScrollableNestedScrollConnection;
 HSPLandroidx/compose/foundation/gestures/ScrollableNestedScrollConnection;-><init>(Landroidx/compose/foundation/gestures/ScrollingLogic;Z)V
 HSPLandroidx/compose/foundation/gestures/ScrollableNestedScrollConnection;->onPostFling-RZ2iAVY(JJLkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
+HSPLandroidx/datastore/core/DataStoreImpl$data$1;-><init>(Ljava/lang/Object;Ljava/lang/Object;Lkotlin/coroutines/Continuation;I)V
 Landroidx/compose/runtime/internal/ComposableLambdaImpl$invoke$1;
 Lkotlin/jvm/internal/AdaptedFunctionReference;
 Landroidx/compose/foundation/gestures/ScrollableNode$onKeyEvent$1$1;
@@ -970,7 +978,7 @@ HSPLandroidx/compose/foundation/gestures/ScrollableState;->dispatchRawDelta(F)F
 HSPLandroidx/compose/foundation/gestures/ScrollableState;->getCanScrollBackward()Z
 HSPLandroidx/compose/foundation/gestures/ScrollableState;->getCanScrollForward()Z
 HSPLandroidx/compose/foundation/gestures/ScrollableState;->isScrollInProgress()Z
-HSPLandroidx/compose/foundation/gestures/ScrollableState;->scroll(Landroidx/compose/foundation/MutatePriority;Landroidx/datastore/core/DataStoreImpl$data$1;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
+HSPLandroidx/compose/foundation/gestures/ScrollableState;->scroll(Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 Landroidx/compose/foundation/gestures/ScrollingLogic$doFlingAnimation$1;
 HSPLandroidx/compose/foundation/gestures/ScrollingLogic$doFlingAnimation$1;-><init>(Landroidx/compose/foundation/gestures/ScrollingLogic;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)V
 HSPLandroidx/compose/foundation/gestures/ScrollingLogic$doFlingAnimation$1;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
@@ -1308,7 +1316,7 @@ HSPLandroidx/compose/foundation/layout/SizeKt;->requiredSizeIn-qDBjuR0$default(L
 HSPLandroidx/compose/foundation/layout/SizeKt;->size-3ABfNKs(Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 HSPLandroidx/compose/foundation/layout/SizeKt;->size-VpY3zN4(Landroidx/compose/ui/Modifier;FF)Landroidx/compose/ui/Modifier;
 HSPLandroidx/compose/foundation/layout/SizeKt;->sizeIn-qDBjuR0(Landroidx/compose/ui/Modifier;)Landroidx/compose/ui/Modifier;
-HSPLandroidx/compose/foundation/layout/SizeKt;->width-3ABfNKs(F)Landroidx/compose/ui/Modifier;
+HSPLandroidx/compose/foundation/layout/SizeKt;->width-3ABfNKs(Landroidx/compose/ui/Modifier;F)Landroidx/compose/ui/Modifier;
 Landroidx/compose/foundation/layout/SizeNode;
 HSPLandroidx/compose/foundation/layout/SizeNode;->getTargetConstraints-OenEA2s(Landroidx/compose/ui/layout/MeasureScope;)J
 HSPLandroidx/compose/foundation/layout/SizeNode;->maxIntrinsicHeight(Landroidx/compose/ui/node/LookaheadCapablePlaceable;Landroidx/compose/ui/layout/Measurable;I)I
@@ -1585,7 +1593,7 @@ HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wra
 HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wrappedScrollableState$1$1;->getCanScrollBackward()Z
 HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wrappedScrollableState$1$1;->getCanScrollForward()Z
 HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wrappedScrollableState$1$1;->isScrollInProgress()Z
-HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wrappedScrollableState$1$1;->scroll(Landroidx/compose/foundation/MutatePriority;Landroidx/datastore/core/DataStoreImpl$data$1;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
+HSPLandroidx/compose/foundation/text/TextFieldScrollKt$textFieldScrollable$2$wrappedScrollableState$1$1;->scroll(Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/jvm/internal/ContinuationImpl;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/text/BasicTextKt;->access$getCursorRectInScroller(Landroidx/compose/ui/layout/Placeable$PlacementScope;ILandroidx/compose/ui/text/input/TransformedText;Landroidx/compose/ui/text/TextLayoutResult;ZI)Landroidx/compose/ui/geometry/Rect;
 Landroidx/compose/foundation/text/TextFieldScrollerPosition;
 HSPLandroidx/compose/foundation/text/TextFieldScrollerPosition;-><clinit>()V
@@ -2453,6 +2461,7 @@ HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/ComposerChangeListWri
 HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/ComposerChangeListWriter;->realizeOperationLocation(Z)V
 HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/ComposerChangeListWriter;->removeNode(II)V
 Landroidx/compose/runtime/composer/gapbuffer/changelist/FixupList;
+Landroidx/compose/ui/geometry/RectKt;
 HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/FixupList;-><init>()V
 Landroidx/compose/runtime/composer/gapbuffer/changelist/Operation$AdvanceSlotsBy;
 Landroidx/compose/runtime/composer/gapbuffer/changelist/Operation;
@@ -2587,7 +2596,6 @@ HSPLandroidx/compose/runtime/external/kotlinx/collections/immutable/implementati
 HSPLandroidx/compose/runtime/external/kotlinx/collections/immutable/implementations/immutableList/SmallPersistentVector;->get(I)Ljava/lang/Object;
 HSPLandroidx/compose/runtime/external/kotlinx/collections/immutable/implementations/immutableList/SmallPersistentVector;->getSize()I
 Landroidx/compose/runtime/external/kotlinx/collections/immutable/implementations/immutableList/TrieIterator;
-Landroidx/compose/ui/geometry/RectKt;
 Landroidx/compose/runtime/external/kotlinx/collections/immutable/implementations/immutableMap/PersistentHashMapBuilderKeys;
 Lkotlin/collections/AbstractMutableSet;
 HSPLandroidx/collection/MapEntry;-><init>(ILjava/lang/Object;Ljava/lang/Object;)V
@@ -6192,6 +6200,7 @@ Landroidx/compose/ui/text/font/TypefaceResult;
 Landroidx/compose/ui/text/font/TypefaceResult$Immutable;
 HSPLandroidx/compose/ui/text/font/TypefaceResult;->getCacheable()Z
 Landroidx/compose/ui/text/input/CommitTextCommand;
+Landroidx/core/os/BundleKt;
 Landroidx/compose/ui/text/input/TextInputServiceAndroid$stopInput$1;
 Landroidx/compose/ui/text/input/CursorAnchorInfoController;
 SPLandroidx/compose/ui/text/input/CursorAnchorInfoController;-><init>(Landroidx/compose/ui/platform/AndroidComposeView;Landroidx/compose/ui/node/UiApplier;)V
@@ -6211,7 +6220,6 @@ HSPLandroidx/compose/ui/text/input/EditingBuffer;->setSelection$ui_text(II)V
 HSPLandroidx/compose/ui/text/input/EditingBuffer;->setSelectionEnd(I)V
 HSPLandroidx/compose/ui/text/input/EditingBuffer;->setSelectionStart(I)V
 HSPLandroidx/compose/ui/text/input/EditingBuffer;->toString()Ljava/lang/String;
-Landroidx/core/os/BundleKt;
 Landroidx/compose/ui/text/input/FinishComposingTextCommand;
 Landroidx/compose/ui/text/input/ImeAction;
 HSPLandroidx/compose/ui/text/input/ImeAction;-><init>(I)V
@@ -6676,8 +6684,8 @@ HSPLandroidx/startup/AppInitializer;-><init>(Landroid/content/Context;)V
 HSPLandroidx/startup/AppInitializer;->discoverAndInitialize(Landroid/os/Bundle;)V
 HSPLandroidx/startup/AppInitializer;->doInitialize(Ljava/lang/Class;Ljava/util/HashSet;)Ljava/lang/Object;
 HSPLandroidx/startup/AppInitializer;->getInstance(Landroid/content/Context;)Landroidx/startup/AppInitializer;
-Lkotlin/UnsignedKt;
-HSPLkotlin/UnsignedKt;->ulongToDouble(J)D
+Lkotlin/ResultKt;
+HSPLkotlin/ResultKt;->ulongToDouble(J)D
 HSPLkotlin/collections/AbstractCollection;->isEmpty()Z
 HSPLkotlin/collections/AbstractCollection;->size()I
 Lkotlin/jvm/internal/ArrayIterator;
@@ -6710,10 +6718,10 @@ HSPLkotlin/collections/ArraysKt;->copyInto$default([I[IIII)V
 HSPLkotlin/collections/ArraysKt;->copyInto$default([Ljava/lang/Object;[Ljava/lang/Object;III)V
 HSPLkotlin/collections/ArraysKt;->fill([Ljava/lang/Object;II)V
 HSPLkotlin/collections/ArraysKt;->toList([Ljava/lang/Object;)Ljava/util/List;
-HSPLkotlin/UnsignedKt;->listOf(Ljava/lang/Object;)Ljava/util/List;
-HSPLkotlin/UnsignedKt;->arrayListOf([Ljava/lang/Object;)Ljava/util/ArrayList;
-HSPLkotlin/UnsignedKt;->getLastIndex(Ljava/util/List;)I
-HSPLkotlin/UnsignedKt;->listOf([Ljava/lang/Object;)Ljava/util/List;
+HSPLkotlin/ResultKt;->listOf(Ljava/lang/Object;)Ljava/util/List;
+HSPLkotlin/ResultKt;->arrayListOf([Ljava/lang/Object;)Ljava/util/ArrayList;
+HSPLkotlin/ResultKt;->getLastIndex(Ljava/util/List;)I
+HSPLkotlin/ResultKt;->listOf([Ljava/lang/Object;)Ljava/util/List;
 Lkotlin/collections/CollectionsKt__IterablesKt;
 HSPLkotlin/collections/CollectionsKt__IterablesKt;->collectionSizeOrDefault(Ljava/lang/Iterable;)I
 Lkotlin/collections/CollectionsKt__MutableCollectionsJVMKt;
@@ -6738,7 +6746,7 @@ HSPLkotlin/collections/EmptyMap;->containsKey(Ljava/lang/Object;)Z
 HSPLkotlin/collections/EmptyMap;->equals(Ljava/lang/Object;)Z
 HSPLkotlin/collections/EmptyMap;->get(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLkotlin/collections/EmptyMap;->isEmpty()Z
-HSPLkotlin/UnsignedKt;->mapCapacity(I)I
+HSPLkotlin/ResultKt;->mapCapacity(I)I
 Lkotlin/jvm/internal/Intrinsics$Kotlin;
 HSPLkotlin/jvm/internal/Intrinsics$Kotlin;->toArray(Ljava/util/Collection;)[Ljava/lang/Object;
 HSPLkotlin/jvm/internal/FunctionReferenceImpl;-><init>(ILjava/lang/Object;Ljava/lang/Class;Ljava/lang/String;Ljava/lang/String;II)V
@@ -6753,12 +6761,12 @@ HSPLkotlin/math/MathKt;->roundToInt(F)I
 Lkotlin/ranges/IntRange;
 Lkotlin/ranges/IntProgression;
 HSPLkotlin/ranges/IntRange;->isEmpty()Z
-HSPLkotlin/UnsignedKt;->coerceIn(DDD)D
-HSPLkotlin/UnsignedKt;->coerceIn(FFF)F
-HSPLkotlin/UnsignedKt;->coerceIn(III)I
-HSPLkotlin/UnsignedKt;->step(Lkotlin/ranges/IntRange;)Lkotlin/ranges/IntProgression;
-HSPLkotlin/UnsignedKt;->until(II)Lkotlin/ranges/IntRange;
-HSPLkotlin/UnsignedKt;->isWhitespace(C)Z
+HSPLkotlin/ResultKt;->coerceIn(DDD)D
+HSPLkotlin/ResultKt;->coerceIn(FFF)F
+HSPLkotlin/ResultKt;->coerceIn(III)I
+HSPLkotlin/ResultKt;->step(Lkotlin/ranges/IntRange;)Lkotlin/ranges/IntProgression;
+HSPLkotlin/ResultKt;->until(II)Lkotlin/ranges/IntRange;
+HSPLkotlin/ResultKt;->isWhitespace(C)Z
 HSPLkotlin/text/MatcherMatchResult;->getRange()Lkotlin/ranges/IntRange;
 Lkotlin/text/StringsKt__StringsJVMKt;
 Lkotlin/text/StringsKt__StringNumberConversionsJVMKt;
@@ -7096,8 +7104,8 @@ Landroidx/datastore/core/FileStorage$$ExternalSyntheticLambda1;
 HSPLandroidx/datastore/core/FileStorage$$ExternalSyntheticLambda1;-><init>(ILjava/lang/Object;)V
 Landroidx/compose/runtime/GapComposer$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/runtime/GapComposer$$ExternalSyntheticLambda0;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
-Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda18;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda18;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
+Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
 Lkotlinx/coroutines/sync/SemaphoreAndMutexImpl$$ExternalSyntheticLambda0;
 HSPLkotlinx/coroutines/sync/SemaphoreAndMutexImpl$$ExternalSyntheticLambda0;-><init>(ILjava/lang/Object;)V
 Landroidx/compose/foundation/gestures/TrackpadScrollingLogic$$ExternalSyntheticLambda0;
@@ -7110,8 +7118,8 @@ Landroidx/compose/foundation/gestures/ScrollableNode$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/foundation/gestures/ScrollableNode$$ExternalSyntheticLambda0;-><init>(Landroidx/compose/foundation/gestures/ScrollableNode;I)V
 Landroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;-><init>(ILjava/lang/Object;)V
-Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda21;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda21;-><init>(Landroidx/compose/runtime/MutableState;I)V
+Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;-><init>(Landroidx/compose/runtime/MutableState;I)V
 Landroidx/compose/foundation/gestures/UpdatableAnimationState$$ExternalSyntheticLambda0;
 Landroidx/compose/foundation/layout/BoxKt$$ExternalSyntheticLambda0;
 Landroidx/compose/foundation/layout/BoxMeasurePolicy$$ExternalSyntheticLambda0;
@@ -7521,7 +7529,7 @@ HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$awaitSecondDown$2;
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$awaitSecondDown$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$awaitSecondDown$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;-><init>(Landroidx/compose/foundation/ScrollKt$$ExternalSyntheticLambda0;Lkotlinx/coroutines/sync/SemaphoreAndMutexImpl$$ExternalSyntheticLambda0;Landroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;Landroidx/compose/foundation/text/LongPressTextDragObserverKt$$ExternalSyntheticLambda1;Lkotlin/collections/AbstractMap$$ExternalSyntheticLambda0;Lkotlin/coroutines/Continuation;)V
-HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;-><init>(Lkotlinx/coroutines/CoroutineScope;Landroidx/compose/foundation/text/TextFieldPressGestureFilterKt$tapPressTextFieldModifier$1$2$1$1;Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda21;Landroidx/compose/foundation/gestures/PressGestureScopeImpl;Lkotlin/coroutines/Continuation;)V
+HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;-><init>(Lkotlinx/coroutines/CoroutineScope;Landroidx/compose/foundation/text/TextFieldPressGestureFilterKt$tapPressTextFieldModifier$1$2$1$1;Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;Landroidx/compose/foundation/gestures/PressGestureScopeImpl;Lkotlin/coroutines/Continuation;)V
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/gestures/TapGestureDetectorKt$detectTapAndPress$2$1;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
@@ -7738,6 +7746,8 @@ HSPLandroidx/compose/ui/text/input/TextInputServiceAndroid$stopInput$1;->invoke(
 HSPLandroidx/compose/ui/window/AndroidPopup_androidKt$Popup$2$1$invoke$$inlined$onDispose$1;->dispose()V
 HSPLandroidx/compose/ui/window/AndroidPopup_androidKt$Popup$4$1;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/ui/window/PopupLayout$Content$4;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+HSPLandroidx/datastore/core/DataStoreImpl$data$1;-><init>(Landroidx/compose/foundation/gestures/DefaultScrollableState;Landroidx/compose/foundation/MutatePriority;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)V
+HSPLandroidx/datastore/core/DataStoreImpl$data$1;-><init>(Landroidx/compose/foundation/gestures/DefaultScrollableState;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)V
 HSPLandroidx/datastore/core/DataStoreImpl$data$1;-><init>(Lkotlinx/coroutines/Job;Lkotlin/jvm/functions/Function2;Lkotlin/coroutines/Continuation;)V
 HSPLandroidx/datastore/core/DataStoreImpl$data$1;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
 HSPLandroidx/datastore/core/DataStoreImpl$data$1;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -7765,8 +7775,8 @@ HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;-><in
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda18;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda21;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda7;->invoke()Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/ui/parent/ElternschlossKt$$ExternalSyntheticLambda4;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLkotlin/collections/AbstractMap$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;)Ljava/lang/Object;

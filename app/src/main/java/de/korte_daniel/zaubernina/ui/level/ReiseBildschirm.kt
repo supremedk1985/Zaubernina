@@ -2,6 +2,8 @@ package de.korte_daniel.zaubernina.ui.level
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,10 +31,12 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke as StrichStil
+import androidx.compose.ui.graphics.drawscope.clipRect
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.korte_daniel.zaubernina.domain.ALPHABET
 import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Level
 import de.korte_daniel.zaubernina.domain.levelIstGeschafft
@@ -53,13 +58,13 @@ import kotlin.math.sin
  * Weg und nicht als Tabelle, und es zeigt auf einen Blick, wo man steht. Die Positionen
  * werden gerechnet, nicht abgetippt, damit weitere Wörter einfach dazukommen können.
  */
-private fun knotenAnteil(i: Int, anzahl: Int): Pair<Float, Float> {
-    val x = 0.5f + 0.30f * sin(i * 1.6f)
-    // Der senkrechte Bereich endet bei 0,84 und nicht bei 1: unter jedem Knoten steht sein
-    // Wort, und beim untersten stieß es sonst an die Leiste darunter.
-    val y = if (anzahl <= 1) 0.5f else 0.84f - 0.78f * i / (anzahl - 1)
-    return x to y
-}
+private val KNOTEN_ABSTAND = 118.dp
+private val FUSS_ABSTAND = 96.dp
+private val KOPF_ABSTAND = 60.dp
+
+/** Waagerechte Lage als Welle; senkrecht feste Abstände von unten nach oben. */
+private fun knotenX(i: Int): Float = 0.5f + 0.30f * sin(i * 1.6f)
+private fun knotenY(i: Int, inhaltHoehe: Dp): Dp = inhaltHoehe - FUSS_ABSTAND - KNOTEN_ABSTAND * i
 
 private enum class Knotenzustand { GESCHAFFT, OFFEN, ZU }
 
@@ -71,8 +76,11 @@ fun ReiseBildschirm(
     sterne: Int,
     benutzerName: String,
     avatar: Avatar,
+    alphabetIndex: Int,
+    alphabetRunden: Int,
     onLevelWaehlen: (Int) -> Unit,
     onZahlWaehlen: (Int) -> Unit,
+    onAlphabet: () -> Unit,
     onElternbereich: () -> Unit,
     onRechnen: () -> Unit,
     onBenutzerWechsel: () -> Unit,
@@ -162,13 +170,21 @@ fun ReiseBildschirm(
             modifier = Modifier.fillMaxWidth().weight(1f),
         ) {
             val breite = maxWidth
-            val hoehe = maxHeight
             val anzahl = level.size
+            // Die Reise wächst mit der Levelzahl und wird scrollbar — vorher war die
+            // Bildschirmhöhe das harte Limit bei sieben Leveln. Start unten (beim ersten
+            // Level), deshalb springt der Scroller nach dem Aufbau ans Ende.
+            val inhaltHoehe = maxOf(maxHeight, KOPF_ABSTAND + FUSS_ABSTAND + KNOTEN_ABSTAND * (anzahl - 1))
+            val scroller = rememberScrollState()
+            LaunchedEffect(anzahl) { scroller.scrollTo(scroller.maxValue) }
+
+            Box(modifier = Modifier.fillMaxSize().verticalScroll(scroller)) {
+            Box(modifier = Modifier.fillMaxWidth().height(inhaltHoehe)) {
+            val hoehe = inhaltHoehe
 
             Canvas(modifier = Modifier.fillMaxSize()) {
                 val punkte = (0 until anzahl).map { i ->
-                    val (ax, ay) = knotenAnteil(i, anzahl)
-                    Offset(ax * size.width, ay * size.height)
+                    Offset(knotenX(i) * size.width, knotenY(i, inhaltHoehe).toPx())
                 }
                 val gestrichelt = PathEffect.dashPathEffect(floatArrayOf(2.5f * density, 12f * density))
                 for (i in 0 until anzahl - 1) {
@@ -184,20 +200,29 @@ fun ReiseBildschirm(
                 }
             }
 
+            // Der ABC-Stern: unabhängig von den Leveln, immer offen, unten neben dem Start.
+            AbcKnoten(
+                index = alphabetIndex,
+                runden = alphabetRunden,
+                farben = farben,
+                onClick = onAlphabet,
+                modifier = Modifier.offset(
+                    x = breite * 0.13f - 36.dp,
+                    y = knotenY(0, inhaltHoehe) - 36.dp,
+                ),
+            )
+
             // Die Zwischendurch-Zahlen: kleine Knoten auf halbem Weg zwischen den
             // Wortknoten — bewusst kleiner, die Wörter bleiben die Reise. Die Ziffer
             // nach dem LETZTEN Wort wird über den Knoten hinaus verlängert.
             level.indices.filter { zifferFuer(it) <= 9 }.forEach { i ->
-                val (ax1, ay1) = knotenAnteil(i, anzahl)
                 val (zx, zy) = if (i < anzahl - 1) {
-                    val (ax2, ay2) = knotenAnteil(i + 1, anzahl)
-                    (ax1 + ax2) / 2f to (ay1 + ay2) / 2f
+                    (knotenX(i) + knotenX(i + 1)) / 2f to
+                        (knotenY(i, inhaltHoehe) + knotenY(i + 1, inhaltHoehe)) / 2
                 } else {
-                    // Hinter dem letzten Wort wird verlängert — aber eingeklemmt, damit
-                    // die 7 nicht in die Überschrift ragt.
-                    val (ax0, ay0) = knotenAnteil(i - 1, anzahl)
-                    (ax1 + (ax1 - ax0) * 0.55f).coerceIn(0.1f, 0.9f) to
-                        (ay1 + (ay1 - ay0) * 0.55f).coerceAtLeast(0.045f)
+                    // Hinter dem letzten Wort wird verlängert.
+                    (knotenX(i) + (knotenX(i) - knotenX(i - 1)) * 0.55f).coerceIn(0.1f, 0.9f) to
+                        (knotenY(i, inhaltHoehe) - KNOTEN_ABSTAND * 0.55f).coerceAtLeast(16.dp)
                 }
                 val geschrieben = zahlIstGeschrieben(zahlen, i)
                 val offen = zahlOffen(i, geschafft)
@@ -209,13 +234,14 @@ fun ReiseBildschirm(
                     onClick = { if (offen) onZahlWaehlen(i) },
                     modifier = Modifier.offset(
                         x = breite * zx - 30.dp,
-                        y = hoehe * zy - 30.dp,
+                        y = zy - 30.dp,
                     ),
                 )
             }
 
             level.forEachIndexed { i, einLevel ->
-                val (ax, ay) = knotenAnteil(i, anzahl)
+                val ax = knotenX(i)
+                val ay = knotenY(i, inhaltHoehe)
                 val zustand = when {
                     levelIstGeschafft(i, geschafft) -> Knotenzustand.GESCHAFFT
                     levelOffen(i, geschafft) -> Knotenzustand.OFFEN
@@ -231,9 +257,11 @@ fun ReiseBildschirm(
                         .width(spaltenBreite)
                         .offset(
                             x = breite * ax - spaltenBreite / 2,
-                            y = hoehe * ay - 40.dp,
+                            y = ay - 40.dp,
                         ),
                 )
+            }
+            }
             }
         }
 
@@ -440,6 +468,64 @@ private fun Zahlknoten(
                 offen -> farben.zahlAkzent
                 else -> farben.schrift.copy(alpha = 0.24f)
             },
+        )
+    }
+}
+
+/**
+ * Der ABC-Stern: das ganze Alphabet einmal von A bis Z (und Ä Ö Ü) durchschreiben —
+ * unabhängig von den Wort-Leveln, ohne Schloss, jederzeit. Ein großer Stern-Umriss,
+ * der sich mit dem Fortschritt der Runde füllt; nach der ersten vollen Runde ist er golden.
+ */
+@Composable
+private fun AbcKnoten(
+    index: Int,
+    runden: Int,
+    farben: ZauberFarben,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier.width(72.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(72.dp)
+                .clip(CircleShape)
+                .clickable(onClick = onClick),
+            contentAlignment = Alignment.Center,
+        ) {
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val mitte = Offset(size.width / 2f, size.height / 2f)
+                val punkte = sternPunkte(mitte, size.minDimension * 0.42f, 0f)
+                val pfad = Path().apply {
+                    moveTo(punkte[0].x, punkte[0].y)
+                    for (i in 1 until punkte.size) lineTo(punkte[i].x, punkte[i].y)
+                    close()
+                }
+                if (runden > 0) {
+                    drawCircle(farben.akzent, size.minDimension * 0.5f, mitte, alpha = 0.2f)
+                    drawPath(pfad, farben.akzent)
+                } else {
+                    drawCircle(farben.akzent, size.minDimension * 0.48f, mitte, alpha = 0.12f)
+                    // Der Stern füllt sich von unten mit dem Rundenfortschritt.
+                    if (index > 0) {
+                        val anteil = index.toFloat() / ALPHABET.size
+                        clipRect(top = size.height * (1f - anteil)) {
+                            drawPath(pfad, farben.akzent, alpha = 0.85f)
+                        }
+                    }
+                    drawPath(pfad, farben.akzent, style = StrichStil(width = 2.5f * density))
+                }
+            }
+        }
+        ZauberText(
+            text = if (runden > 0) "ABC" else if (index > 0) "ABC · ${index}/${ALPHABET.size}" else "ABC",
+            groesse = 14.sp,
+            farbe = farben.akzent,
+            gewicht = FontWeight.SemiBold,
+            modifier = Modifier.padding(top = 2.dp),
         )
     }
 }

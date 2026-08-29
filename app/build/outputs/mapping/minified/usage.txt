@@ -2507,7 +2507,6 @@ androidx.compose.foundation.ScrollState:
     public boolean getLastScrolledForward()
     public androidx.compose.foundation.ScrollIndicatorState getScrollIndicatorState()
     public final int getViewportSize()
-    public final java.lang.Object scrollTo(int,kotlin.coroutines.Continuation)
 androidx.compose.foundation.ScrollableAreaElement:
     public void inspectableProperties(androidx.compose.ui.platform.InspectorInfo)
 androidx.compose.foundation.ScrollingLayoutElement:
@@ -2862,13 +2861,20 @@ androidx.compose.foundation.gestures.ScrollExtensionsKt$animateScrollBy$1
 androidx.compose.foundation.gestures.ScrollExtensionsKt$animateScrollBy$2
 androidx.compose.foundation.gestures.ScrollExtensionsKt$animateScrollBy$3
 androidx.compose.foundation.gestures.ScrollExtensionsKt$animateScrollBy$4
-androidx.compose.foundation.gestures.ScrollExtensionsKt$scrollBy$1
-androidx.compose.foundation.gestures.ScrollExtensionsKt$scrollBy$2
 androidx.compose.foundation.gestures.ScrollExtensionsKt$scrollBy$3
 androidx.compose.foundation.gestures.ScrollExtensionsKt$scrollBy$4
 androidx.compose.foundation.gestures.ScrollExtensionsKt$stopScroll$2
 androidx.compose.foundation.gestures.ScrollExtensionsKt$stopScroll$4
-androidx.compose.foundation.gestures.ScrollExtensionsKt
+androidx.compose.foundation.gestures.ScrollExtensionsKt:
+    public static final java.lang.Object animateScrollBy(androidx.compose.foundation.gestures.ScrollableState,float,androidx.compose.animation.core.AnimationSpec,kotlin.coroutines.Continuation)
+    public static synthetic java.lang.Object animateScrollBy$default(androidx.compose.foundation.gestures.ScrollableState,float,androidx.compose.animation.core.AnimationSpec,kotlin.coroutines.Continuation,int,java.lang.Object)
+    public static final java.lang.Object animateScrollBy-ubNVwUQ(androidx.compose.foundation.gestures.Scrollable2DState,long,androidx.compose.animation.core.AnimationSpec,kotlin.coroutines.Continuation)
+    public static synthetic java.lang.Object animateScrollBy-ubNVwUQ$default(androidx.compose.foundation.gestures.Scrollable2DState,long,androidx.compose.animation.core.AnimationSpec,kotlin.coroutines.Continuation,int,java.lang.Object)
+    public static final java.lang.Object scrollBy-d-4ec7I(androidx.compose.foundation.gestures.Scrollable2DState,long,kotlin.coroutines.Continuation)
+    public static final java.lang.Object stopScroll(androidx.compose.foundation.gestures.Scrollable2DState,androidx.compose.foundation.MutatePriority,kotlin.coroutines.Continuation)
+    public static final java.lang.Object stopScroll(androidx.compose.foundation.gestures.ScrollableState,androidx.compose.foundation.MutatePriority,kotlin.coroutines.Continuation)
+    public static synthetic java.lang.Object stopScroll$default(androidx.compose.foundation.gestures.Scrollable2DState,androidx.compose.foundation.MutatePriority,kotlin.coroutines.Continuation,int,java.lang.Object)
+    public static synthetic java.lang.Object stopScroll$default(androidx.compose.foundation.gestures.ScrollableState,androidx.compose.foundation.MutatePriority,kotlin.coroutines.Continuation,int,java.lang.Object)
 androidx.compose.foundation.gestures.Scrollable2DElement
 androidx.compose.foundation.gestures.Scrollable2DKt$NoOpScrollScope$1
 androidx.compose.foundation.gestures.Scrollable2DKt$semanticsScrollBy$1
@@ -2915,7 +2921,6 @@ androidx.compose.foundation.gestures.ScrollableState:
     public boolean getLastScrolledBackward()
     public boolean getLastScrolledForward()
     public androidx.compose.foundation.ScrollIndicatorState getScrollIndicatorState()
-    public static synthetic java.lang.Object scroll$default(androidx.compose.foundation.gestures.ScrollableState,androidx.compose.foundation.MutatePriority,kotlin.jvm.functions.Function2,kotlin.coroutines.Continuation,int,java.lang.Object)
 androidx.compose.foundation.gestures.Scrollable_androidKt:
     public static final androidx.compose.foundation.gestures.FlingBehavior rememberPlatformDefaultFlingBehavior(androidx.compose.runtime.Composer,int)
 androidx.compose.foundation.gestures.ScrollingLogic2D$doFlingAnimation$1
@@ -5662,7 +5667,6 @@ androidx.compose.runtime.Composer:
     public boolean changed(byte)
     public boolean changed(char)
     public boolean changed(double)
-    public boolean changed(float)
     public boolean changed(short)
     public abstract void disableReusing()
     public abstract void disableSourceInformation()
@@ -5862,7 +5866,6 @@ androidx.compose.runtime.GapComposer:
     public boolean changed(byte)
     public boolean changed(char)
     public boolean changed(double)
-    public boolean changed(float)
     public boolean changed(short)
     public void disableReusing()
     public void disableSourceInformation()
@@ -20997,15 +21000,17 @@ de.korte_daniel.zaubernina.R$style
 de.korte_daniel.zaubernina.R$xml
 de.korte_daniel.zaubernina.R
 de.korte_daniel.zaubernina.data.BenutzerDaten:
-    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
+    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public final de.korte_daniel.zaubernina.domain.Benutzer component1()
     public final de.korte_daniel.zaubernina.domain.Paket component2()
     public final de.korte_daniel.zaubernina.domain.Klasse component3()
     public final int component4()
     public final int component5()
-    public final java.util.Map component6()
-    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,java.util.Map)
-    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,java.util.Map,int,java.lang.Object)
+    public final int component6()
+    public final int component7()
+    public final java.util.Map component8()
+    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map)
+    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map,int,java.lang.Object)
     public final java.util.Map getStaende()
 de.korte_daniel.zaubernina.data.FortschrittKt:
     private static final synthetic java.lang.Enum lese(java.lang.String,java.lang.Enum)
@@ -21132,6 +21137,13 @@ de.korte_daniel.zaubernina.logic.StrokeTracker:
     public final void zuruecksetzen()
 de.korte_daniel.zaubernina.logic.Zug:
     public static kotlin.enums.EnumEntries getEntries()
+de.korte_daniel.zaubernina.ui.Ansicht$Alphabet:
+    public static final int $stable
+de.korte_daniel.zaubernina.ui.Ansicht$AlphabetFertig:
+    public static final int $stable
+    public final int component1()
+    public final de.korte_daniel.zaubernina.ui.Ansicht$AlphabetFertig copy(int)
+    public static synthetic de.korte_daniel.zaubernina.ui.Ansicht$AlphabetFertig copy$default(de.korte_daniel.zaubernina.ui.Ansicht$AlphabetFertig,int,int,java.lang.Object)
 de.korte_daniel.zaubernina.ui.Ansicht$Einstellungen:
     public static final int $stable
 de.korte_daniel.zaubernina.ui.Ansicht$Geschafft:
@@ -23582,7 +23594,8 @@ kotlin.collections.ArraysUtilJVM:
     void <init>()
 kotlin.collections.BooleanIterator
 kotlin.collections.ByteIterator
-kotlin.collections.CharIterator
+kotlin.collections.CharIterator:
+    public final java.lang.Character next()
 kotlin.collections.CollectionsKt:
     private void <init>()
 kotlin.collections.CollectionsKt__CollectionsJVMKt:
@@ -24253,7 +24266,6 @@ kotlin.comparisons.ComparisonsKt___ComparisonsJvmKt:
     private static final long maxOf(long,long)
     private static final long maxOf(long,long,long)
     public static final varargs long maxOf(long,long[])
-    public static final java.lang.Comparable maxOf(java.lang.Comparable,java.lang.Comparable)
     public static final java.lang.Comparable maxOf(java.lang.Comparable,java.lang.Comparable,java.lang.Comparable)
     public static final varargs java.lang.Comparable maxOf(java.lang.Comparable,java.lang.Comparable[])
     private static final short maxOf(short,short)
@@ -25194,11 +25206,29 @@ kotlin.random.jdk8.PlatformThreadLocalRandom:
     public double nextDouble(double)
     public long nextLong(long)
     public long nextLong(long,long)
-kotlin.ranges.CharProgression$Companion
-kotlin.ranges.CharProgression
-kotlin.ranges.CharProgressionIterator
-kotlin.ranges.CharRange$Companion
-kotlin.ranges.CharRange
+kotlin.ranges.CharProgression$Companion:
+    public final kotlin.ranges.CharProgression fromClosedRange(char,char,int)
+kotlin.ranges.CharProgression:
+    public boolean equals(java.lang.Object)
+    public final int getStep()
+    public int hashCode()
+    public boolean isEmpty()
+    public java.lang.String toString()
+kotlin.ranges.CharProgressionIterator:
+    public final int getStep()
+kotlin.ranges.CharRange$Companion:
+    public final kotlin.ranges.CharRange getEMPTY()
+kotlin.ranges.CharRange:
+    public static final synthetic kotlin.ranges.CharRange access$getEMPTY$cp()
+    public boolean contains(char)
+    public synthetic bridge boolean contains(java.lang.Comparable)
+    public java.lang.Character getEndExclusive()
+    public synthetic bridge java.lang.Comparable getEndExclusive()
+    public static synthetic void getEndExclusive$annotations()
+    public java.lang.Character getEndInclusive()
+    public synthetic bridge java.lang.Comparable getEndInclusive()
+    public java.lang.Character getStart()
+    public synthetic bridge java.lang.Comparable getStart()
 kotlin.ranges.ClosedDoubleRange
 kotlin.ranges.ClosedFloatRange:
     public boolean contains(float)
@@ -25259,7 +25289,6 @@ kotlin.ranges.RangesKt___RangesKt:
     public static final boolean byteRangeContains(kotlin.ranges.OpenEndRange,long)
     public static final boolean byteRangeContains(kotlin.ranges.OpenEndRange,short)
     public static final byte coerceAtLeast(byte,byte)
-    public static final java.lang.Comparable coerceAtLeast(java.lang.Comparable,java.lang.Comparable)
     public static final short coerceAtLeast(short,short)
     public static final byte coerceAtMost(byte,byte)
     public static final double coerceAtMost(double,double)
@@ -30165,6 +30194,7 @@ androidx.compose.foundation.ScrollState:
     public static androidx.compose.foundation.interaction.MutableInteractionSourceImpl getInternalInteractionSource$foundation()
     public static int getMaxValue()
     public static int getValue()
+    public static java.lang.Object scrollTo()
     public static void setContentSize$foundation()
     public static void setMaxValue$foundation()
     public final void setValue(int)
@@ -30529,6 +30559,9 @@ androidx.compose.foundation.gestures.PressGestureScope
 androidx.compose.foundation.gestures.PressGestureScopeImpl:
     static void <clinit>()
 androidx.compose.foundation.gestures.ScrollConfig
+androidx.compose.foundation.gestures.ScrollExtensionsKt$scrollBy$2:
+    public int label
+    public final java.lang.Object invoke$6()
 androidx.compose.foundation.gestures.ScrollLogic
 androidx.compose.foundation.gestures.ScrollableContainerNode$TraverseKey
 androidx.compose.foundation.gestures.ScrollableContainerNode
@@ -32302,6 +32335,7 @@ androidx.compose.runtime.Composer:
     static void <clinit>()
     public abstract void apply(java.lang.Object,kotlin.jvm.functions.Function2)
     public abstract androidx.compose.runtime.CompositionContext buildContext()
+    public abstract boolean changed()
     public abstract boolean changed(int)
     public abstract boolean changed(long)
     public abstract boolean changed(java.lang.Object)
@@ -32497,6 +32531,7 @@ androidx.compose.runtime.GapComposer:
     public boolean isDisposed
     static void <clinit>()
     public final androidx.compose.runtime.CompositionContext buildContext()
+    public final boolean changed()
     public final void changesApplied$runtime()
     public final void collectParameterInformation()
     public final void composeContent--ZbOJvo$runtime()
@@ -35354,7 +35389,7 @@ androidx.compose.ui.graphics.drawscope.CanvasDrawScope:
     public final androidx.compose.ui.graphics.AndroidPaint obtainStrokePaint()
 androidx.compose.ui.graphics.drawscope.CanvasDrawScopeKt$asDrawTransform$1:
     public final void clipPath-mtrdD-E(androidx.compose.ui.graphics.Path)
-    public final void clipRect-N_I0leg(float,float,float,float)
+    public final void clipRect-N_I0leg(float,float,float,float,int)
     public static long getSize-NH-jbRc()
     public static void rotate-Uv8p0NA()
     public static void transform-58bKbWc()
@@ -42440,9 +42475,16 @@ de.korte_daniel.zaubernina.data.BenutzerDaten:
     public static final int $stable
     static void <clinit>()
     public final de.korte_daniel.zaubernina.data.Spielstand getAktuellerStand()
+    public static int getAlphabetIndex()
+    public static int getAlphabetRunden()
     public final de.korte_daniel.zaubernina.domain.Benutzer getBenutzer()
     public final int getSterne()
     public static de.korte_daniel.zaubernina.data.Spielstand stand()
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$alphabetBuchstabeGeschrieben$1:
+    public int I$0
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$alphabetBuchstabeGeschrieben$2:
+    public int label
+    public final java.lang.Object invoke$27()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$benutzerAnlegen$1:
     public java.lang.Object L$0
     public java.lang.Object L$1
@@ -42654,17 +42696,18 @@ de.korte_daniel.zaubernina.logic.RechenaufgabenKt$WhenMappings
 de.korte_daniel.zaubernina.logic.StrokeTracker:
     public static final int $stable
     static void <clinit>()
-    public final float getAnteil()
     public final boolean getFertig()
     public static de.korte_daniel.zaubernina.logic.Zug hebe()
     public static de.korte_daniel.zaubernina.logic.Zug senke()
-    public static de.korte_daniel.zaubernina.logic.Zug ziehe()
 de.korte_daniel.zaubernina.logic.Zug:
     public static final synthetic kotlin.enums.EnumEntries $ENTRIES
+de.korte_daniel.zaubernina.ui.Ansicht$AlphabetFertig:
+    static void <clinit>()
+    public final int getNeueSterne()
 de.korte_daniel.zaubernina.ui.Ansicht$Geschafft:
     static void <clinit>()
     public final int getLevel()
-    public static int getNeueSterne()
+    public final int getNeueSterne()
 de.korte_daniel.zaubernina.ui.Ansicht$Ueben:
     static void <clinit>()
     public final int getLevel()
@@ -42685,19 +42728,13 @@ de.korte_daniel.zaubernina.ui.MainActivityKt$$InternalSyntheticLambda$2$7fc67105
     public final synthetic int f$0
 de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$11$1$1$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$10$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$12$1$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$12$1$1$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$17$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$15$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$18$1$1:
-    public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$19$1$1:
-    public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$20$1$1:
-    public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$21$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$17$1$1$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$22$1$1:
     public final java.lang.Object invoke$3()
@@ -42707,11 +42744,19 @@ de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$24$1$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$25$1$1:
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$9$1$1:
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$26$1$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$27$1$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$28$1$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$29$1$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$30$1$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.MainActivityKt:
-    public static synthetic java.lang.String $r8$lambda$BkHprQ2DeMvGhT6HF8JlzGvKB7k()
-    public static final java.lang.String Zaubernina$lambda$11$1$0$9$0$0()
+    public static synthetic java.lang.String $r8$lambda$auK6clP5FslemJjjtxi4WXfG9Zw()
+    public static final java.lang.String Zaubernina$lambda$11$1$0$10$0$0()
 de.korte_daniel.zaubernina.ui.components.AvatarBildKt$$InternalSyntheticLambda$5$af5204a9890f2cb4ffc198bc5d67c892110119a5188dcd2dee2e985fe40f57bc$1:
     public final synthetic int f$4
 de.korte_daniel.zaubernina.ui.components.AvatarBildKt$WhenMappings
@@ -42745,21 +42790,29 @@ de.korte_daniel.zaubernina.ui.components.Funkenfeld:
     public static void schritt()
 de.korte_daniel.zaubernina.ui.components.GlyphZeichnungKt:
     public static synthetic void zeichneSpur$default(androidx.compose.ui.graphics.drawscope.DrawScope,androidx.compose.ui.graphics.AndroidPath,de.korte_daniel.zaubernina.ui.components.Boxabbildung,de.korte_daniel.zaubernina.ui.theme.ZauberFarben)
+de.korte_daniel.zaubernina.ui.level.AlphabetFertigBildschirmKt$$InternalSyntheticLambda$4$a62b6a6d5f006c19dc269ab3334b0cde3c87dcafa62e2a1ccba57e2e7880a9e6$2:
+    public final synthetic int f$3
+    public final synthetic int f$4
 de.korte_daniel.zaubernina.ui.level.GeschafftBildschirmKt$$InternalSyntheticLambda$4$e6bbc9e0efd94d0e81f75b7a1030e6997389e5b5b35e035afc0fbb229f02ff35$2:
     public final synthetic int f$6
     public final synthetic int f$7
 de.korte_daniel.zaubernina.ui.level.Knotenzustand:
     public static final synthetic kotlin.enums.EnumEntries $ENTRIES
-de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$4$7e8643d0ebb1743c30aa48f2c61fa850ab3ff9e60329a5c048a0ddcf24dc5b71$3:
-    public final synthetic int f$12
-    public final synthetic int f$13
-    public final synthetic int f$14
+de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$4$47c5c62511792ac11be08cea9cfdfc502e7f860206cddbf1e5b06c11e30d121b$3:
+    public final synthetic int f$15
+    public final synthetic int f$16
+    public final synthetic int f$17
+de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$6$866130069a28f2ffc560a25e6075133f9cf556266c1b691982a41325cbf0037f$1:
+    public final synthetic int f$5
+    public final synthetic int f$6
 de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$6$90dff334e080feb962a28078d190895e4662420a938287c437dc6777dfdc6a10$1:
     public final synthetic int f$5
     public final synthetic int f$6
 de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$$InternalSyntheticLambda$6$e1e1edbaae1b4f7e46f9640ef2ad7c6c61bbcb10f7ce363b0ee57b92bd99de22$1:
     public final synthetic int f$6
     public final synthetic int f$7
+de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$ReiseBildschirm$1$2$1$1:
+    public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$WhenMappings
 de.korte_daniel.zaubernina.ui.level.ZaehlBildschirmKt$$InternalSyntheticLambda$5$e340f8a65ee67963902f9e7bbe6ddd594b542ff566d77fbd85cdd4e5934a5866$3:
     public final synthetic int f$4
@@ -42915,6 +42968,7 @@ kotlin.collections.ArraysKt___ArraysJvmKt:
     public static synthetic void copyInto$default(long[],long[],int)
 kotlin.collections.ArraysKt___ArraysKt
 kotlin.collections.ArraysUtilJVM
+kotlin.collections.CharIterator
 kotlin.collections.CollectionsKt:
     public static java.lang.Object getOrNull(java.util.List,int)
     public static java.util.ArrayList toMutableList(java.util.List)
@@ -43075,7 +43129,9 @@ kotlin.internal.PlatformImplementations$ReflectThrowable:
     public static final kotlin.internal.PlatformImplementations$ReflectThrowable INSTANCE
 kotlin.internal.PlatformImplementations
 kotlin.internal.PlatformImplementationsKt
-kotlin.internal.ProgressionUtilKt
+kotlin.internal.ProgressionUtilKt:
+    public static final int differenceModulo(int,int,int)
+    public static final int mod(int,int)
 kotlin.internal.jdk7.JDK7PlatformImplementations$ReflectSdkVersion:
     public static final kotlin.internal.jdk7.JDK7PlatformImplementations$ReflectSdkVersion INSTANCE
 kotlin.internal.jdk7.JDK7PlatformImplementations
@@ -43146,6 +43202,20 @@ kotlin.properties.ReadOnlyProperty
 kotlin.random.FallbackThreadLocalRandom$implStorage$1:
     public static java.util.Random initialValue()
 kotlin.random.RandomKt
+kotlin.ranges.CharProgression$Companion
+kotlin.ranges.CharProgression:
+    public static final kotlin.ranges.CharProgression$Companion Companion
+    static void <clinit>()
+    public abstract char getFirst()
+    public abstract char getLast()
+    public abstract kotlin.ranges.CharProgressionIterator iterator()
+kotlin.ranges.CharProgressionIterator:
+    public static char nextChar()
+kotlin.ranges.CharRange$Companion
+kotlin.ranges.CharRange:
+    public static final kotlin.ranges.CharRange$Companion Companion
+    public static final kotlin.ranges.CharRange EMPTY
+    public final boolean isEmpty()
 kotlin.ranges.ClosedFloatRange:
     public static java.lang.Float getEndInclusive()
     public final java.lang.Float getEndInclusive$1()

@@ -58,6 +58,18 @@ class StrokeTracker(
         require(punkte.size >= 2) { "Ein Strich braucht mindestens zwei Punkte" }
     }
 
+    /**
+     * Wie viel Reststrecke am Ende geschenkt wird: die Toleranz, aber höchstens 15 % der
+     * Strichlänge. Ohne die Deckelung wäre beim kurzen Querbalken des A (360 Einheiten)
+     * schon bei zwei Dritteln Schluss gewesen — die Toleranz von 115 ist dort fast ein
+     * Drittel des ganzen Strichs.
+     */
+    private val zielNachsicht: Float = run {
+        var laenge = 0f
+        for (i in 1 until punkte.size) laenge += abstand(punkte[i - 1], punkte[i])
+        minOf(toleranz, laenge * 0.15f)
+    }
+
     /** Index des zuletzt erreichten Stützpunkts, -1 solange nicht gestartet wurde. */
     var fortschritt: Int = -1
         private set
@@ -135,16 +147,23 @@ class StrokeTracker(
     }
 
     /**
-     * Nachsicht am Strichende: Wer den letzten Zehntel geschrieben hat und mit dem Finger
-     * beim Endpunkt steht, hat den Strich geschafft — auch wenn er den allerletzten
-     * Stützpunkt nicht exakt getroffen hat. Ohne das scheitert ein Kind daran, dass es
-     * kurz vor Schluss loslässt, und der ganze Strich beginnt von vorn.
+     * Nachsicht am Strichende: Wer fast alles geschrieben hat und mit dem Finger beim
+     * Endpunkt steht, hat den Strich geschafft — auch wenn er den allerletzten Stützpunkt
+     * nicht exakt getroffen hat. Ohne das scheitert ein Kind daran, dass es kurz vor
+     * Schluss loslässt, und der ganze Strich beginnt von vorn.
      *
-     * Der Fortschrittsanteil in der Bedingung ist wichtig: ohne ihn könnte ein Zeichen mit
-     * zusammenfallendem Anfang und Ende (das O) mit einer Berührung "fertig" sein.
+     * "Fast alles" ist GEOMETRISCH gemeint, nicht anteilig ([zielNachsicht]): Die alte
+     * 90-%-Regel war bei kurzen Strichen strenger als bei langen — beim Querbalken des A
+     * (360 Einheiten) fehlten einem Kind bei 87 % nur noch Millimeter, und der Strich galt
+     * als nicht geschrieben.
+     *
+     * Die Halbe-Strecke-Bedingung bleibt: ohne sie wäre ein Zeichen mit zusammenfallendem
+     * Anfang und Ende (das O) mit einer Berührung "fertig".
      */
     private fun amZiel(p: GlyphPoint): Boolean =
-        fortschritt >= (punkte.lastIndex * 0.9f).toInt() && abstand(p, punkte.last()) <= toleranz
+        fortschritt >= punkte.lastIndex / 2 &&
+            abstand(punkte[fortschritt], punkte.last()) <= zielNachsicht &&
+            abstand(p, punkte.last()) <= zielNachsicht
 
     /**
      * Der Finger geht hoch. Ein unvollendeter Strich beginnt von vorn — ein Strich ist

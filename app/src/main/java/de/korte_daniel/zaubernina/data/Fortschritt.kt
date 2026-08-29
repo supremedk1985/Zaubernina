@@ -11,7 +11,9 @@ import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Benutzer
 import de.korte_daniel.zaubernina.domain.Klasse
 import de.korte_daniel.zaubernina.domain.Paket
+import de.korte_daniel.zaubernina.domain.ALPHABET
 import de.korte_daniel.zaubernina.domain.mitZahl
+import de.korte_daniel.zaubernina.domain.sterneFuerAlphabetRunde
 import de.korte_daniel.zaubernina.domain.nachLevel
 import de.korte_daniel.zaubernina.domain.sterneFuerZahl
 import de.korte_daniel.zaubernina.logic.AUFGABEN_JE_STERN
@@ -38,6 +40,10 @@ data class BenutzerDaten(
     val sterne: Int = 0,
     /** Richtige Rechenaufgaben insgesamt — alle [AUFGABEN_JE_STERN] gibt es einen Stern. */
     val rechenRichtig: Int = 0,
+    /** Wie weit die laufende ABC-Runde ist (geschriebene Buchstaben, 0..28). */
+    val alphabetIndex: Int = 0,
+    /** Wie oft das ganze Alphabet schon durchgeschrieben wurde. */
+    val alphabetRunden: Int = 0,
     val staende: Map<Paket, Spielstand> = emptyMap(),
 ) {
     fun stand(paket: Paket): Spielstand = staende[paket] ?: Spielstand()
@@ -69,6 +75,8 @@ private fun kPaket(id: Int) = stringPreferencesKey("u${id}_paket")
 private fun kKlasse(id: Int) = stringPreferencesKey("u${id}_klasse")
 private fun kSterne(id: Int) = intPreferencesKey("u${id}_sterne")
 private fun kRechen(id: Int) = intPreferencesKey("u${id}_rechen_richtig")
+private fun kAlphabetIndex(id: Int) = intPreferencesKey("u${id}_alphabet_index")
+private fun kAlphabetRunden(id: Int) = intPreferencesKey("u${id}_alphabet_runden")
 private fun kGeschafft(id: Int, paket: Paket) = intPreferencesKey("u${id}_${paket.name}_geschafft")
 private fun kZahlen(id: Int, paket: Paket) = intPreferencesKey("u${id}_${paket.name}_zahlen")
 
@@ -96,6 +104,8 @@ class FortschrittSpeicher(private val context: Context) {
                     klasse = lese(p[kKlasse(id)], Klasse.VORSCHULE),
                     sterne = p[kSterne(id)] ?: 0,
                     rechenRichtig = p[kRechen(id)] ?: 0,
+                    alphabetIndex = p[kAlphabetIndex(id)] ?: 0,
+                    alphabetRunden = p[kAlphabetRunden(id)] ?: 0,
                     staende = Paket.entries.associateWith { paket ->
                         Spielstand(
                             geschafft = p[kGeschafft(id, paket)] ?: 0,
@@ -158,6 +168,7 @@ class FortschrittSpeicher(private val context: Context) {
             p[SCHLUESSEL_BENUTZER_IDS] = ids.filterNot { it == id }.joinToString(",")
             p.remove(kName(id)); p.remove(kAvatar(id)); p.remove(kPaket(id)); p.remove(kKlasse(id))
             p.remove(kSterne(id)); p.remove(kRechen(id))
+            p.remove(kAlphabetIndex(id)); p.remove(kAlphabetRunden(id))
             Paket.entries.forEach { paket ->
                 p.remove(kGeschafft(id, paket)); p.remove(kZahlen(id, paket))
             }
@@ -185,6 +196,26 @@ class FortschrittSpeicher(private val context: Context) {
             val dazu = sterneFuerZahl(bisher, index)
             p[kZahlen(benutzerId, paket)] = mitZahl(bisher, index)
             if (dazu > 0) p[kSterne(benutzerId)] = (p[kSterne(benutzerId)] ?: 0) + dazu
+        }
+    }
+
+    /**
+     * Ein Buchstabe der ABC-Runde ist geschrieben. Ist die Runde damit voll, beginnt die
+     * nächste bei A — und die ERSTE volle Runde bringt fünf Sterne (danach keine mehr,
+     * dieselbe Regel wie überall).
+     */
+    suspend fun alphabetBuchstabeGeschrieben(benutzerId: Int) {
+        context.speicher.edit { p ->
+            val index = (p[kAlphabetIndex(benutzerId)] ?: 0) + 1
+            if (index >= ALPHABET.size) {
+                val runden = p[kAlphabetRunden(benutzerId)] ?: 0
+                val dazu = sterneFuerAlphabetRunde(runden)
+                p[kAlphabetIndex(benutzerId)] = 0
+                p[kAlphabetRunden(benutzerId)] = runden + 1
+                if (dazu > 0) p[kSterne(benutzerId)] = (p[kSterne(benutzerId)] ?: 0) + dazu
+            } else {
+                p[kAlphabetIndex(benutzerId)] = index
+            }
         }
     }
 
@@ -226,6 +257,8 @@ class FortschrittSpeicher(private val context: Context) {
         context.speicher.edit { p ->
             p[kSterne(benutzerId)] = 0
             p[kRechen(benutzerId)] = 0
+            p[kAlphabetIndex(benutzerId)] = 0
+            p[kAlphabetRunden(benutzerId)] = 0
             Paket.entries.forEach { paket ->
                 p.remove(kGeschafft(benutzerId, paket))
                 p.remove(kZahlen(benutzerId, paket))

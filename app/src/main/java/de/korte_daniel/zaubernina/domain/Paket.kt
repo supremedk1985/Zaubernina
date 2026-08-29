@@ -13,14 +13,17 @@ enum class Paket(val anzeigename: String, val beschreibung: String) {
 }
 
 /** Kurz und mit einfachen Formen — viele Geraden, wenige Bögen. */
-private val SCHNECKE_WOERTER = listOf("OMA", "OPA", "BALL", "AUTO", "HAUS", "HUND", "KATZE")
+private val SCHNECKE_WOERTER = listOf(
+    "OMA", "OPA", "BALL", "AUTO", "HAUS", "HUND", "KATZE", "SONNE", "MOND", "STERN",
+)
 
 /** Die sieben Namen der Familie — das ursprüngliche Spiel. */
 private val STANDARD_WOERTER = listOf("NINA", "MAMA", "PAPA", "LEA", "MIRA", "DANIEL", "NATHALIE")
 
 /** Lang und mit den schweren Buchstaben (S, G, W, Z …). */
 private val FUCHS_WOERTER = listOf(
-    "FUCHS", "SCHULE", "FLUGZEUG", "REGENBOGEN", "GEBURTSTAG", "ZAUBERNINA", "SCHMETTERLING",
+    "FUCHS", "SCHULE", "FLUGZEUG", "REGENBOGEN", "GEBURTSTAG", "PURZELBAUM",
+    "WEIHNACHTEN", "KINDERGARTEN", "ZAUBERNINA", "SCHMETTERLING",
 )
 
 /**

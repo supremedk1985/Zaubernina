@@ -22,10 +22,15 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import de.korte_daniel.zaubernina.data.FortschrittSpeicher
 import de.korte_daniel.zaubernina.data.Zustand
+import de.korte_daniel.zaubernina.domain.ALPHABET
+import de.korte_daniel.zaubernina.domain.alphabetBuchstabe
+import de.korte_daniel.zaubernina.domain.alphabetRundeVoll
 import de.korte_daniel.zaubernina.domain.levelFuer
+import de.korte_daniel.zaubernina.domain.sterneFuerAlphabetRunde
 import de.korte_daniel.zaubernina.domain.sterneFuerZahl
 import de.korte_daniel.zaubernina.domain.woerterFuer
 import de.korte_daniel.zaubernina.domain.zifferFuer
+import de.korte_daniel.zaubernina.ui.level.AlphabetFertigBildschirm
 import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
 import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
 import de.korte_daniel.zaubernina.ui.level.ZaehlBildschirm
@@ -61,6 +66,10 @@ private sealed interface Ansicht {
     /** Eine Zwischendurch-Zahl schreiben, dann zählen. */
     data class Zahl(val level: Int) : Ansicht
     data class Zaehlen(val level: Int, val bonusStern: Boolean) : Ansicht
+
+    /** Der ABC-Stern: die laufende Runde durchs Alphabet. */
+    data object Alphabet : Ansicht
+    data class AlphabetFertig(val neueSterne: Int) : Ansicht
 
     /** Der Rechenmodus. */
     data object Rechnen : Ansicht
@@ -117,8 +126,11 @@ private fun Zaubernina() {
                                 sterne = aktiver.sterne,
                                 benutzerName = aktiver.benutzer.name,
                                 avatar = aktiver.benutzer.avatar,
+                                alphabetIndex = aktiver.alphabetIndex,
+                                alphabetRunden = aktiver.alphabetRunden,
                                 onLevelWaehlen = { ansicht = Ansicht.Ueben(it) },
                                 onZahlWaehlen = { ansicht = Ansicht.Zahl(it) },
+                                onAlphabet = { ansicht = Ansicht.Alphabet },
                                 onElternbereich = { ansicht = Ansicht.Schloss },
                                 onRechnen = { ansicht = Ansicht.Rechnen },
                                 onBenutzerWechsel = {
@@ -182,6 +194,36 @@ private fun Zaubernina() {
                             },
                         )
                     }
+
+                    is Ansicht.Alphabet -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            val index = aktiver.alphabetIndex
+                            UebungsBildschirm(
+                                wort = alphabetBuchstabe(index).toString(),
+                                kopfzeile = { "Das ABC · Buchstabe ${index + 1} von ${ALPHABET.size}" },
+                                genauigkeit = zustand.genauigkeit,
+                                onZurueck = { ansicht = Ansicht.Reise },
+                                onFertig = {
+                                    val rundeVoll = alphabetRundeVoll(index)
+                                    val bonus = if (rundeVoll) sterneFuerAlphabetRunde(aktiver.alphabetRunden) else 0
+                                    bereich.launch { speicher.alphabetBuchstabeGeschrieben(aktiver.benutzer.id) }
+                                    // Bleiben: der nächste Buchstabe kommt von selbst, weil
+                                    // alphabetIndex im Zustand weiterwandert. Nur die volle
+                                    // Runde bekommt ihren eigenen Auftritt.
+                                    if (rundeVoll) ansicht = Ansicht.AlphabetFertig(bonus)
+                                },
+                                jubelLetzter = "Toll gemacht!",
+                                knopfLetzter = "Weiter",
+                            )
+                        }
+                    }
+
+                    is Ansicht.AlphabetFertig -> AlphabetFertigBildschirm(
+                        neueSterne = jetzt.neueSterne,
+                        onZurReise = { ansicht = Ansicht.Reise },
+                    )
 
                     is Ansicht.Rechnen -> CompositionLocalProvider(
                         LocalZauberFarben provides farben.fuerZahlen(),
