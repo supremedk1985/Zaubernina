@@ -360,6 +360,19 @@ fun EinstellungenBildschirm(
                 "gemalte Bilder und keine Fotos.",
             groesse = 13.sp,
             farbe = farben.schriftSchwach,
+            modifier = Modifier.padding(bottom = 12.dp),
+        )
+
+        // Namensnennung — die Lizenz der Tierbilder verlangt sie, und sie gehört
+        // dorthin, wo Erwachsene lesen, nicht auf den Übungsbildschirm.
+        Abschnitt("BILDER", farben.schriftSchwach)
+        ZauberText(
+            text = "Die Tiere zu den Buchstaben stammen aus dem OpenMoji-Katalog " +
+                "(openmoji.org) der Hochschule für Gestaltung Schwäbisch Gmünd und stehen " +
+                "unter der Lizenz CC BY-SA 4.0. Sie liegen als Zeichnungen in der App und " +
+                "werden nicht nachgeladen.",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
             modifier = Modifier.padding(bottom = 16.dp),
         )
     }

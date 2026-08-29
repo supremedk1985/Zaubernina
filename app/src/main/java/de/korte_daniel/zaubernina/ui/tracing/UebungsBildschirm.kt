@@ -14,6 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -34,6 +37,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke as StrichStil
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.korte_daniel.zaubernina.data.grundschrift.BREITESTE_ZEICHENBREITE
@@ -42,6 +46,7 @@ import de.korte_daniel.zaubernina.domain.Glyph
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.logic.StrokeTracker
 import de.korte_daniel.zaubernina.logic.Zug
+import de.korte_daniel.zaubernina.data.anlauttier
 import de.korte_daniel.zaubernina.ui.Vorleser
 import de.korte_daniel.zaubernina.ui.components.Funkenfeld
 import de.korte_daniel.zaubernina.ui.components.SCHABLONE_BREITE
@@ -84,9 +89,13 @@ fun UebungsBildschirm(
     val zeichen = wort.getOrNull(buchstabeIndex) ?: return
     val glyphe: Glyph = glyph(zeichen) ?: return
 
+    // Das Anlauttier — null bei Ziffern und bei X Y Ä Ö Ü, dann bleibt es beim Buchstaben.
+    val tier = remember(zeichen) { anlauttier(zeichen) }
+    val gesprochen = tier?.satz(zeichen) ?: zeichen.toString()
+
     // Vorgelesen wird VOR dem Schreiben (jedes neue Zeichen, auch ein doppeltes wie
     // die zwei M in MAMA — deshalb der Index als Schlüssel, nicht das Zeichen) …
-    LaunchedEffect(wort, buchstabeIndex) { vorleser?.sprich(zeichen.toString()) }
+    LaunchedEffect(wort, buchstabeIndex) { vorleser?.sprich(gesprochen) }
 
     val abgetastet = remember(glyphe) { glyphe.striche.map { it.abtasten(120) } }
     val zeichenBreite = remember(glyphe) {
@@ -101,7 +110,7 @@ fun UebungsBildschirm(
 
     // … und NACH dem Schreiben noch einmal, als Bestätigung zum Jubel.
     LaunchedEffect(buchstabeFertig) {
-        if (buchstabeFertig) vorleser?.sprich(zeichen.toString())
+        if (buchstabeFertig) vorleser?.sprich(gesprochen)
     }
 
     val tracker = remember(glyphe, buchstabeIndex, strichIndex, genauigkeit) {
@@ -164,7 +173,7 @@ fun UebungsBildschirm(
                     .size(46.dp)
                     .clip(CircleShape)
                     .background(farben.flaeche)
-                    .clickable(enabled = vorleser != null) { vorleser?.sprich(zeichen.toString()) },
+                    .clickable(enabled = vorleser != null) { vorleser?.sprich(gesprochen) },
                 contentAlignment = Alignment.Center,
             ) {
                 Canvas(modifier = Modifier.size(22.dp)) {
@@ -362,6 +371,30 @@ fun UebungsBildschirm(
                 }
             }
 
+            // Das Anlauttier, klein und ruhig unter dem Zeichen: „N wie Nashorn". Es steht
+            // NEBEN dem Schreibfeld, nicht darin — die Schablone soll die Bühne behalten.
+            // Während des Jubels weicht es dem großen Tier im Jubelfeld.
+            if (tier != null && !buchstabeFertig) {
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Image(
+                        painter = painterResource(tier.bild),
+                        contentDescription = null,
+                        modifier = Modifier.size(46.dp),
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    ZauberText(
+                        text = gesprochen,
+                        groesse = 19.sp,
+                        farbe = farben.schriftSchwach,
+                    )
+                }
+            }
+
             // Ohne Zwischenjubel (Zahlen): direkt weiter, der Zählmoment übernimmt die Bühne.
             if (buchstabeFertig && ohneZwischenjubel) {
                 LaunchedEffect(buchstabeFertig) {
@@ -379,12 +412,31 @@ fun UebungsBildschirm(
                         .background(if (farben.dunkel) Color(0xCC0A0C22) else Color(0xE6FFF9EE))
                         .padding(horizontal = 34.dp, vertical = 26.dp),
                 ) {
-                    ZauberText(
-                        text = if (letzter) jubelLetzter else "Toll gemacht!",
-                        groesse = 32.sp,
-                        farbe = farben.schrift,
-                        gewicht = FontWeight.Bold,
-                    )
+                    if (tier != null) {
+                        Image(
+                            painter = painterResource(tier.bild),
+                            contentDescription = null,
+                            modifier = Modifier.size(88.dp).padding(bottom = 6.dp),
+                        )
+                        ZauberText(
+                            text = gesprochen,
+                            groesse = 26.sp,
+                            farbe = farben.schrift,
+                            gewicht = FontWeight.Bold,
+                        )
+                        ZauberText(
+                            text = if (letzter) jubelLetzter else "Toll gemacht!",
+                            groesse = 18.sp,
+                            farbe = farben.schriftSchwach,
+                        )
+                    } else {
+                        ZauberText(
+                            text = if (letzter) jubelLetzter else "Toll gemacht!",
+                            groesse = 32.sp,
+                            farbe = farben.schrift,
+                            gewicht = FontWeight.Bold,
+                        )
+                    }
                     Box(
                         modifier = Modifier
                             .padding(top = 18.dp)
