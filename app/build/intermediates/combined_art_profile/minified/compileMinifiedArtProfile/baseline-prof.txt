@@ -1789,7 +1789,7 @@ Landroidx/compose/foundation/text/selection/TextClassificationResult;
 Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$cut$1;
 Landroidx/datastore/core/DataStoreImpl$doWithWriteFileLock$2;
 Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$contextMenuAreaModifier$3;
-Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$copy$1;
+Lde/korte_daniel/zaubernina/data/FortschrittSpeicher$setzeKleinschreibung$2;
 Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$cursorDragObserver$1;
 Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$handleDragObserver$1;
 Landroidx/compose/foundation/text/selection/TextFieldSelectionManager$touchSelectionObserver$1;
@@ -6197,6 +6197,7 @@ HSPLandroidx/compose/ui/geometry/RectKt;->synthesizeTypeface-FxwP2eA(ILjava/lang
 Landroidx/compose/ui/text/font/FontVariation$SettingInt;
 Landroidx/compose/ui/text/font/FontVariation$Settings;
 HSPLandroidx/compose/ui/geometry/RectKt;->getBold()Landroidx/compose/ui/text/font/FontWeight;
+HSPLandroidx/compose/ui/geometry/RectKt;->getMedium()Landroidx/compose/ui/text/font/FontWeight;
 HSPLandroidx/compose/ui/geometry/RectKt;->getSemiBold()Landroidx/compose/ui/text/font/FontWeight;
 Landroidx/compose/ui/text/font/FontWeight;
 HSPLandroidx/compose/ui/text/font/FontWeight;-><clinit>()V
@@ -6789,6 +6790,7 @@ HSPLkotlin/math/MathKt;->roundToInt(F)I
 Lkotlin/ranges/IntRange;
 Lkotlin/ranges/IntProgression;
 HSPLkotlin/ranges/IntRange;->isEmpty()Z
+HSPLkotlin/ResultKt;->coerceAtLeast(I)I
 HSPLkotlin/ResultKt;->coerceIn(DDD)D
 HSPLkotlin/ResultKt;->coerceIn(FFF)F
 HSPLkotlin/ResultKt;->coerceIn(III)I
@@ -7135,8 +7137,8 @@ Landroidx/datastore/core/FileStorage$$ExternalSyntheticLambda1;
 HSPLandroidx/datastore/core/FileStorage$$ExternalSyntheticLambda1;-><init>(ILjava/lang/Object;)V
 Landroidx/compose/runtime/GapComposer$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/runtime/GapComposer$$ExternalSyntheticLambda0;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
-Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
+Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda25;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda25;-><init>(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;I)V
 Lkotlinx/coroutines/sync/SemaphoreAndMutexImpl$$ExternalSyntheticLambda0;
 HSPLkotlinx/coroutines/sync/SemaphoreAndMutexImpl$$ExternalSyntheticLambda0;-><init>(ILjava/lang/Object;)V
 Landroidx/compose/foundation/gestures/TrackpadScrollingLogic$$ExternalSyntheticLambda0;
@@ -7805,8 +7807,8 @@ HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;-><in
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->create(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Lkotlin/coroutines/Continuation;
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/data/FortschrittSpeicher$benutzerLoeschen$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
-HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda23;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
+HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda25;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda7;->invoke()Ljava/lang/Object;
 HSPLde/korte_daniel/zaubernina/ui/parent/ElternschlossKt$$ExternalSyntheticLambda4;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLkotlin/collections/AbstractMap$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;)Ljava/lang/Object;

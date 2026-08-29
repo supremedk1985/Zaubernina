@@ -48,8 +48,11 @@ private val TIERE: Map<Char, Anlauttier> = mapOf(
     'Z' to Anlauttier(R.drawable.tier_zebra, "Zebra"),
 )
 
-/** Das Tier zu einem Zeichen, oder null (Ziffern, X, Y, Ä, Ö, Ü). */
-fun anlauttier(zeichen: Char): Anlauttier? = TIERE[zeichen]
+/**
+ * Das Tier zu einem Zeichen, oder null (Ziffern, X, Y, Ä, Ö, Ü). Klein- und
+ * Großbuchstabe teilen sich ihr Tier — beim kleinen n heißt es „n wie Nashorn".
+ */
+fun anlauttier(zeichen: Char): Anlauttier? = TIERE[zeichen.uppercaseChar()]
 
 /** Wie viele Buchstaben ein Tier haben — für den Test und den Elternbereich. */
 val ANLAUTTIER_ANZAHL: Int = TIERE.size

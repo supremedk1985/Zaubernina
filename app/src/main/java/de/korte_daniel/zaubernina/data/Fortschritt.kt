@@ -3,6 +3,7 @@ package de.korte_daniel.zaubernina.data
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -37,6 +38,8 @@ data class BenutzerDaten(
     val benutzer: Benutzer,
     val paket: Paket = Paket.STANDARD,
     val klasse: Klasse = Klasse.VORSCHULE,
+    /** Wörter normal geschrieben (Nina) statt in Großbuchstaben (NINA). */
+    val kleinschreibung: Boolean = false,
     val sterne: Int = 0,
     /** Richtige Rechenaufgaben insgesamt — alle [AUFGABEN_JE_STERN] gibt es einen Stern. */
     val rechenRichtig: Int = 0,
@@ -73,6 +76,7 @@ private fun kName(id: Int) = stringPreferencesKey("u${id}_name")
 private fun kAvatar(id: Int) = stringPreferencesKey("u${id}_avatar")
 private fun kPaket(id: Int) = stringPreferencesKey("u${id}_paket")
 private fun kKlasse(id: Int) = stringPreferencesKey("u${id}_klasse")
+private fun kKlein(id: Int) = booleanPreferencesKey("u${id}_kleinschreibung")
 private fun kSterne(id: Int) = intPreferencesKey("u${id}_sterne")
 private fun kRechen(id: Int) = intPreferencesKey("u${id}_rechen_richtig")
 private fun kAlphabetIndex(id: Int) = intPreferencesKey("u${id}_alphabet_index")
@@ -102,6 +106,7 @@ class FortschrittSpeicher(private val context: Context) {
                     ),
                     paket = lese(p[kPaket(id)], Paket.STANDARD),
                     klasse = lese(p[kKlasse(id)], Klasse.VORSCHULE),
+                    kleinschreibung = p[kKlein(id)] ?: false,
                     sterne = p[kSterne(id)] ?: 0,
                     rechenRichtig = p[kRechen(id)] ?: 0,
                     alphabetIndex = p[kAlphabetIndex(id)] ?: 0,
@@ -167,6 +172,7 @@ class FortschrittSpeicher(private val context: Context) {
             if (ids.size <= 1) return@edit
             p[SCHLUESSEL_BENUTZER_IDS] = ids.filterNot { it == id }.joinToString(",")
             p.remove(kName(id)); p.remove(kAvatar(id)); p.remove(kPaket(id)); p.remove(kKlasse(id))
+            p.remove(kKlein(id))
             p.remove(kSterne(id)); p.remove(kRechen(id))
             p.remove(kAlphabetIndex(id)); p.remove(kAlphabetRunden(id))
             Paket.entries.forEach { paket ->
@@ -238,6 +244,10 @@ class FortschrittSpeicher(private val context: Context) {
 
     suspend fun setzeKlasse(benutzerId: Int, klasse: Klasse) {
         context.speicher.edit { it[kKlasse(benutzerId)] = klasse.name }
+    }
+
+    suspend fun setzeKleinschreibung(benutzerId: Int, an: Boolean) {
+        context.speicher.edit { it[kKlein(benutzerId)] = an }
     }
 
     suspend fun setzeEigeneWoerter(woerter: List<String>) {

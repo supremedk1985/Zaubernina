@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.data.AnlauttiereTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-29T19:14:24.696Z" hostname="nexus" time="0.047">
+<testsuite name="de.korte_daniel.zaubernina.data.AnlauttiereTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-08-29T20:29:50.274Z" hostname="nexus" time="0.048">
   <properties/>
-  <testcase name="jedes Tier hat ein eigenes Bild" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.016"/>
-  <testcase name="X Y und die Umlaute bleiben bewusst ohne Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.012"/>
-  <testcase name="die Anfangsbuchstaben der Uebungswoerter haben moeglichst ein Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.007"/>
-  <testcase name="nur gezeichnete Grossbuchstaben haben ein Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.007"/>
+  <testcase name="jedes Tier hat ein eigenes Bild" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.013"/>
+  <testcase name="X Y und die Umlaute bleiben bewusst ohne Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.01"/>
+  <testcase name="die Anfangsbuchstaben der Uebungswoerter haben moeglichst ein Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.008"/>
+  <testcase name="nur gezeichnete Grossbuchstaben haben ein Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.011"/>
   <testcase name="jedes Tier passt zum Anlaut seines Buchstabens" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.004"/>
-  <testcase name="der gesprochene Satz lautet Buchstabe wie Wort" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.0"/>
+  <testcase name="der gesprochene Satz lautet Buchstabe wie Wort" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.001"/>
   <testcase name="Ziffern haben kein Tier" classname="de.korte_daniel.zaubernina.data.AnlauttiereTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>

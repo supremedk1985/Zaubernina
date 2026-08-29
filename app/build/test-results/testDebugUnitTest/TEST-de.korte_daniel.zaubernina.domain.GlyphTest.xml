@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.GlyphTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T19:14:24.791Z" hostname="nexus" time="0.007">
+<testsuite name="de.korte_daniel.zaubernina.domain.GlyphTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T20:29:50.375Z" hostname="nexus" time="0.004">
   <properties/>
   <testcase name="Abtastung beginnt am Start und endet am Ende" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.001"/>
   <testcase name="Abtastung liefert ungefaehr die gewuenschte Punktzahl" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.0"/>
   <testcase name="Glyph kennt seine Strichzahl" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.0"/>
-  <testcase name="die Abstaende sind ueber Wegstuecke hinweg ungefaehr gleich" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.004"/>
-  <testcase name="ein Bogen ist laenger als seine Sehne" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.001"/>
+  <testcase name="die Abstaende sind ueber Wegstuecke hinweg ungefaehr gleich" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.003"/>
+  <testcase name="ein Bogen ist laenger als seine Sehne" classname="de.korte_daniel.zaubernina.domain.GlyphTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

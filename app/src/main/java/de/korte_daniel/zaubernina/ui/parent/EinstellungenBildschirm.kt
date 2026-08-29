@@ -63,6 +63,7 @@ fun EinstellungenBildschirm(
     onGenauigkeitWechsel: (Genauigkeit) -> Unit,
     onPaketWechsel: (Paket) -> Unit,
     onKlasseWechsel: (Klasse) -> Unit,
+    onKleinschreibungWechsel: (Boolean) -> Unit,
     onWortHinzu: (String) -> Unit,
     onWortWeg: (String) -> Unit,
     onBenutzerNeu: (String, Avatar) -> Unit,
@@ -119,6 +120,23 @@ fun EinstellungenBildschirm(
                     onClick = { onPaketWechsel(paket) },
                 )
             }
+        }
+
+        // ───────── Schreibweise ─────────
+        Abschnitt("SCHREIBWEISE", farben.schriftSchwach)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Wahlzeile(
+                titel = "Große Buchstaben",
+                beschreibung = "NINA — so fangen die meisten Erstklässler an",
+                gewaehlt = !aktiverBenutzer.kleinschreibung,
+                onClick = { onKleinschreibungWechsel(false) },
+            )
+            Wahlzeile(
+                titel = "Groß und klein",
+                beschreibung = "Nina — die Wörter werden normal geschrieben",
+                gewaehlt = aktiverBenutzer.kleinschreibung,
+                onClick = { onKleinschreibungWechsel(true) },
+            )
         }
 
         // ───────── Eigene Wörter ─────────

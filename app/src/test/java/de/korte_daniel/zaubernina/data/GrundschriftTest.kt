@@ -114,6 +114,44 @@ class GrundschriftTest {
     }
 
     @Test
+    fun `das komplette kleine Alphabet ist gezeichnet`() {
+        for (b in 'a'..'z') {
+            assertNotNull("Buchstabe '$b' ist nicht gezeichnet", glyph(b))
+        }
+        for (b in "äöü") {
+            assertNotNull("Umlaut '$b' ist nicht gezeichnet", glyph(b))
+        }
+    }
+
+    @Test
+    fun `Kleinbuchstaben sitzen in ihren Baendern`() {
+        // Der Körper eines Kleinbuchstabens lebt im x-Band (400–850). Oberlängen reichen
+        // zur Oberlinie (t nur bis ~270), Unterlängen in den Keller. Punkte (i j ä ö ü)
+        // schweben über dem x-Band und werden getrennt geprüft.
+        val oberlaenge = "bdfhkl"
+        val unterlaenge = "gjpqy"
+        for ((zeichen, glyphe) in GRUNDSCHRIFT.filterKeys { it.isLowerCase() }) {
+            val koerper = glyphe.striche.filterNot { it.tupfer }.flatMap { it.abtasten(60) }
+            val oben = koerper.minOf { it.y }
+            val unten = koerper.maxOf { it.y }
+
+            when (zeichen) {
+                in oberlaenge -> assertTrue("$zeichen beginnt bei $oben statt an der Oberlinie", oben in 145f..155f)
+                't' -> assertTrue("t beginnt bei $oben statt knapp über dem x-Band", oben in 255f..285f)
+                else -> assertTrue("$zeichen beginnt bei $oben statt an der Mittellinie 400", oben in 393f..410f)
+            }
+            if (zeichen in unterlaenge) {
+                assertTrue("$zeichen muss in den Keller reichen, endet bei $unten", unten in 900f..985f)
+            } else {
+                assertTrue("$zeichen endet bei $unten statt an der Grundlinie 850", unten in 840f..860f)
+            }
+            for (strich in glyphe.striche.filter { it.tupfer }) {
+                assertTrue("$zeichen: Punkt sitzt bei ${strich.start.y}", strich.start.y in 255f..295f)
+            }
+        }
+    }
+
+    @Test
     fun `jeder Strich laesst sich sauber nachfahren`() {
         // Ein Finger, der die Linie exakt entlangfährt, muss JEDEN Strich fertig
         // schreiben können. Das klingt selbstverständlich, ist es aber nicht: die

@@ -55,6 +55,14 @@ fun woerterFuer(paket: Paket, eigene: List<String>): List<String> = when (paket)
     Paket.EIGENE -> eigene.ifEmpty { SCHNECKE_WOERTER }
 }
 
+/**
+ * Wie ein Wort dem Kind gezeigt wird: in Großbuchstaben (NINA) oder normal geschrieben
+ * (Nina). Gespeichert und gezählt wird IMMER die Großform — die Kleinschreibung ist
+ * reine Darstellung, deshalb bleibt jeder Fortschritt beim Umschalten erhalten.
+ */
+fun anzeigeWort(wort: String, kleinschreibung: Boolean): String =
+    if (kleinschreibung && wort.isNotEmpty()) wort.first() + wort.drop(1).lowercase() else wort
+
 /** Baut aus einer Wortliste die Level der Reise. */
 fun levelFuer(woerter: List<String>): List<Level> =
     woerter.mapIndexed { i, wort -> Level(nummer = i + 1, wort = wort) }

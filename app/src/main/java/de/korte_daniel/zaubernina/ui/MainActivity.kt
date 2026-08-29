@@ -25,6 +25,7 @@ import de.korte_daniel.zaubernina.data.Zustand
 import de.korte_daniel.zaubernina.domain.ALPHABET
 import de.korte_daniel.zaubernina.domain.alphabetBuchstabe
 import de.korte_daniel.zaubernina.domain.alphabetRundeVoll
+import de.korte_daniel.zaubernina.domain.anzeigeWort
 import de.korte_daniel.zaubernina.domain.levelFuer
 import de.korte_daniel.zaubernina.domain.sterneFuerAlphabetRunde
 import de.korte_daniel.zaubernina.domain.sterneFuerZahl
@@ -99,7 +100,10 @@ private fun Zaubernina() {
     // gewählt ist, bleibt die App auf dem Startbildschirm.
     val aktiver = aktiverId?.let { zustand.daten(it) }
     val woerter = aktiver?.let { woerterFuer(it.paket, zustand.eigeneWoerter) } ?: emptyList()
-    val levelListe = levelFuer(woerter)
+    // Die Level tragen das Wort gleich in der gewünschten Schreibweise — Reise, Üben
+    // und Jubel zeigen es dann überall gleich. Gezählt wird nur die Levelnummer, der
+    // Fortschritt bleibt beim Umschalten also erhalten.
+    val levelListe = levelFuer(woerter.map { anzeigeWort(it, aktiver?.kleinschreibung == true) })
     val stand = aktiver?.aktuellerStand
 
     ZauberTheme(zustand.thema) {
@@ -278,6 +282,7 @@ private fun Zaubernina() {
                                 onGenauigkeitWechsel = { neu -> bereich.launch { speicher.setzeGenauigkeit(neu) } },
                                 onPaketWechsel = { neu -> bereich.launch { speicher.setzePaket(aktiver.benutzer.id, neu) } },
                                 onKlasseWechsel = { neu -> bereich.launch { speicher.setzeKlasse(aktiver.benutzer.id, neu) } },
+                                onKleinschreibungWechsel = { neu -> bereich.launch { speicher.setzeKleinschreibung(aktiver.benutzer.id, neu) } },
                                 onWortHinzu = { wort ->
                                     bereich.launch { speicher.setzeEigeneWoerter(zustand.eigeneWoerter + wort) }
                                 },

@@ -20997,17 +20997,18 @@ de.korte_daniel.zaubernina.data.AnlauttiereKt:
     public static final java.util.Map getANLAUTTIERE()
     public static final int getANLAUTTIER_ANZAHL()
 de.korte_daniel.zaubernina.data.BenutzerDaten:
-    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
+    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public final de.korte_daniel.zaubernina.domain.Benutzer component1()
     public final de.korte_daniel.zaubernina.domain.Paket component2()
     public final de.korte_daniel.zaubernina.domain.Klasse component3()
-    public final int component4()
+    public final boolean component4()
     public final int component5()
     public final int component6()
     public final int component7()
-    public final java.util.Map component8()
-    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map)
-    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,int,int,int,int,java.util.Map,int,java.lang.Object)
+    public final int component8()
+    public final java.util.Map component9()
+    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map)
+    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map,int,java.lang.Object)
     public final java.util.Map getStaende()
 de.korte_daniel.zaubernina.data.FortschrittKt:
     private static final synthetic java.lang.Enum lese(java.lang.String,java.lang.Enum)
@@ -21034,14 +21035,15 @@ de.korte_daniel.zaubernina.data.Zustand:
     public final de.korte_daniel.zaubernina.data.Zustand copy(java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,java.util.List)
     public static synthetic de.korte_daniel.zaubernina.data.Zustand copy$default(de.korte_daniel.zaubernina.data.Zustand,java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,java.util.List,int,java.lang.Object)
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
-    private static final float A_GRIFF
-    private static final float A_MITTE_X
-    private static final float A_MITTE_Y
-    private static final float A_RADIUS
     private static final float GRUNDLINIE
     private static final float KREIS_GRIFF
     private static final float MITTELLINIE
     private static final float OBERLINIE
+    private static final float RING_GRIFF
+    private static final float RING_R
+    private static final float RING_X
+    private static final float RING_Y
+    private static final float UNTERLINIE
     public static final java.util.List getGROSSBUCHSTABEN()
     public static final java.util.Map getGRUNDSCHRIFT()
     public static final java.util.List getKLEINBUCHSTABEN()
@@ -26395,7 +26397,6 @@ kotlin.text.StringsKt___StringsKt:
     public static final java.lang.Appendable filterTo(java.lang.CharSequence,java.lang.Appendable,kotlin.jvm.functions.Function1)
     private static final java.lang.Character find(java.lang.CharSequence,kotlin.jvm.functions.Function1)
     private static final java.lang.Character findLast(java.lang.CharSequence,kotlin.jvm.functions.Function1)
-    public static final char first(java.lang.CharSequence)
     public static final char first(java.lang.CharSequence,kotlin.jvm.functions.Function1)
     private static final java.lang.Object firstNotNullOf(java.lang.CharSequence,kotlin.jvm.functions.Function1)
     private static final java.lang.Object firstNotNullOfOrNull(java.lang.CharSequence,kotlin.jvm.functions.Function1)
@@ -42504,6 +42505,7 @@ de.korte_daniel.zaubernina.data.BenutzerDaten:
     public static int getAlphabetIndex()
     public static int getAlphabetRunden()
     public final de.korte_daniel.zaubernina.domain.Benutzer getBenutzer()
+    public final boolean getKleinschreibung()
     public final int getSterne()
     public static de.korte_daniel.zaubernina.data.Spielstand stand()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$alphabetBuchstabeGeschrieben$1:
@@ -42556,6 +42558,12 @@ de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeKlasse$1:
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeKlasse$2:
     public int label
     public final java.lang.Object invoke$27()
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeKleinschreibung$1:
+    public int I$0
+    public boolean Z$0
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeKleinschreibung$2:
+    public int label
+    public final java.lang.Object invoke$27()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzePaket$1:
     public int I$0
     public java.lang.Object L$0
@@ -42604,50 +42612,76 @@ de.korte_daniel.zaubernina.data.Zustand:
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     public static final de.korte_daniel.zaubernina.domain.Glyph ACHT
     public static final de.korte_daniel.zaubernina.domain.Glyph AE_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph AE_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph A_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph A_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph B_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph B_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph C_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph C_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph DREI
     public static final de.korte_daniel.zaubernina.domain.Glyph D_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph D_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph EINS
     public static final java.util.List EIN_PFEIL
     public static final de.korte_daniel.zaubernina.domain.Glyph E_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph E_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph FUENF
     public static final de.korte_daniel.zaubernina.domain.Glyph F_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph F_KLEIN
     public static final java.util.List GROSSBUCHSTABEN
     public static final de.korte_daniel.zaubernina.domain.Glyph G_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph G_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph H_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph H_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph I_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph I_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph J_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph J_KLEIN
     public static final java.util.List KLEINBUCHSTABEN
     public static final de.korte_daniel.zaubernina.domain.Glyph K_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph K_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph L_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph L_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph M_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph M_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph NEUN
     public static final de.korte_daniel.zaubernina.domain.Glyph NULL_ZIFFER
     public static final de.korte_daniel.zaubernina.domain.Glyph N_GROSS
     public static final de.korte_daniel.zaubernina.domain.Glyph N_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph OE_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph OE_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph O_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph O_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph P_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph P_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph Q_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph Q_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph R_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph R_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph SECHS
     public static final de.korte_daniel.zaubernina.domain.Glyph SIEBEN
     public static final de.korte_daniel.zaubernina.domain.Glyph S_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph S_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph T_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph T_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph UE_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph UE_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph U_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph U_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph VIER
     public static final de.korte_daniel.zaubernina.domain.Glyph V_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph V_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph W_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph W_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph X_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph X_KLEIN
     public static final de.korte_daniel.zaubernina.domain.Glyph Y_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph Y_KLEIN
     public static final java.util.List ZIFFERN
     public static final de.korte_daniel.zaubernina.domain.Glyph ZWEI
     public static final de.korte_daniel.zaubernina.domain.Glyph Z_GROSS
+    public static final de.korte_daniel.zaubernina.domain.Glyph Z_KLEIN
 de.korte_daniel.zaubernina.domain.Avatar:
     public static final enum de.korte_daniel.zaubernina.domain.Avatar BLUME
     public static final enum de.korte_daniel.zaubernina.domain.Avatar HERZ
@@ -42780,9 +42814,11 @@ de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$29$1$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$30$1$1:
     public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$31$1$1:
+    public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.MainActivityKt:
-    public static synthetic java.lang.String $r8$lambda$auK6clP5FslemJjjtxi4WXfG9Zw()
-    public static final java.lang.String Zaubernina$lambda$11$1$0$10$0$0()
+    public static synthetic java.lang.String $r8$lambda$nXEASSJi0Ot0TyK4NEdaOpWJuDc()
+    public static final java.lang.String Zaubernina$lambda$12$1$0$10$0$0()
 de.korte_daniel.zaubernina.ui.Vorleser:
     public static final int $stable
     static void <clinit>()
@@ -42848,16 +42884,14 @@ de.korte_daniel.zaubernina.ui.level.ReiseBildschirmKt$WhenMappings
 de.korte_daniel.zaubernina.ui.level.ZaehlBildschirmKt$$InternalSyntheticLambda$5$e340f8a65ee67963902f9e7bbe6ddd594b542ff566d77fbd85cdd4e5934a5866$3:
     public final synthetic int f$4
     public final synthetic int f$5
-de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$4$8751e1f464ee76d895e749a9feec6e4b0891117c834b07380eec1f836c150e71$12:
-    public final synthetic int f$16
+de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$4$919d46215fe877583f4ac61e9f0a9ca841e379ccb0ccdfda55003b3f08211cc7$14:
     public final synthetic int f$17
     public final synthetic int f$18
+    public final synthetic int f$19
 de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$5$4007b3729210133601c476569664097ae4c530d11a21e9f8bccc562f902af21c$0:
     public final synthetic int f$4
     public final synthetic int f$5
-de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$5$7efb7e6ace884daf1cf6383d3f98806690dcd269d55f5561621046c1152ce9b5$0
-de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$5$c4ec483442fc517b9f76952625db0533dcaa04dfdf85334896a23b06de5d867d$0:
-    public final synthetic int f$4
+de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt$$InternalSyntheticLambda$5$df6eed20fa2b218c2a0461524acf25a0b46cd7ec3d7a94bd3efba4da2641cef6$0
 de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirmKt:
     public static final boolean EinstellungenBildschirm$lambda$1(androidx.compose.runtime.MutableState)
     public static final void EinstellungenBildschirm$lambda$14(androidx.compose.runtime.MutableState,boolean)

@@ -3,6 +3,7 @@ package de.korte_daniel.zaubernina.data.grundschrift
 import de.korte_daniel.zaubernina.domain.Glyph
 import de.korte_daniel.zaubernina.domain.GlyphPoint
 import de.korte_daniel.zaubernina.domain.Stroke
+import de.korte_daniel.zaubernina.domain.StrokeSegment
 import de.korte_daniel.zaubernina.domain.StrokeSegment.Bogen
 import de.korte_daniel.zaubernina.domain.StrokeSegment.Linie
 
@@ -46,6 +47,7 @@ import de.korte_daniel.zaubernina.domain.StrokeSegment.Linie
 private const val OBERLINIE = 150f
 private const val MITTELLINIE = 400f
 private const val GRUNDLINIE = 850f
+private const val UNTERLINIE = 980f
 
 private fun p(x: Float, y: Float) = GlyphPoint(x, y)
 
@@ -545,10 +547,17 @@ private val NEUN = Glyph(
     ),
 )
 
-// ───────── Kleinbuchstaben: schon gezeichnet, aber noch nicht im Einsatz ─────────
-// Daniels Entscheidung vom 2026-08-28: erst einmal nur Großbuchstaben. Diese drei
-// bleiben stehen, weil sie fertig und geprüft sind — sie kosten nichts und sind da,
-// sobald die Kleinbuchstaben drankommen.
+// ──────────────────────────── Kleinbuchstaben ────────────────────────────
+// Seit 2026-08-29 im Einsatz: in den Einstellungen kann je Kind „Groß und klein"
+// gewählt werden, dann werden die Wörter normal geschrieben (Nina statt NINA).
+//
+// Dieselben Regeln wie bei den Großbuchstaben (sofatutor-Lehrgang): Stämme von
+// oben nach unten, Ovale gegen den Uhrzeigersinn, Anbau-Bögen setzen auf halber
+// Stammhöhe an (Muster des kleinen n), Punkte zuletzt. Kein Strich läuft über
+// sich selbst zurück — wo die Schreibschrift absetzt, sind es hier zwei Züge.
+//
+// Maße: x-Band 400–850 (Bandmitte 625), Oberlängen bis 150 (t nur bis 270),
+// Unterlängen (g j p q y) bis 980, i/j-Punkt und Umlautpunkte um 270–285.
 
 /** Kleines i: erst der Stamm, dann der Punkt. Der Punkt wird getippt, nicht gezogen. */
 private val I_KLEIN = Glyph(
@@ -581,28 +590,366 @@ private val N_KLEIN = Glyph(
     ),
 )
 
-/** Kleines a: erst der runde Bauch gegen den Uhrzeigersinn ab zwölf Uhr, dann der Strich rechts. */
-private const val A_MITTE_X = 450f
-private const val A_MITTE_Y = 625f
-private const val A_RADIUS = 225f
-private const val A_GRIFF = A_RADIUS * 0.5523f // Kreisnäherung durch vier kubische Bögen
+/**
+ * Der runde Bauch der Ovalbuchstaben (a d g o q ä ö): ein Ring gegen den Uhrzeigersinn,
+ * oben beginnend — vier kubische Viertelbögen (Kreisnäherung, Kappa 0,5523).
+ */
+private const val RING_X = 450f
+private const val RING_Y = 625f
+private const val RING_R = 225f
+private const val RING_GRIFF = RING_R * 0.5523f
 
+private fun ringSegmente(): List<StrokeSegment> = listOf(
+    Bogen(p(RING_X - RING_GRIFF, RING_Y - RING_R), p(RING_X - RING_R, RING_Y - RING_GRIFF), p(RING_X - RING_R, RING_Y)),
+    Bogen(p(RING_X - RING_R, RING_Y + RING_GRIFF), p(RING_X - RING_GRIFF, RING_Y + RING_R), p(RING_X, RING_Y + RING_R)),
+    Bogen(p(RING_X + RING_GRIFF, RING_Y + RING_R), p(RING_X + RING_R, RING_Y + RING_GRIFF), p(RING_X + RING_R, RING_Y)),
+    Bogen(p(RING_X + RING_R, RING_Y - RING_GRIFF), p(RING_X + RING_GRIFF, RING_Y - RING_R), p(RING_X, RING_Y - RING_R)),
+)
+
+private fun ringZug() = Stroke(
+    start = p(RING_X, RING_Y - RING_R),
+    segmente = ringSegmente(),
+    pfeileBei = listOf(0.16f, 0.62f),
+)
+
+/** Kleines a: erst der runde Bauch gegen den Uhrzeigersinn ab zwölf Uhr, dann der Strich rechts. */
 private val A_KLEIN = Glyph(
     zeichen = 'a', name = "a",
     striche = listOf(
-        Stroke(
-            start = p(A_MITTE_X, A_MITTE_Y - A_RADIUS),
-            segmente = listOf(
-                Bogen(p(A_MITTE_X - A_GRIFF, A_MITTE_Y - A_RADIUS), p(A_MITTE_X - A_RADIUS, A_MITTE_Y - A_GRIFF), p(A_MITTE_X - A_RADIUS, A_MITTE_Y)),
-                Bogen(p(A_MITTE_X - A_RADIUS, A_MITTE_Y + A_GRIFF), p(A_MITTE_X - A_GRIFF, A_MITTE_Y + A_RADIUS), p(A_MITTE_X, A_MITTE_Y + A_RADIUS)),
-                Bogen(p(A_MITTE_X + A_GRIFF, A_MITTE_Y + A_RADIUS), p(A_MITTE_X + A_RADIUS, A_MITTE_Y + A_GRIFF), p(A_MITTE_X + A_RADIUS, A_MITTE_Y)),
-                Bogen(p(A_MITTE_X + A_RADIUS, A_MITTE_Y - A_GRIFF), p(A_MITTE_X + A_GRIFF, A_MITTE_Y - A_RADIUS), p(A_MITTE_X, A_MITTE_Y - A_RADIUS)),
-            ),
-            pfeileBei = listOf(0.16f, 0.62f),
-        ),
-        zug(p(A_MITTE_X + A_RADIUS, MITTELLINIE), p(A_MITTE_X + A_RADIUS, GRUNDLINIE)),
+        ringZug(),
+        zug(p(RING_X + RING_R, MITTELLINIE), p(RING_X + RING_R, GRUNDLINIE), EIN_PFEIL),
     ),
 )
+
+/** Kleines b: langer Stamm, dann der Bauch — er setzt wie beim n auf halber Höhe an. */
+private val B_KLEIN = Glyph(
+    zeichen = 'b', name = "b",
+    striche = listOf(
+        zug(p(330f, OBERLINIE), p(330f, GRUNDLINIE)),
+        Stroke(
+            start = p(330f, 455f),
+            segmente = listOf(
+                Bogen(p(545f, 405f), p(650f, 490f), p(650f, 625f)),
+                Bogen(p(650f, 760f), p(545f, 845f), p(330f, 825f)),
+            ),
+            pfeileBei = listOf(0.3f, 0.75f),
+        ),
+    ),
+)
+
+/** Kleines c: der offene Bogen gegen den Uhrzeigersinn, wie das große C eine Etage tiefer. */
+private val C_KLEIN = Glyph(
+    zeichen = 'c', name = "c",
+    striche = listOf(
+        Stroke(
+            start = p(620f, 462f),
+            segmente = listOf(
+                Bogen(p(555f, 412f), p(505f, 400f), p(450f, 400f)),
+                Bogen(p(326f, 400f), p(225f, 501f), p(225f, 625f)),
+                Bogen(p(225f, 749f), p(326f, 850f), p(450f, 850f)),
+                Bogen(p(505f, 850f), p(556f, 838f), p(618f, 792f)),
+            ),
+            pfeileBei = listOf(0.3f, 0.7f),
+        ),
+    ),
+)
+
+/** Kleines d: erst der Bauch, dann der lange Stamm von ganz oben. */
+private val D_KLEIN = Glyph(
+    zeichen = 'd', name = "d",
+    striche = listOf(
+        ringZug(),
+        zug(p(RING_X + RING_R, OBERLINIE), p(RING_X + RING_R, GRUNDLINIE)),
+    ),
+)
+
+/** Kleines e: der Querstrich, dann ohne Absetzen im Bogen herum — ein Zug. */
+private val E_KLEIN = Glyph(
+    zeichen = 'e', name = "e",
+    striche = listOf(
+        Stroke(
+            start = p(250f, 608f),
+            segmente = listOf(
+                Linie(p(648f, 608f)),
+                Bogen(p(648f, 480f), p(570f, 400f), p(450f, 400f)),
+                Bogen(p(326f, 400f), p(225f, 501f), p(225f, 625f)),
+                Bogen(p(225f, 749f), p(326f, 850f), p(450f, 850f)),
+                Bogen(p(505f, 850f), p(560f, 836f), p(618f, 795f)),
+            ),
+            pfeileBei = listOf(0.14f, 0.5f, 0.85f),
+        ),
+    ),
+)
+
+/** Kleines f: oben der Haken nach links, der Stamm hinunter, dann der Querstrich. */
+private val F_KLEIN = Glyph(
+    zeichen = 'f', name = "f",
+    striche = listOf(
+        Stroke(
+            start = p(600f, 235f),
+            segmente = listOf(
+                Bogen(p(545f, 168f), p(470f, OBERLINIE), p(430f, OBERLINIE)),
+                Bogen(p(365f, OBERLINIE), p(330f, 205f), p(330f, 270f)),
+                Linie(p(330f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.2f, 0.7f),
+        ),
+        zug(p(210f, MITTELLINIE), p(480f, MITTELLINIE), EIN_PFEIL),
+    ),
+)
+
+/** Kleines g: der Bauch, dann der Strich in den Keller mit dem Bogen nach links. */
+private val G_KLEIN = Glyph(
+    zeichen = 'g', name = "g",
+    striche = listOf(
+        ringZug(),
+        Stroke(
+            start = p(RING_X + RING_R, MITTELLINIE),
+            segmente = listOf(
+                Linie(p(675f, 820f)),
+                Bogen(p(675f, 930f), p(590f, 980f), p(530f, 980f)),
+                Bogen(p(465f, 980f), p(428f, 948f), p(425f, 905f)),
+            ),
+            pfeileBei = listOf(0.3f, 0.8f),
+        ),
+    ),
+)
+
+/** Kleines h: wie das n, nur mit langem Stamm. */
+private val H_KLEIN = Glyph(
+    zeichen = 'h', name = "h",
+    striche = listOf(
+        zug(p(330f, OBERLINIE), p(330f, GRUNDLINIE)),
+        Stroke(
+            start = p(330f, 480f),
+            segmente = listOf(
+                Bogen(p(330f, 395f), p(610f, 395f), p(610f, 480f)),
+                Linie(p(610f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.30f, 0.78f),
+        ),
+    ),
+)
+
+/** Kleines j: Strich in den Keller mit Linksbogen, der Punkt zuletzt. */
+private val J_KLEIN = Glyph(
+    zeichen = 'j', name = "j",
+    striche = listOf(
+        Stroke(
+            start = p(500f, MITTELLINIE),
+            segmente = listOf(
+                Linie(p(500f, 860f)),
+                Bogen(p(500f, 950f), p(430f, 982f), p(380f, 975f)),
+                Bogen(p(340f, 968f), p(315f, 945f), p(310f, 915f)),
+            ),
+            pfeileBei = listOf(0.35f, 0.8f),
+        ),
+        Stroke(p(500f, 270f), listOf(Linie(p(500f, 276f))), emptyList(), tupfer = true),
+    ),
+)
+
+/** Kleines k: langer Stamm, dann beide Arme in einem Zug mit Knick am Stamm. */
+private val K_KLEIN = Glyph(
+    zeichen = 'k', name = "k",
+    striche = listOf(
+        zug(p(330f, OBERLINIE), p(330f, GRUNDLINIE)),
+        Stroke(
+            start = p(620f, MITTELLINIE),
+            segmente = listOf(Linie(p(345f, 625f)), Linie(p(620f, GRUNDLINIE))),
+            pfeileBei = listOf(0.22f, 0.78f),
+        ),
+    ),
+)
+
+/** Kleines l: ein einziger langer Abstrich. */
+private val L_KLEIN = Glyph(
+    zeichen = 'l', name = "l",
+    striche = listOf(zug(p(500f, OBERLINIE), p(500f, GRUNDLINIE))),
+)
+
+/** Kleines m: der Stamm, dann zwei Bögen — jeder setzt auf halber Höhe des vorigen an. */
+private val M_KLEIN = Glyph(
+    zeichen = 'm', name = "m",
+    striche = listOf(
+        zug(p(270f, MITTELLINIE), p(270f, GRUNDLINIE), EIN_PFEIL),
+        Stroke(
+            start = p(270f, 480f),
+            segmente = listOf(
+                Bogen(p(270f, 395f), p(475f, 395f), p(475f, 480f)),
+                Linie(p(475f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.30f, 0.8f),
+        ),
+        Stroke(
+            start = p(475f, 480f),
+            segmente = listOf(
+                Bogen(p(475f, 395f), p(680f, 395f), p(680f, 480f)),
+                Linie(p(680f, GRUNDLINIE)),
+            ),
+            pfeileBei = listOf(0.30f, 0.8f),
+        ),
+    ),
+)
+
+/** Kleines o: der Ring gegen den Uhrzeigersinn, oben beginnend. */
+private val O_KLEIN = Glyph(
+    zeichen = 'o', name = "o",
+    striche = listOf(ringZug()),
+)
+
+/** Kleines p: Stamm in den Keller, dann der Bauch wie beim b. */
+private val P_KLEIN = Glyph(
+    zeichen = 'p', name = "p",
+    striche = listOf(
+        zug(p(330f, MITTELLINIE), p(330f, UNTERLINIE)),
+        Stroke(
+            start = p(330f, 455f),
+            segmente = listOf(
+                Bogen(p(545f, 405f), p(650f, 490f), p(650f, 625f)),
+                Bogen(p(650f, 760f), p(545f, 845f), p(330f, 825f)),
+            ),
+            pfeileBei = listOf(0.3f, 0.75f),
+        ),
+    ),
+)
+
+/** Kleines q: der Bauch, dann der gerade Strich in den Keller. */
+private val Q_KLEIN = Glyph(
+    zeichen = 'q', name = "q",
+    striche = listOf(
+        ringZug(),
+        zug(p(RING_X + RING_R, MITTELLINIE), p(RING_X + RING_R, UNTERLINIE)),
+    ),
+)
+
+/** Kleines r: kurzer Stamm, dann der kleine Bogen — offen, ohne Abstrich. */
+private val R_KLEIN = Glyph(
+    zeichen = 'r', name = "r",
+    striche = listOf(
+        zug(p(350f, MITTELLINIE), p(350f, GRUNDLINIE), EIN_PFEIL),
+        Stroke(
+            start = p(350f, 480f),
+            segmente = listOf(Bogen(p(350f, 395f), p(575f, 395f), p(590f, 470f))),
+            pfeileBei = EIN_PFEIL,
+        ),
+    ),
+)
+
+/** Kleines s: die S-Kurve des großen S, eine Etage tiefer und entsprechend kleiner. */
+private val S_KLEIN = Glyph(
+    zeichen = 's', name = "s",
+    striche = listOf(
+        Stroke(
+            start = p(622f, 468f),
+            segmente = listOf(
+                Bogen(p(603f, 416f), p(539f, 399f), p(484f, 400f)),
+                Bogen(p(407f, 403f), p(378f, 458f), p(391f, 516f)),
+                Bogen(p(404f, 580f), p(481f, 606f), p(526f, 625f)),
+                Bogen(p(577f, 648f), p(622f, 689f), p(622f, 747f)),
+                Bogen(p(622f, 821f), p(539f, 858f), p(461f, GRUNDLINIE)),
+                Bogen(p(413f, 846f), p(384f, 815f), p(378f, 776f)),
+            ),
+            pfeileBei = listOf(0.14f, 0.62f),
+        ),
+    ),
+)
+
+/** Kleines t: der Stamm beginnt über der Mittellinie, aber unter der Oberlinie; dann quer. */
+private val T_KLEIN = Glyph(
+    zeichen = 't', name = "t",
+    striche = listOf(
+        zug(p(450f, 270f), p(450f, GRUNDLINIE), EIN_PFEIL),
+        zug(p(320f, MITTELLINIE), p(580f, MITTELLINIE), EIN_PFEIL),
+    ),
+)
+
+/** Kleines u: hinunter, im Bogen hinauf bis zur Mittellinie, dann der Abstrich rechts. */
+private val U_KLEIN = Glyph(
+    zeichen = 'u', name = "u",
+    striche = listOf(
+        Stroke(
+            start = p(330f, MITTELLINIE),
+            segmente = listOf(
+                Linie(p(330f, 690f)),
+                Bogen(p(330f, 795f), p(415f, 850f), p(470f, 850f)),
+                Bogen(p(545f, 850f), p(610f, 790f), p(610f, 700f)),
+                Linie(p(610f, MITTELLINIE)),
+            ),
+            pfeileBei = listOf(0.2f, 0.62f),
+        ),
+        zug(p(610f, MITTELLINIE), p(610f, GRUNDLINIE), EIN_PFEIL),
+    ),
+)
+
+/** Kleines v: das Zickzack des großen V, eine Etage tiefer. */
+private val V_KLEIN = Glyph(
+    zeichen = 'v', name = "v",
+    striche = listOf(
+        Stroke(
+            start = p(330f, MITTELLINIE),
+            segmente = listOf(Linie(p(500f, GRUNDLINIE)), Linie(p(670f, MITTELLINIE))),
+            pfeileBei = listOf(0.25f, 0.75f),
+        ),
+    ),
+)
+
+/** Kleines w: zweimal hinunter und hinauf, die Mittelspitze bis zur Mittellinie. */
+private val W_KLEIN = Glyph(
+    zeichen = 'w', name = "w",
+    striche = listOf(
+        Stroke(
+            start = p(280f, MITTELLINIE),
+            segmente = listOf(
+                Linie(p(390f, GRUNDLINIE)),
+                Linie(p(500f, MITTELLINIE)),
+                Linie(p(610f, GRUNDLINIE)),
+                Linie(p(720f, MITTELLINIE)),
+            ),
+            pfeileBei = listOf(0.14f, 0.62f),
+        ),
+    ),
+)
+
+/** Kleines x: zwei gekreuzte Abstriche, beide von oben. */
+private val X_KLEIN = Glyph(
+    zeichen = 'x', name = "x",
+    striche = listOf(
+        zug(p(330f, MITTELLINIE), p(670f, GRUNDLINIE), EIN_PFEIL),
+        zug(p(670f, MITTELLINIE), p(330f, GRUNDLINIE), EIN_PFEIL),
+    ),
+)
+
+/** Kleines y: wie das v, aber der zweite Abstrich läuft durch bis in den Keller. */
+private val Y_KLEIN = Glyph(
+    zeichen = 'y', name = "y",
+    striche = listOf(
+        zug(p(330f, MITTELLINIE), p(505f, GRUNDLINIE), EIN_PFEIL),
+        zug(p(680f, MITTELLINIE), p(455f, UNTERLINIE), EIN_PFEIL),
+    ),
+)
+
+/** Kleines z: hin, schräg hinunter, wieder hin — ein Zug. */
+private val Z_KLEIN = Glyph(
+    zeichen = 'z', name = "z",
+    striche = listOf(
+        Stroke(
+            start = p(330f, MITTELLINIE),
+            segmente = listOf(Linie(p(660f, MITTELLINIE)), Linie(p(330f, GRUNDLINIE)), Linie(p(660f, GRUNDLINIE))),
+            pfeileBei = listOf(0.15f, 0.5f, 0.85f),
+        ),
+    ),
+)
+
+/** Die Umlautpunkte der Kleinbuchstaben — tiefer als bei den Großen, über dem x-Band. */
+private fun kleineUmlautpunkte(): List<Stroke> = listOf(
+    Stroke(p(365f, 275f), listOf(Linie(p(365f, 281f))), emptyList(), tupfer = true),
+    Stroke(p(585f, 275f), listOf(Linie(p(585f, 281f))), emptyList(), tupfer = true),
+)
+
+private val AE_KLEIN = Glyph('ä', "ä", A_KLEIN.striche + kleineUmlautpunkte())
+private val OE_KLEIN = Glyph('ö', "ö", O_KLEIN.striche + kleineUmlautpunkte())
+private val UE_KLEIN = Glyph('ü', "ü", U_KLEIN.striche + kleineUmlautpunkte())
+
 
 
 // ───────────────────────────── Ziffern ─────────────────────────────
@@ -730,8 +1077,12 @@ val GROSSBUCHSTABEN: List<Glyph> = listOf(
     AE_GROSS, OE_GROSS, UE_GROSS,
 )
 
-/** Gezeichnet, aber noch nicht im Einsatz — siehe Hinweis oben. */
-val KLEINBUCHSTABEN: List<Glyph> = listOf(I_KLEIN, N_KLEIN, A_KLEIN)
+val KLEINBUCHSTABEN: List<Glyph> = listOf(
+    A_KLEIN, B_KLEIN, C_KLEIN, D_KLEIN, E_KLEIN, F_KLEIN, G_KLEIN, H_KLEIN, I_KLEIN,
+    J_KLEIN, K_KLEIN, L_KLEIN, M_KLEIN, N_KLEIN, O_KLEIN, P_KLEIN, Q_KLEIN, R_KLEIN,
+    S_KLEIN, T_KLEIN, U_KLEIN, V_KLEIN, W_KLEIN, X_KLEIN, Y_KLEIN, Z_KLEIN,
+    AE_KLEIN, OE_KLEIN, UE_KLEIN,
+)
 
 val GRUNDSCHRIFT: Map<Char, Glyph> = (GROSSBUCHSTABEN + KLEINBUCHSTABEN + ZIFFERN).associateBy { it.zeichen }
 
