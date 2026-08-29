@@ -42,6 +42,7 @@ import de.korte_daniel.zaubernina.domain.Glyph
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.logic.StrokeTracker
 import de.korte_daniel.zaubernina.logic.Zug
+import de.korte_daniel.zaubernina.ui.Vorleser
 import de.korte_daniel.zaubernina.ui.components.Funkenfeld
 import de.korte_daniel.zaubernina.ui.components.SCHABLONE_BREITE
 import de.korte_daniel.zaubernina.ui.components.boxabbildungFuer
@@ -76,11 +77,16 @@ fun UebungsBildschirm(
     // Texte des Abschluss-Jubels — das Alphabet sagt "Weiter" statt "Zeig mir das Wort".
     jubelLetzter: String = "Fertig!",
     knopfLetzter: String = "Zeig mir das Wort",
+    vorleser: Vorleser? = null,
 ) {
     val farben = ZauberTheme.farben
     var buchstabeIndex by remember(wort) { mutableIntStateOf(0) }
     val zeichen = wort.getOrNull(buchstabeIndex) ?: return
     val glyphe: Glyph = glyph(zeichen) ?: return
+
+    // Vorgelesen wird VOR dem Schreiben (jedes neue Zeichen, auch ein doppeltes wie
+    // die zwei M in MAMA — deshalb der Index als Schlüssel, nicht das Zeichen) …
+    LaunchedEffect(wort, buchstabeIndex) { vorleser?.sprich(zeichen.toString()) }
 
     val abgetastet = remember(glyphe) { glyphe.striche.map { it.abtasten(120) } }
     val zeichenBreite = remember(glyphe) {
@@ -92,6 +98,11 @@ fun UebungsBildschirm(
     var zustand by remember(glyphe, buchstabeIndex) { mutableStateOf(Zug.WARTET) }
     var finger by remember(glyphe, buchstabeIndex) { mutableStateOf<Offset?>(null) }
     var buchstabeFertig by remember(glyphe, buchstabeIndex) { mutableStateOf(false) }
+
+    // … und NACH dem Schreiben noch einmal, als Bestätigung zum Jubel.
+    LaunchedEffect(buchstabeFertig) {
+        if (buchstabeFertig) vorleser?.sprich(zeichen.toString())
+    }
 
     val tracker = remember(glyphe, buchstabeIndex, strichIndex, genauigkeit) {
         StrokeTracker(
@@ -147,7 +158,43 @@ fun UebungsBildschirm(
                 groesse = 15.sp,
                 farbe = farben.schriftSchwach,
             )
-            Box(modifier = Modifier.size(46.dp))
+            // Nochmal vorlesen — der Lautsprecher-Knopf, Gegenstück zum Zurück-Knopf links.
+            Box(
+                modifier = Modifier
+                    .size(46.dp)
+                    .clip(CircleShape)
+                    .background(farben.flaeche)
+                    .clickable(enabled = vorleser != null) { vorleser?.sprich(zeichen.toString()) },
+                contentAlignment = Alignment.Center,
+            ) {
+                Canvas(modifier = Modifier.size(22.dp)) {
+                    val b = size.width
+                    val h = size.height
+                    // Lautsprecher: Kasten mit Trichter, gefüllt …
+                    val korpus = Path().apply {
+                        moveTo(b * 0.06f, h * 0.36f)
+                        lineTo(b * 0.30f, h * 0.36f)
+                        lineTo(b * 0.54f, h * 0.14f)
+                        lineTo(b * 0.54f, h * 0.86f)
+                        lineTo(b * 0.30f, h * 0.64f)
+                        lineTo(b * 0.06f, h * 0.64f)
+                        close()
+                    }
+                    drawPath(korpus, farben.schrift)
+                    // … und zwei Schallbögen davor.
+                    for (r in listOf(0.22f, 0.40f)) {
+                        drawArc(
+                            color = farben.schrift,
+                            startAngle = -55f,
+                            sweepAngle = 110f,
+                            useCenter = false,
+                            topLeft = Offset(b * (0.62f - r), h * (0.5f - r)),
+                            size = androidx.compose.ui.geometry.Size(b * r * 2f, h * r * 2f),
+                            style = StrichStil(width = 1.8f * density),
+                        )
+                    }
+                }
+            }
         }
 
         // Das Wort mit dem gerade geübten Buchstaben hervorgehoben — bei einem

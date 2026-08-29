@@ -1977,6 +1977,7 @@ HSPLandroidx/compose/runtime/GapComposer$derivedStateObserver$1;-><init>(ILjava/
 HSPLandroidx/compose/runtime/GapComposer;-><init>(Landroidx/compose/ui/node/UiApplier;Landroidx/compose/runtime/CompositionContext;Landroidx/compose/runtime/composer/gapbuffer/SlotTable;Landroidx/collection/MutableSetWrapper;Landroidx/compose/runtime/composer/gapbuffer/changelist/ChangeList;Landroidx/compose/runtime/composer/gapbuffer/changelist/ChangeList;Landroidx/compose/ui/draw/DrawResult;Landroidx/compose/runtime/CompositionImpl;)V
 HSPLandroidx/compose/runtime/GapComposer;->abortRoot()V
 HSPLandroidx/compose/runtime/GapComposer;->apply(Ljava/lang/Object;Lkotlin/jvm/functions/Function2;)V
+HSPLandroidx/compose/runtime/GapComposer;->changed(C)Z
 HSPLandroidx/compose/runtime/GapComposer;->changed(I)Z
 HSPLandroidx/compose/runtime/GapComposer;->changed(J)Z
 HSPLandroidx/compose/runtime/GapComposer;->changed(Ljava/lang/Object;)Z
@@ -3313,6 +3314,7 @@ HSPLandroidx/compose/ui/graphics/AndroidCanvas;->clipPath-mtrdD-E(Landroidx/comp
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->clipRect-N_I0leg(FFFFI)V
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->concat-58bKbWc([F)V
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->disableZ()V
+HSPLandroidx/compose/ui/graphics/AndroidCanvas;->drawArc(FFFFLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->drawCircle-9KIMszo(FJLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->drawImage-d-4ec7I(Landroidx/compose/ui/graphics/AndroidImageBitmap;Landroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/AndroidCanvas;->drawImageRect-HPBpro0(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJLandroidx/compose/ui/graphics/AndroidPaint;)V
@@ -3411,6 +3413,7 @@ HSPLandroidx/compose/ui/graphics/Canvas;->clipRect-N_I0leg(FFFFI)V
 HSPLandroidx/compose/ui/graphics/Canvas;->clipRect-mtrdD-E$default(Landroidx/compose/ui/graphics/Canvas;Landroidx/compose/ui/geometry/Rect;)V
 HSPLandroidx/compose/ui/graphics/Canvas;->concat-58bKbWc([F)V
 HSPLandroidx/compose/ui/graphics/Canvas;->disableZ()V
+HSPLandroidx/compose/ui/graphics/Canvas;->drawArc(FFFFLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/Canvas;->drawCircle-9KIMszo(FJLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/Canvas;->drawImage-d-4ec7I(Landroidx/compose/ui/graphics/AndroidImageBitmap;Landroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/Canvas;->drawImageRect-HPBpro0(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJLandroidx/compose/ui/graphics/AndroidPaint;)V
@@ -3646,6 +3649,7 @@ Landroidx/compose/ui/graphics/drawscope/DrawScope;
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;-><init>()V
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->configurePaint-2qPWKa0$default(Landroidx/compose/ui/graphics/drawscope/CanvasDrawScope;JLandroidx/compose/ui/graphics/drawscope/DrawStyle;FI)Landroidx/compose/ui/graphics/AndroidPaint;
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->configurePaint-swdJneE(Landroidx/compose/ui/graphics/Brush;Landroidx/compose/ui/graphics/drawscope/DrawStyle;FLandroidx/compose/ui/graphics/BlendModeColorFilter;II)Landroidx/compose/ui/graphics/AndroidPaint;
+HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->drawArc-yD3GUKo(JJJLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->drawCircle-VaOC9Bg(JFJFLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->drawImage-AZ2fEMs(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJFLandroidx/compose/ui/graphics/BlendModeColorFilter;I)V
 HSPLandroidx/compose/ui/graphics/drawscope/CanvasDrawScope;->drawImage-gbVJVH8(Landroidx/compose/ui/graphics/AndroidImageBitmap;Landroidx/compose/ui/graphics/BlendModeColorFilter;)V
@@ -3667,6 +3671,7 @@ Landroidx/compose/ui/node/LayoutNodeDrawScope;
 HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;->drawContent()V
 Landroidx/compose/ui/graphics/drawscope/DrawStyle;
 HSPLandroidx/compose/ui/graphics/drawscope/DrawStyle;-><clinit>()V
+HSPLandroidx/compose/ui/graphics/drawscope/DrawScope;->drawArc-yD3GUKo(JJJLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/graphics/drawscope/DrawScope;->drawCircle-VaOC9Bg(JFJFLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/graphics/drawscope/DrawScope;->drawCircle-VaOC9Bg$default(Landroidx/compose/ui/graphics/drawscope/DrawScope;JFJFLandroidx/compose/ui/graphics/drawscope/Stroke;I)V
 HSPLandroidx/compose/ui/graphics/drawscope/DrawScope;->drawImage-AZ2fEMs(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJFLandroidx/compose/ui/graphics/BlendModeColorFilter;I)V
@@ -3694,6 +3699,7 @@ HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->clipPath-mtrdD-E(Landro
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->clipRect-N_I0leg(FFFFI)V
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->concat-58bKbWc([F)V
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->disableZ()V
+HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->drawArc(FFFFLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->drawCircle-9KIMszo(FJLandroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->drawImage-d-4ec7I(Landroidx/compose/ui/graphics/AndroidImageBitmap;Landroidx/compose/ui/graphics/AndroidPaint;)V
 HSPLandroidx/compose/ui/graphics/drawscope/EmptyCanvas;->drawImageRect-HPBpro0(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJLandroidx/compose/ui/graphics/AndroidPaint;)V
@@ -4728,6 +4734,7 @@ HSPLandroidx/compose/ui/node/LayoutNode;->setViewConfiguration(Landroidx/compose
 HSPLandroidx/compose/ui/node/LayoutNode;->toString()Ljava/lang/String;
 HSPLandroidx/compose/ui/node/LayoutNode;->updateChildrenIfDirty$ui()V
 HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;-><init>()V
+HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;->drawArc-yD3GUKo(JJJLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;->drawCircle-VaOC9Bg(JFJFLandroidx/compose/ui/graphics/drawscope/DrawStyle;)V
 HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;->drawDirect-eZhPAX0$ui(Landroidx/compose/ui/graphics/Canvas;JLandroidx/compose/ui/node/NodeCoordinator;Landroidx/compose/ui/node/DrawModifierNode;Landroidx/compose/ui/graphics/layer/GraphicsLayer;)V
 HSPLandroidx/compose/ui/node/LayoutNodeDrawScope;->drawImage-AZ2fEMs(Landroidx/compose/ui/graphics/AndroidImageBitmap;JJJFLandroidx/compose/ui/graphics/BlendModeColorFilter;I)V
@@ -7121,7 +7128,7 @@ HSPLandroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;-><init>(ILjava/l
 Lde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;
 HSPLde/korte_daniel/zaubernina/ui/MainActivityKt$$ExternalSyntheticLambda24;-><init>(Landroidx/compose/runtime/MutableState;I)V
 Landroidx/compose/foundation/gestures/UpdatableAnimationState$$ExternalSyntheticLambda0;
-Landroidx/compose/foundation/layout/BoxKt$$ExternalSyntheticLambda0;
+HSPLandroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;-><init>(IILjava/lang/Object;)V
 Landroidx/compose/foundation/layout/BoxMeasurePolicy$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/foundation/layout/BoxMeasurePolicy$$ExternalSyntheticLambda0;-><init>(Landroidx/compose/ui/layout/Placeable;Landroidx/compose/ui/layout/Measurable;Landroidx/compose/ui/layout/MeasureScope;IILandroidx/compose/foundation/layout/BoxMeasurePolicy;)V
 HSPLandroidx/compose/foundation/layout/BoxMeasurePolicy$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
@@ -7146,6 +7153,9 @@ HSPLandroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSynt
 Landroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda2;
 HSPLandroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda2;-><init>(Landroidx/compose/foundation/text/selection/OffsetProvider;Landroidx/compose/ui/Modifier;JI)V
 HSPLandroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda2;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
+Landroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda3;
+HSPLandroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda3;-><init>(Landroidx/compose/ui/Modifier;II)V
+HSPLandroidx/compose/foundation/text/AndroidCursorHandle_androidKt$$ExternalSyntheticLambda3;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 Landroidx/compose/runtime/BroadcastFrameClock$$ExternalSyntheticLambda0;
 HSPLandroidx/compose/runtime/BroadcastFrameClock$$ExternalSyntheticLambda0;-><init>(IJ)V
 Landroidx/compose/foundation/text/BasicTextFieldKt$$ExternalSyntheticLambda3;
@@ -7554,9 +7564,6 @@ HSPLandroidx/compose/foundation/layout/Arrangement$Center$1;->getSpacing-D9Ej5fM
 HSPLandroidx/compose/foundation/layout/Arrangement$Center$1;->toString()Ljava/lang/String;
 HSPLandroidx/compose/foundation/layout/Arrangement$Start$1;->arrange(Landroidx/compose/ui/unit/Density;I[ILandroidx/compose/ui/unit/LayoutDirection;[I)V
 HSPLandroidx/compose/foundation/layout/Arrangement$Start$1;->toString()Ljava/lang/String;
-HSPLandroidx/compose/foundation/layout/BoxKt$$ExternalSyntheticLambda0;-><init>(Landroidx/compose/ui/Modifier;I)V
-HSPLandroidx/compose/foundation/layout/BoxKt$$ExternalSyntheticLambda0;-><init>(Landroidx/compose/ui/Modifier;II)V
-HSPLandroidx/compose/foundation/layout/BoxKt$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/layout/FillNode$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/foundation/layout/SpacerMeasurePolicy;->measure-3p2s80s(Landroidx/compose/ui/layout/MeasureScope;Ljava/util/List;J)Landroidx/compose/ui/layout/MeasureResult;
 HSPLandroidx/compose/foundation/text/ComposableSingletons$BasicTextFieldKt$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
@@ -7616,7 +7623,6 @@ HSPLandroidx/compose/runtime/Recomposer$recompositionRunner$2;->invoke(Ljava/lan
 HSPLandroidx/compose/runtime/Recomposer$recompositionRunner$2;->invokeSuspend(Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/runtime/SnapshotFlowManagerImpl;-><init>(I)V
 HSPLandroidx/compose/runtime/SnapshotStateKt__SnapshotFlowKt$collectAsState$1$1$1;->emit(Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-HSPLandroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;-><init>(Landroidx/compose/foundation/text/selection/TextFieldSelectionManager;I)V
 HSPLandroidx/compose/runtime/Updater$$ExternalSyntheticLambda0;->invoke(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;
 HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/Operation$UpdateValue;->execute(Landroidx/compose/ui/text/input/GapBuffer;Landroidx/compose/runtime/Applier;Landroidx/compose/runtime/composer/gapbuffer/SlotWriter;Landroidx/compose/runtime/internal/RememberEventDispatcher;Landroidx/compose/runtime/composer/gapbuffer/changelist/OperationErrorContext;)V
 HSPLandroidx/compose/runtime/composer/gapbuffer/changelist/Operation$UpdateValue;->getGroupAnchor(Landroidx/compose/ui/text/input/GapBuffer;)Landroidx/compose/runtime/composer/gapbuffer/GapAnchor;

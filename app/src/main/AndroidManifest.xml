@@ -6,7 +6,16 @@
       android.permission.INTERNET. Die App KANN damit nichts senden — das ist keine
       Zusage, sondern eine Eigenschaft des Programms, und sie ist im Play Store
       nachprüfbar. Wer hier etwas hinzufügt, hebt genau diese Eigenschaft auf.
+
+      Das <queries>-Element darunter ist KEINE Berechtigung: Es macht seit Android 11
+      die installierten Sprachausgabe-Dienste für die App sichtbar, damit das Vorlesen
+      der Buchstaben funktioniert. Es erlaubt weder Netz noch sonst etwas.
     -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
 
     <application
         android:allowBackup="true"

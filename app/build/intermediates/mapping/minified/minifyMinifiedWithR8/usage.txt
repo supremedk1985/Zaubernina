@@ -5665,7 +5665,6 @@ androidx.compose.runtime.Composer$Companion:
     public final void setTracer(androidx.compose.runtime.CompositionTracer)
 androidx.compose.runtime.Composer:
     public boolean changed(byte)
-    public boolean changed(char)
     public boolean changed(double)
     public boolean changed(short)
     public abstract void disableReusing()
@@ -5864,7 +5863,6 @@ androidx.compose.runtime.GapComposer:
     private boolean pausable
     public final java.lang.Object cache(boolean,kotlin.jvm.functions.Function0)
     public boolean changed(byte)
-    public boolean changed(char)
     public boolean changed(double)
     public boolean changed(short)
     public void disableReusing()
@@ -8691,7 +8689,6 @@ androidx.compose.ui.graphics.AndroidBlendMode_androidKt:
     public static final int toComposeBlendMode(android.graphics.BlendMode)
     public static final android.graphics.PorterDuff$Mode toPorterDuffMode-s9anfk8(int)
 androidx.compose.ui.graphics.AndroidCanvas:
-    public void drawArc(float,float,float,float,float,float,boolean,androidx.compose.ui.graphics.Paint)
     private final void drawLines(java.util.List,androidx.compose.ui.graphics.Paint,int)
     public void drawOval(float,float,float,float,androidx.compose.ui.graphics.Paint)
     private final void drawPoints(java.util.List,androidx.compose.ui.graphics.Paint)
@@ -8872,7 +8869,6 @@ androidx.compose.ui.graphics.Canvas:
     public static synthetic void access$drawOval$jd(androidx.compose.ui.graphics.Canvas,androidx.compose.ui.geometry.Rect,androidx.compose.ui.graphics.Paint)
     public static synthetic void access$drawRect$jd(androidx.compose.ui.graphics.Canvas,androidx.compose.ui.geometry.Rect,androidx.compose.ui.graphics.Paint)
     public static synthetic void access$skewRad$jd(androidx.compose.ui.graphics.Canvas,float,float)
-    public abstract void drawArc(float,float,float,float,float,float,boolean,androidx.compose.ui.graphics.Paint)
     public void drawArc(androidx.compose.ui.geometry.Rect,float,float,boolean,androidx.compose.ui.graphics.Paint)
     public void drawArcRad(androidx.compose.ui.geometry.Rect,float,float,boolean,androidx.compose.ui.graphics.Paint)
     public static synthetic void drawImageRect-HPBpro0$default(androidx.compose.ui.graphics.Canvas,androidx.compose.ui.graphics.ImageBitmap,long,long,long,long,androidx.compose.ui.graphics.Paint,int,java.lang.Object)
@@ -9570,7 +9566,6 @@ androidx.compose.ui.graphics.drawscope.CanvasDrawScope:
     public static final int $stable
     public final void draw-yzxVdVo(androidx.compose.ui.unit.Density,androidx.compose.ui.unit.LayoutDirection,androidx.compose.ui.graphics.Canvas,long,kotlin.jvm.functions.Function1)
     public void drawArc-illE91I(androidx.compose.ui.graphics.Brush,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
-    public void drawArc-yD3GUKo(long,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public void drawCircle-V9BoPsw(androidx.compose.ui.graphics.Brush,float,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public synthetic void drawImage-9jGpkUE(androidx.compose.ui.graphics.ImageBitmap,long,long,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public void drawOval-AsUm42w(androidx.compose.ui.graphics.Brush,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
@@ -9621,8 +9616,6 @@ androidx.compose.ui.graphics.drawscope.DrawScope:
     public static synthetic long access$toSp-kPz2Gy4$jd(androidx.compose.ui.graphics.drawscope.DrawScope,int)
     public abstract void drawArc-illE91I(androidx.compose.ui.graphics.Brush,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public static synthetic void drawArc-illE91I$default(androidx.compose.ui.graphics.drawscope.DrawScope,androidx.compose.ui.graphics.Brush,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int,int,java.lang.Object)
-    public abstract void drawArc-yD3GUKo(long,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
-    public static synthetic void drawArc-yD3GUKo$default(androidx.compose.ui.graphics.drawscope.DrawScope,long,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int,int,java.lang.Object)
     public abstract void drawCircle-V9BoPsw(androidx.compose.ui.graphics.Brush,float,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public static synthetic void drawCircle-V9BoPsw$default(androidx.compose.ui.graphics.drawscope.DrawScope,androidx.compose.ui.graphics.Brush,float,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int,int,java.lang.Object)
     public synthetic abstract void drawImage-9jGpkUE(androidx.compose.ui.graphics.ImageBitmap,long,long,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
@@ -9650,7 +9643,6 @@ androidx.compose.ui.graphics.drawscope.DrawTransform:
 androidx.compose.ui.graphics.drawscope.DrawTransformKt
 androidx.compose.ui.graphics.drawscope.EmptyCanvas:
     public static final int $stable
-    public void drawArc(float,float,float,float,float,float,boolean,androidx.compose.ui.graphics.Paint)
     public void drawOval(float,float,float,float,androidx.compose.ui.graphics.Paint)
     public void drawPoints-O7TthRY(int,java.util.List,androidx.compose.ui.graphics.Paint)
     public void drawRawPoints-O7TthRY(int,float[],androidx.compose.ui.graphics.Paint)
@@ -11913,7 +11905,6 @@ androidx.compose.ui.node.LayoutNodeDrawScope:
     public static final synthetic androidx.compose.ui.node.DrawModifierNode access$getDrawNode$p(androidx.compose.ui.node.LayoutNodeDrawScope)
     public static final synthetic void access$setDrawNode$p(androidx.compose.ui.node.LayoutNodeDrawScope,androidx.compose.ui.node.DrawModifierNode)
     public void drawArc-illE91I(androidx.compose.ui.graphics.Brush,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
-    public void drawArc-yD3GUKo(long,float,float,boolean,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public void drawCircle-V9BoPsw(androidx.compose.ui.graphics.Brush,float,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public synthetic void drawImage-9jGpkUE(androidx.compose.ui.graphics.ImageBitmap,long,long,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
     public void drawOval-AsUm42w(androidx.compose.ui.graphics.Brush,long,long,float,androidx.compose.ui.graphics.drawscope.DrawStyle,androidx.compose.ui.graphics.ColorFilter,int)
@@ -30839,6 +30830,8 @@ androidx.compose.foundation.layout.Arrangement:
     public static androidx.compose.foundation.layout.Arrangement$Horizontal getStart()
     public static androidx.compose.foundation.layout.Arrangement$Vertical getTop()
 androidx.compose.foundation.layout.BoxChildDataNode
+androidx.compose.foundation.layout.BoxKt$$InternalSyntheticLambda$5$a6783fe875a834f1d6da47f6601bbb6189fd0df09099050a2273649f060687bd$0:
+    public final synthetic int f$1
 androidx.compose.foundation.layout.BoxKt$$InternalSyntheticThrowCCEIfNotNull$97$bc162e963c11a9510c1f49b454dd52b65aaadab24929c647d8614f4e0b789413$0
 androidx.compose.foundation.layout.BoxKt$EmptyBoxMeasurePolicy$1:
     public static synthetic kotlin.Unit $r8$lambda$DzEk0os17xcA1vkRdXGmNrOSzNo()
@@ -32336,6 +32329,7 @@ androidx.compose.runtime.Composer:
     public abstract void apply(java.lang.Object,kotlin.jvm.functions.Function2)
     public abstract androidx.compose.runtime.CompositionContext buildContext()
     public abstract boolean changed()
+    public abstract boolean changed(char)
     public abstract boolean changed(int)
     public abstract boolean changed(long)
     public abstract boolean changed(java.lang.Object)
@@ -42757,6 +42751,11 @@ de.korte_daniel.zaubernina.ui.MainActivityKt$Zaubernina$2$2$1$30$1$1:
 de.korte_daniel.zaubernina.ui.MainActivityKt:
     public static synthetic java.lang.String $r8$lambda$auK6clP5FslemJjjtxi4WXfG9Zw()
     public static final java.lang.String Zaubernina$lambda$11$1$0$10$0$0()
+de.korte_daniel.zaubernina.ui.Vorleser:
+    public static final int $stable
+    static void <clinit>()
+    public static void schliessen()
+de.korte_daniel.zaubernina.ui.VorleserKt
 de.korte_daniel.zaubernina.ui.components.AvatarBildKt$$InternalSyntheticLambda$5$af5204a9890f2cb4ffc198bc5d67c892110119a5188dcd2dee2e985fe40f57bc$1:
     public final synthetic int f$4
 de.korte_daniel.zaubernina.ui.components.AvatarBildKt$WhenMappings
@@ -42876,16 +42875,21 @@ de.korte_daniel.zaubernina.ui.theme.ZauberFarben:
     public static androidx.compose.ui.graphics.Brush hintergrundPinsel-uvyYCjk()
 de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$1$1:
+    public int label
     public final java.lang.Object invoke$3()
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$3$1$1$1:
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$1:
+    public int label
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$3$1:
+    public final java.lang.Object invoke$3()
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$4$3$1$1$1:
     public java.lang.Object L$1
     public final java.lang.Object invoke$4()
-de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$2$3$3$1:
+de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt$UebungsBildschirm$4$3$3$1:
     public final java.lang.Object invoke$3()
 de.korte_daniel.zaubernina.ui.tracing.UebungsBildschirmKt:
     public static final int UebungsBildschirm$lambda$1(androidx.compose.runtime.SnapshotMutableIntStateImpl)
-    public static final boolean UebungsBildschirm$lambda$20(androidx.compose.runtime.MutableState)
-    public static final int UebungsBildschirm$lambda$8(androidx.compose.runtime.SnapshotMutableIntStateImpl)
+    public static final int UebungsBildschirm$lambda$9(androidx.compose.runtime.SnapshotMutableIntStateImpl)
 kotlin.DeprecationLevel
 kotlin.ExceptionsKt__ExceptionsKt
 kotlin.Lazy:

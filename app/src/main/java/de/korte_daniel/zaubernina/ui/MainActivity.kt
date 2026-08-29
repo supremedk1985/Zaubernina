@@ -88,6 +88,10 @@ private fun Zaubernina() {
 
     LaunchedEffect(Unit) { speicher.stelleErstenBenutzerSicher() }
 
+    // Eine Sprachausgabe für die ganze App: so lebt sie über Bildschirmwechsel hinweg
+    // weiter und ein angefangener Buchstabe wird nicht mitten im Wort abgeschnitten.
+    val vorleser = rememberVorleser()
+
     var ansicht by remember { mutableStateOf<Ansicht>(Ansicht.Start) }
     var aktiverId by remember { mutableStateOf<Int?>(null) }
 
@@ -150,6 +154,7 @@ private fun Zaubernina() {
                                 wort = level.wort,
                                 kopfzeile = { i -> "Level ${level.nummer} · Buchstabe ${i + 1} von ${level.wort.length}" },
                                 genauigkeit = zustand.genauigkeit,
+                                vorleser = vorleser,
                                 onZurueck = { ansicht = Ansicht.Reise },
                                 onFertig = {
                                     val neueSterne = if (jetzt.level == stand.geschafft) 3 else 0
@@ -171,6 +176,7 @@ private fun Zaubernina() {
                             wort = "${zifferFuer(jetzt.level)}",
                             kopfzeile = { "Zauberzahl" },
                             genauigkeit = zustand.genauigkeit,
+                            vorleser = vorleser,
                             onZurueck = { ansicht = Ansicht.Reise },
                             onFertig = {
                                 val bonus = stand != null && sterneFuerZahl(stand.zahlen, jetzt.level) > 0
@@ -204,6 +210,7 @@ private fun Zaubernina() {
                                 wort = alphabetBuchstabe(index).toString(),
                                 kopfzeile = { "Das ABC · Buchstabe ${index + 1} von ${ALPHABET.size}" },
                                 genauigkeit = zustand.genauigkeit,
+                                vorleser = vorleser,
                                 onZurueck = { ansicht = Ansicht.Reise },
                                 onFertig = {
                                     val rundeVoll = alphabetRundeVoll(index)
