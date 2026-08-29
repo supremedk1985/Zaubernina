@@ -40,6 +40,8 @@ data class BenutzerDaten(
     val klasse: Klasse = Klasse.VORSCHULE,
     /** Wörter normal geschrieben (Nina) statt in Großbuchstaben (NINA). */
     val kleinschreibung: Boolean = false,
+    /** Die eigene Wortliste dieses Kindes (Paket „Eigene"). */
+    val eigeneWoerter: List<String> = emptyList(),
     val sterne: Int = 0,
     /** Richtige Rechenaufgaben insgesamt — alle [AUFGABEN_JE_STERN] gibt es einen Stern. */
     val rechenRichtig: Int = 0,
@@ -58,7 +60,6 @@ data class Zustand(
     val benutzer: List<BenutzerDaten> = emptyList(),
     val thema: Thema = Thema.NACHTHIMMEL,
     val genauigkeit: Genauigkeit = Genauigkeit.NORMAL,
-    val eigeneWoerter: List<String> = emptyList(),
 ) {
     fun daten(benutzerId: Int): BenutzerDaten? = benutzer.firstOrNull { it.benutzer.id == benutzerId }
 }
@@ -69,7 +70,11 @@ private val Context.speicher: DataStore<Preferences> by preferencesDataStore(nam
 private val SCHLUESSEL_BENUTZER_IDS = stringPreferencesKey("benutzer_ids")
 private val SCHLUESSEL_THEMA = stringPreferencesKey("thema")
 private val SCHLUESSEL_GENAUIGKEIT = stringPreferencesKey("genauigkeit")
-private val SCHLUESSEL_EIGENE = stringPreferencesKey("eigene_woerter")
+// Bis zum 2026-08-29 galt EINE Wortliste für alle — Daniel ist aufgefallen, dass sie
+// nicht am Benutzer hing. Der alte Schlüssel bleibt nur für die Wanderung unten.
+private val ALT_EIGENE = stringPreferencesKey("eigene_woerter")
+
+private fun kEigene(id: Int) = stringPreferencesKey("u${id}_eigene")
 
 // Schlüssel je Benutzer. DataStore kennt keine Tabellen — die Benutzer-ID steckt im Namen.
 private fun kName(id: Int) = stringPreferencesKey("u${id}_name")
@@ -107,6 +112,7 @@ class FortschrittSpeicher(private val context: Context) {
                     paket = lese(p[kPaket(id)], Paket.STANDARD),
                     klasse = lese(p[kKlasse(id)], Klasse.VORSCHULE),
                     kleinschreibung = p[kKlein(id)] ?: false,
+                    eigeneWoerter = (p[kEigene(id)] ?: "").split(",").filter { it.isNotBlank() },
                     sterne = p[kSterne(id)] ?: 0,
                     rechenRichtig = p[kRechen(id)] ?: 0,
                     alphabetIndex = p[kAlphabetIndex(id)] ?: 0,
@@ -121,7 +127,6 @@ class FortschrittSpeicher(private val context: Context) {
             },
             thema = lese(p[SCHLUESSEL_THEMA], Thema.NACHTHIMMEL),
             genauigkeit = lese(p[SCHLUESSEL_GENAUIGKEIT], Genauigkeit.NORMAL),
-            eigeneWoerter = (p[SCHLUESSEL_EIGENE] ?: "").split(",").filter { it.isNotBlank() },
         )
     }
 
@@ -143,6 +148,16 @@ class FortschrittSpeicher(private val context: Context) {
             p[ALT_ZAHLEN]?.let { p[kZahlen(0, Paket.STANDARD)] = it }
             p[ALT_STERNE]?.let { p[kSterne(0)] = it }
             p.remove(ALT_GESCHAFFT); p.remove(ALT_ZAHLEN); p.remove(ALT_STERNE)
+        }
+        // Die Wortliste war früher global. Jedes Kind, das noch keine eigene hat,
+        // übernimmt sie — so verliert beim Update niemand seine Wörter.
+        context.speicher.edit { p ->
+            val alte = p[ALT_EIGENE] ?: return@edit
+            val ids = (p[SCHLUESSEL_BENUTZER_IDS] ?: "").split(",").mapNotNull { it.toIntOrNull() }
+            for (id in ids) {
+                if (p[kEigene(id)] == null) p[kEigene(id)] = alte
+            }
+            p.remove(ALT_EIGENE)
         }
     }
 
@@ -172,7 +187,7 @@ class FortschrittSpeicher(private val context: Context) {
             if (ids.size <= 1) return@edit
             p[SCHLUESSEL_BENUTZER_IDS] = ids.filterNot { it == id }.joinToString(",")
             p.remove(kName(id)); p.remove(kAvatar(id)); p.remove(kPaket(id)); p.remove(kKlasse(id))
-            p.remove(kKlein(id))
+            p.remove(kKlein(id)); p.remove(kEigene(id))
             p.remove(kSterne(id)); p.remove(kRechen(id))
             p.remove(kAlphabetIndex(id)); p.remove(kAlphabetRunden(id))
             Paket.entries.forEach { paket ->
@@ -250,8 +265,8 @@ class FortschrittSpeicher(private val context: Context) {
         context.speicher.edit { it[kKlein(benutzerId)] = an }
     }
 
-    suspend fun setzeEigeneWoerter(woerter: List<String>) {
-        context.speicher.edit { it[SCHLUESSEL_EIGENE] = woerter.joinToString(",") }
+    suspend fun setzeEigeneWoerter(benutzerId: Int, woerter: List<String>) {
+        context.speicher.edit { it[kEigene(benutzerId)] = woerter.joinToString(",") }
     }
 
     suspend fun setzeThema(thema: Thema) {

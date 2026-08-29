@@ -20997,18 +20997,19 @@ de.korte_daniel.zaubernina.data.AnlauttiereKt:
     public static final java.util.Map getANLAUTTIERE()
     public static final int getANLAUTTIER_ANZAHL()
 de.korte_daniel.zaubernina.data.BenutzerDaten:
-    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
+    public synthetic void <init>(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,java.util.List,int,int,int,int,java.util.Map,int,kotlin.jvm.internal.DefaultConstructorMarker)
     public final de.korte_daniel.zaubernina.domain.Benutzer component1()
+    public final java.util.Map component10()
     public final de.korte_daniel.zaubernina.domain.Paket component2()
     public final de.korte_daniel.zaubernina.domain.Klasse component3()
     public final boolean component4()
-    public final int component5()
+    public final java.util.List component5()
     public final int component6()
     public final int component7()
     public final int component8()
-    public final java.util.Map component9()
-    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map)
-    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,int,int,int,int,java.util.Map,int,java.lang.Object)
+    public final int component9()
+    public final de.korte_daniel.zaubernina.data.BenutzerDaten copy(de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,java.util.List,int,int,int,int,java.util.Map)
+    public static synthetic de.korte_daniel.zaubernina.data.BenutzerDaten copy$default(de.korte_daniel.zaubernina.data.BenutzerDaten,de.korte_daniel.zaubernina.domain.Benutzer,de.korte_daniel.zaubernina.domain.Paket,de.korte_daniel.zaubernina.domain.Klasse,boolean,java.util.List,int,int,int,int,java.util.Map,int,java.lang.Object)
     public final java.util.Map getStaende()
 de.korte_daniel.zaubernina.data.FortschrittKt:
     private static final synthetic java.lang.Enum lese(java.lang.String,java.lang.Enum)
@@ -21031,9 +21032,8 @@ de.korte_daniel.zaubernina.data.Zustand:
     public final java.util.List component1()
     public final de.korte_daniel.zaubernina.ui.theme.Thema component2()
     public final de.korte_daniel.zaubernina.logic.Genauigkeit component3()
-    public final java.util.List component4()
-    public final de.korte_daniel.zaubernina.data.Zustand copy(java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,java.util.List)
-    public static synthetic de.korte_daniel.zaubernina.data.Zustand copy$default(de.korte_daniel.zaubernina.data.Zustand,java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,java.util.List,int,java.lang.Object)
+    public final de.korte_daniel.zaubernina.data.Zustand copy(java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit)
+    public static synthetic de.korte_daniel.zaubernina.data.Zustand copy$default(de.korte_daniel.zaubernina.data.Zustand,java.util.List,de.korte_daniel.zaubernina.ui.theme.Thema,de.korte_daniel.zaubernina.logic.Genauigkeit,int,java.lang.Object)
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:
     private static final float GRUNDLINIE
     private static final float KREIS_GRIFF
@@ -41189,6 +41189,7 @@ androidx.datastore.preferences.core.AtomicBoolean:
 androidx.datastore.preferences.core.MutablePreferences:
     public static void freeze$datastore_preferences_core()
     public static varargs void putAll()
+    public final void set(androidx.datastore.preferences.core.Preferences$Key,java.lang.String)
     public static androidx.datastore.preferences.core.MutablePreferences toMutablePreferences()
     public static androidx.datastore.preferences.core.MutablePreferences toPreferences()
 androidx.datastore.preferences.core.PreferenceDataStore$updateData$2:
@@ -42505,6 +42506,7 @@ de.korte_daniel.zaubernina.data.BenutzerDaten:
     public static int getAlphabetIndex()
     public static int getAlphabetRunden()
     public final de.korte_daniel.zaubernina.domain.Benutzer getBenutzer()
+    public static java.util.List getEigeneWoerter()
     public final boolean getKleinschreibung()
     public final int getSterne()
     public static de.korte_daniel.zaubernina.data.Spielstand stand()
@@ -42543,6 +42545,7 @@ de.korte_daniel.zaubernina.data.FortschrittSpeicher$rechenaufgabeRichtig$2:
     public int label
     public final java.lang.Object invoke$27()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeEigeneWoerter$1:
+    public int I$0
     public java.lang.Object L$0
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$setzeEigeneWoerter$2:
     public int label
@@ -42587,6 +42590,9 @@ de.korte_daniel.zaubernina.data.FortschrittSpeicher$special$$inlined$map$1$2$1:
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$stelleErstenBenutzerSicher$2:
     public int label
     public final java.lang.Object invoke$27()
+de.korte_daniel.zaubernina.data.FortschrittSpeicher$stelleErstenBenutzerSicher$3:
+    public int label
+    public final java.lang.Object invoke$27()
 de.korte_daniel.zaubernina.data.FortschrittSpeicher$zahlGeschrieben$1:
     public int I$0
     public int I$1
@@ -42606,7 +42612,6 @@ de.korte_daniel.zaubernina.data.Zustand:
     static void <clinit>()
     public static de.korte_daniel.zaubernina.data.BenutzerDaten daten()
     public static java.util.List getBenutzer()
-    public static java.util.List getEigeneWoerter()
     public static de.korte_daniel.zaubernina.logic.Genauigkeit getGenauigkeit()
     public static de.korte_daniel.zaubernina.ui.theme.Thema getThema()
 de.korte_daniel.zaubernina.data.grundschrift.GrundschriftKt:

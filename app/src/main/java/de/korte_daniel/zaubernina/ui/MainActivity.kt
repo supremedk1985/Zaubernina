@@ -99,7 +99,7 @@ private fun Zaubernina() {
     // Der aktive Benutzer und seine Reise. Solange die Ablage noch lädt oder niemand
     // gewählt ist, bleibt die App auf dem Startbildschirm.
     val aktiver = aktiverId?.let { zustand.daten(it) }
-    val woerter = aktiver?.let { woerterFuer(it.paket, zustand.eigeneWoerter) } ?: emptyList()
+    val woerter = aktiver?.let { woerterFuer(it.paket, it.eigeneWoerter) } ?: emptyList()
     // Die Level tragen das Wort gleich in der gewünschten Schreibweise — Reise, Üben
     // und Jubel zeigen es dann überall gleich. Gezählt wird nur die Levelnummer, der
     // Fortschritt bleibt beim Umschalten also erhalten.
@@ -277,17 +277,17 @@ private fun Zaubernina() {
                                 alleBenutzer = zustand.benutzer,
                                 thema = zustand.thema,
                                 genauigkeit = zustand.genauigkeit,
-                                eigeneWoerter = zustand.eigeneWoerter,
+                                eigeneWoerter = aktiver.eigeneWoerter,
                                 onThemaWechsel = { neu -> bereich.launch { speicher.setzeThema(neu) } },
                                 onGenauigkeitWechsel = { neu -> bereich.launch { speicher.setzeGenauigkeit(neu) } },
                                 onPaketWechsel = { neu -> bereich.launch { speicher.setzePaket(aktiver.benutzer.id, neu) } },
                                 onKlasseWechsel = { neu -> bereich.launch { speicher.setzeKlasse(aktiver.benutzer.id, neu) } },
                                 onKleinschreibungWechsel = { neu -> bereich.launch { speicher.setzeKleinschreibung(aktiver.benutzer.id, neu) } },
                                 onWortHinzu = { wort ->
-                                    bereich.launch { speicher.setzeEigeneWoerter(zustand.eigeneWoerter + wort) }
+                                    bereich.launch { speicher.setzeEigeneWoerter(aktiver.benutzer.id, aktiver.eigeneWoerter + wort) }
                                 },
                                 onWortWeg = { wort ->
-                                    bereich.launch { speicher.setzeEigeneWoerter(zustand.eigeneWoerter - wort) }
+                                    bereich.launch { speicher.setzeEigeneWoerter(aktiver.benutzer.id, aktiver.eigeneWoerter - wort) }
                                 },
                                 onBenutzerNeu = { name, avatar ->
                                     bereich.launch { speicher.benutzerAnlegen(name, avatar) }
