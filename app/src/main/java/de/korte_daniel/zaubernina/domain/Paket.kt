@@ -21,12 +21,15 @@ private val SCHNECKE_WOERTER = listOf(
     "OMA", "OPA", "BALL", "AUTO", "HAUS", "HUND", "KATZE", "SONNE", "MOND", "STERN",
     // die zweite Runde: Tiere und Kurzes, wieder von leicht nach schwerer
     "KUH", "EIS", "BÄR", "ENTE", "MAUS", "IGEL", "BAUM", "EULE", "FISCH", "VOGEL",
+    // die dritte Runde: Dinge aus dem Kinderzimmer und dem Garten
+    "TÜR", "HAND", "BUCH", "BLUME", "WOLKE", "APFEL", "BANANE",
 )
 
 /** Erst die sieben Namen der Familie — das ursprüngliche Spiel —, dann der Rest der Familie. */
 private val STANDARD_WOERTER = listOf(
     "NINA", "MAMA", "PAPA", "LEA", "MIRA", "DANIEL", "NATHALIE",
     "OMA", "OPA", "TANTE", "ONKEL", "FAMILIE",
+    "BRUDER", "FREUND", "SCHWESTER",
 )
 
 /** Lang und mit den schweren Buchstaben (S, G, W, Z …). */
@@ -36,6 +39,9 @@ private val FUCHS_WOERTER = listOf(
     // die zweite Runde: Tiere, Feste und Zungenbrecher fürs Auge
     "ELEFANT", "PINGUIN", "GIRAFFE", "KROKODIL", "NIKOLAUS", "OSTERHASE",
     "FEUERWEHR", "SPIELPLATZ", "LUFTBALLON", "SCHOKOLADE", "PRINZESSIN", "DINOSAURIER",
+    // die dritte Runde: Fahrzeuge, Feste und Fabelwesen
+    "BAGGER", "EINHORN", "TRAKTOR", "DRACHEN", "LATERNE", "FAHRRAD",
+    "SCHNEEMANN", "MARIENKÄFER", "SEEPFERDCHEN", "HUBSCHRAUBER",
 )
 
 /**

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.AlphabetTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T17:15:35.825Z" hostname="nexus" time="0.004">
+<testsuite name="de.korte_daniel.zaubernina.domain.AlphabetTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T17:35:46.329Z" hostname="nexus" time="0.004">
   <properties/>
   <testcase name="die Runde ist mit dem letzten Buchstaben voll" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.002"/>
-  <testcase name="alphabetBuchstabe klemmt an den Raendern" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.0"/>
-  <testcase name="das Alphabet ist vollstaendig und chronologisch" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.001"/>
-  <testcase name="jeder Buchstabe des Alphabets ist gezeichnet" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.0"/>
-  <testcase name="fuenf Sterne nur fuer die erste Runde" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.001"/>
+  <testcase name="alphabetBuchstabe klemmt an den Raendern" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.001"/>
+  <testcase name="das Alphabet ist vollstaendig und chronologisch" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.0"/>
+  <testcase name="jeder Buchstabe des Alphabets ist gezeichnet" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.001"/>
+  <testcase name="fuenf Sterne nur fuer die erste Runde" classname="de.korte_daniel.zaubernina.domain.AlphabetTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
