@@ -91,6 +91,13 @@ class GrundschriftTest {
             val alle = glyphe.striche.flatMap { it.abtasten(60) }
             val oben = alle.minOf { it.y }
             val unten = alle.maxOf { it.y }
+            if (zeichen == 'J') {
+                // Das große J ist laut Grundschrift-Kartei der einzige Großbuchstabe mit
+                // Unterlänge — es endet im Unterlängenband, nicht auf der Grundlinie.
+                assertTrue("J beginnt bei $oben", oben in 145f..155f)
+                assertTrue("J muss unter die Grundlinie reichen, endet bei $unten", unten in 860f..990f)
+                continue
+            }
             if (zeichen in "ÄÖÜ") {
                 // Die Umlautpunkte liegen ÜBER der Oberlinie — der Grundbuchstabe selbst
                 // wird über die Nicht-Tupfer-Striche geprüft.

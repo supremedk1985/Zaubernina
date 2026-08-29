@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.korte_daniel.zaubernina.domain.ZahlenTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T10:32:40.941Z" hostname="nexus" time="0.001">
+<testsuite name="de.korte_daniel.zaubernina.domain.ZahlenTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-08-29T14:29:27.113Z" hostname="nexus" time="0.002">
   <properties/>
-  <testcase name="der Zusatzstern kommt nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
-  <testcase name="eine Zahl geht erst nach ihrem Wort auf" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
+  <testcase name="der Zusatzstern kommt nur beim ersten Mal" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.001"/>
+  <testcase name="eine Zahl geht erst nach ihrem Wort auf" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.001"/>
   <testcase name="eine Zahl sperrt nichts" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
   <testcase name="der Bitsatz merkt sich jede Zahl einzeln" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>
   <testcase name="die Ziffer ist die Levelnummer" classname="de.korte_daniel.zaubernina.domain.ZahlenTest" time="0.0"/>

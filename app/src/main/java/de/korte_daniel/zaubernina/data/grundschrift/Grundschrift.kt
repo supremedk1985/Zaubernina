@@ -17,16 +17,23 @@ import de.korte_daniel.zaubernina.domain.StrokeSegment.Linie
  *      980  Unterlinie     — Tiefe der Unterlängen (g j p q y)
  *
  * DIE REIHENFOLGE DER STRICHE IST DER INHALT, nicht die Form. Ein Buchstabe, der richtig
- * aussieht, aber in der falschen Reihenfolge geschrieben wird, übt das Falsche ein. Die
- * Reihenfolgen hier folgen der üblichen Grundschrift-Vorgabe:
+ * aussieht, aber in der falschen Reihenfolge geschrieben wird, übt das Falsche ein.
  *
- *   - von oben nach unten, von links nach rechts
- *   - Senkrechte zuerst, dann Querstriche, dann Bögen
- *   - Punkte und i-Tüpfelchen zuletzt
+ * QUELLE seit dem 2026-08-29: die Bewegungsverläufe der GRUNDSCHRIFT-KARTEI des
+ * Grundschulverbands (Lehrerkommentar zu Teil 1, grundschulverband.de) — der in
+ * NRW-Grundschulen verbreitete Standard. Daniel hatte zu Recht moniert, dass die erste
+ * Fassung nach allgemeinen Faustregeln gezeichnet war. Kernpunkte der Kartei:
  *
- * DANIEL MUSS DAS GEGEN DAS SCHULHEFT PRÜFEN. Weicht die Schule ab, sind es hier ein paar
- * Zahlen — der Aufbau bleibt. Die Stellen, an denen es üblicherweise Unterschiede gibt,
- * sind bei den betroffenen Buchstaben vermerkt.
+ *   - Abstriche zuerst, Querstriche DANACH (T: Stamm vor Deckel; H „in der Regel beide
+ *     Abstriche, danach der Querstrich")
+ *   - Zickzack-Buchstaben (V W M, auch A) laufen als EIN Zug mit Haltepunkten — beim N
+ *     wird der rechte Stamm als AUFSTRICH nach oben geschrieben
+ *   - Ovale gegen den Uhrzeigersinn (C O Q G, Ziffer 0); B D P R Bögen im Uhrzeigersinn,
+ *     bei R hängen Bogen und Bein in einem Zug
+ *   - Mittel-Querstriche (E F H) und die Zackentiefen von M/W liegen auf der Mittellinie
+ *   - Punkte und Umlautpunkte zuletzt
+ *
+ * Ziffern nach dem Ziffernschreibkurs (Merksprüche, schulimpulse.de) — alle bestätigt.
  */
 
 private const val OBERLINIE = 150f
@@ -44,12 +51,19 @@ private val EIN_PFEIL = listOf(0.5f)
 
 // ───────────────────────── Großbuchstaben ─────────────────────────
 
-/** A: die beiden Schrägen von der Spitze herunter, dann der Querbalken. */
+/**
+ * A: diagonaler AUFSTRICH von unten links zur Spitze, Haltepunkt, Abstrich nach unten
+ * rechts — ein Zug. Dann der Querbalken. (Kartei: „beginnt mit einem diagonalen
+ * Aufstrich von der unteren Grenze des Mittelbandes".)
+ */
 private val A_GROSS = Glyph(
     zeichen = 'A', name = "A",
     striche = listOf(
-        zug(p(500f, OBERLINIE), p(230f, GRUNDLINIE)),
-        zug(p(500f, OBERLINIE), p(770f, GRUNDLINIE)),
+        Stroke(
+            start = p(230f, GRUNDLINIE),
+            segmente = listOf(Linie(p(500f, OBERLINIE)), Linie(p(770f, GRUNDLINIE))),
+            pfeileBei = listOf(0.24f, 0.76f),
+        ),
         zug(p(320f, 620f), p(680f, 620f), EIN_PFEIL),
     ),
 )
@@ -76,7 +90,8 @@ private val E_GROSS = Glyph(
     striche = listOf(
         zug(p(280f, OBERLINIE), p(280f, GRUNDLINIE)),
         zug(p(280f, OBERLINIE), p(700f, OBERLINIE), EIN_PFEIL),
-        zug(p(280f, 500f), p(640f, 500f), EIN_PFEIL),
+        // Der Mittelbalken liegt auf der Mittellinie — wie bei F und H (Grundschrift).
+        zug(p(280f, MITTELLINIE), p(640f, MITTELLINIE), EIN_PFEIL),
         zug(p(280f, GRUNDLINIE), p(700f, GRUNDLINIE), EIN_PFEIL),
     ),
 )
@@ -87,7 +102,8 @@ private val H_GROSS = Glyph(
     striche = listOf(
         zug(p(270f, OBERLINIE), p(270f, GRUNDLINIE)),
         zug(p(730f, OBERLINIE), p(730f, GRUNDLINIE)),
-        zug(p(270f, 500f), p(730f, 500f), EIN_PFEIL),
+        // Querstrich „auf der oberen Grenze des Mittelbandes" (Kartei) = Mittellinie.
+        zug(p(270f, MITTELLINIE), p(730f, MITTELLINIE), EIN_PFEIL),
     ),
 )
 
@@ -114,9 +130,9 @@ private val L_GROSS = Glyph(
 )
 
 /**
- * M: linker Stamm herunter, dann das V in EINEM Zug (hinunter und wieder hinauf),
- * dann der rechte Stamm herunter. Der Aufwärtszug in der Mitte gehört dazu — er ist
- * die einzige Stelle im Alphabet, an der nach oben geschrieben wird.
+ * M: linker Stamm herunter; dann in EINEM Zug vom Anfangspunkt: Diagonale hinunter bis
+ * zur MITTELLINIE, hinauf, und der rechte Stamm gerade herunter (Kartei: „Folge von vier
+ * Auf- und Abstrichen", die Zacke reicht nur „bis zur oberen Grenze des Mittelbandes").
  */
 private val M_GROSS = Glyph(
     zeichen = 'M', name = "M",
@@ -124,20 +140,26 @@ private val M_GROSS = Glyph(
         zug(p(230f, OBERLINIE), p(230f, GRUNDLINIE)),
         Stroke(
             start = p(230f, OBERLINIE),
-            segmente = listOf(Linie(p(500f, 600f)), Linie(p(770f, OBERLINIE))),
-            pfeileBei = listOf(0.28f, 0.78f),
+            segmente = listOf(Linie(p(500f, MITTELLINIE)), Linie(p(770f, OBERLINIE)), Linie(p(770f, GRUNDLINIE))),
+            pfeileBei = listOf(0.2f, 0.55f, 0.9f),
         ),
-        zug(p(770f, OBERLINIE), p(770f, GRUNDLINIE)),
     ),
 )
 
-/** N: linker Stamm herunter, Schräge herunter, rechter Stamm herunter. */
+/**
+ * N: linker Stamm herunter; dann in EINEM Zug: Diagonale hinunter und der rechte Stamm
+ * als AUFSTRICH gerade nach oben (Kartei: „nach einem kurzen Haltepunkt folgt der letzte
+ * Aufstrich gerade nach oben"). Der rechte Stamm wird beim N von unten geschrieben.
+ */
 private val N_GROSS = Glyph(
     zeichen = 'N', name = "N",
     striche = listOf(
         zug(p(250f, OBERLINIE), p(250f, GRUNDLINIE)),
-        zug(p(250f, OBERLINIE), p(750f, GRUNDLINIE)),
-        zug(p(750f, OBERLINIE), p(750f, GRUNDLINIE)),
+        Stroke(
+            start = p(250f, OBERLINIE),
+            segmente = listOf(Linie(p(750f, GRUNDLINIE)), Linie(p(750f, OBERLINIE))),
+            pfeileBei = listOf(0.26f, 0.76f),
+        ),
     ),
 )
 
@@ -157,7 +179,11 @@ private val P_GROSS = Glyph(
     ),
 )
 
-/** R: wie P, dazu das Bein von der Bauchunterkante schräg nach unten rechts. */
+/**
+ * R: Stamm; dann in EINEM Zug der Halbkreis im Uhrzeigersinn bis zur Stammmitte und
+ * von dort das Bein diagonal hinunter (Kartei: der Bogen „schließt bündig an", „nach
+ * einem kurzen Haltepunkt wird von dieser Position aus ein diagonaler Strich" gezogen).
+ */
 private val R_GROSS = Glyph(
     zeichen = 'R', name = "R",
     striche = listOf(
@@ -166,20 +192,20 @@ private val R_GROSS = Glyph(
             start = p(280f, OBERLINIE),
             segmente = listOf(
                 Bogen(p(600f, OBERLINIE), p(700f, 230f), p(700f, 330f)),
-                Bogen(p(700f, 430f), p(600f, 510f), p(280f, 510f)),
+                Bogen(p(700f, 430f), p(600f, 500f), p(280f, 500f)),
+                Linie(p(740f, GRUNDLINIE)),
             ),
-            pfeileBei = listOf(0.3f, 0.78f),
+            pfeileBei = listOf(0.24f, 0.62f, 0.9f),
         ),
-        zug(p(450f, 510f), p(740f, GRUNDLINIE)),
     ),
 )
 
-/** T: erst der Balken oben, dann der Stamm herunter. */
+/** T: erst der Stamm, dann der Deckel — Kartei: „einfacher Abstrich mit nachfolgendem Querstrich". */
 private val T_GROSS = Glyph(
     zeichen = 'T', name = "T",
     striche = listOf(
-        zug(p(250f, OBERLINIE), p(750f, OBERLINIE), EIN_PFEIL),
         zug(p(500f, OBERLINIE), p(500f, GRUNDLINIE)),
+        zug(p(250f, OBERLINIE), p(750f, OBERLINIE), EIN_PFEIL),
     ),
 )
 
@@ -232,11 +258,15 @@ private val F_GROSS = Glyph(
     striche = listOf(
         zug(p(280f, OBERLINIE), p(280f, GRUNDLINIE)),
         zug(p(280f, OBERLINIE), p(700f, OBERLINIE), EIN_PFEIL),
-        zug(p(280f, 500f), p(640f, 500f), EIN_PFEIL),
+        zug(p(280f, MITTELLINIE), p(640f, MITTELLINIE), EIN_PFEIL),
     ),
 )
 
-/** G: der C-Bogen, der unten rechts hochkommt, dann der Balken in die Mitte. */
+/**
+ * G: das Dreiviertel-Linksoval gegen den Uhrzeigersinn; rechts kommt der Bogen bis zur
+ * MITTELLINIE hoch und geht dort rechtwinklig in den Querstrich nach innen über — ein
+ * Zug (Kartei: „hier geht sie rechtwinklig über in einen Querstrich").
+ */
 private val G_GROSS = Glyph(
     zeichen = 'G', name = "G",
     striche = listOf(
@@ -246,38 +276,47 @@ private val G_GROSS = Glyph(
                 Bogen(p(670f, 195f), p(600f, OBERLINIE), p(500f, OBERLINIE)),
                 Bogen(p(384f, OBERLINIE), p(290f, 307f), p(290f, 500f)),
                 Bogen(p(290f, 693f), p(384f, GRUNDLINIE), p(500f, GRUNDLINIE)),
-                Bogen(p(620f, GRUNDLINIE), p(710f, 790f), p(710f, 570f)),
-                Linie(p(490f, 570f)),
+                Bogen(p(640f, GRUNDLINIE), p(710f, 700f), p(710f, MITTELLINIE)),
+                Linie(p(500f, MITTELLINIE)),
             ),
             pfeileBei = listOf(0.16f, 0.62f),
         ),
     ),
 )
 
-/** J: Stamm herunter, unten der Haken nach links. */
+/**
+ * J: Stamm herunter BIS UNTER die Grundlinie, dort der Linksbogen gegen den
+ * Uhrzeigersinn (Kartei: das große J reicht „vom Oberlängen- bis zum Unterlängenband",
+ * der Bogen „endet in der Mitte des Unterlängenbandes"). Das große J ist der einzige
+ * Großbuchstabe mit Unterlänge.
+ */
 private val J_GROSS = Glyph(
     zeichen = 'J', name = "J",
     striche = listOf(
         Stroke(
             start = p(650f, OBERLINIE),
             segmente = listOf(
-                Linie(p(650f, 650f)),
-                Bogen(p(650f, 800f), p(560f, 860f), p(440f, GRUNDLINIE)),
-                Bogen(p(380f, 845f), p(340f, 800f), p(330f, 730f)),
+                Linie(p(650f, 800f)),
+                Bogen(p(650f, 940f), p(560f, 985f), p(470f, 975f)),
+                Bogen(p(400f, 965f), p(360f, 940f), p(350f, 900f)),
             ),
             pfeileBei = listOf(0.3f, 0.8f),
         ),
     ),
 )
 
-/** K: Stamm, dann beide Arme in einem Zug (wie ein <). */
+/**
+ * K: Stamm, dann beide Arme in einem Zug — der Knick BERÜHRT den Stamm auf der
+ * Mittellinie (Kartei: „berührt den ersten Abstrich auf der unteren Grenze des
+ * Oberlängenbandes").
+ */
 private val K_GROSS = Glyph(
     zeichen = 'K', name = "K",
     striche = listOf(
         zug(p(280f, OBERLINIE), p(280f, GRUNDLINIE)),
         Stroke(
             start = p(700f, OBERLINIE),
-            segmente = listOf(Linie(p(300f, 505f)), Linie(p(700f, GRUNDLINIE))),
+            segmente = listOf(Linie(p(290f, MITTELLINIE)), Linie(p(700f, GRUNDLINIE))),
             pfeileBei = listOf(0.26f, 0.76f),
         ),
     ),
@@ -356,7 +395,10 @@ private val V_GROSS = Glyph(
     ),
 )
 
-/** W: zweimal hinunter und hinauf — ein Zug. */
+/**
+ * W: zweimal hinunter und hinauf — ein Zug. Die mittlere Zacke reicht nur bis zur
+ * MITTELLINIE (Kartei: „Aufstrich bis zur oberen Grenze des Mittelbandes").
+ */
 private val W_GROSS = Glyph(
     zeichen = 'W', name = "W",
     striche = listOf(
@@ -364,7 +406,7 @@ private val W_GROSS = Glyph(
             start = p(180f, OBERLINIE),
             segmente = listOf(
                 Linie(p(340f, GRUNDLINIE)),
-                Linie(p(500f, 330f)),
+                Linie(p(500f, MITTELLINIE)),
                 Linie(p(660f, GRUNDLINIE)),
                 Linie(p(820f, OBERLINIE)),
             ),
@@ -382,14 +424,18 @@ private val X_GROSS = Glyph(
     ),
 )
 
-/** Y: die kurze Schräge in die Mitte, dann Schräge und Stamm in einem Zug. */
+/**
+ * Y: erste Schräge bis zur MITTELLINIE; die zweite beginnt oben rechts, berührt dort den
+ * Endpunkt der ersten und läuft weiter bis zur Grundlinie GENAU UNTER dem Anfang der
+ * ersten (Kartei-Beschreibung des großen Y — das Bein ist schräg, nicht senkrecht).
+ */
 private val Y_GROSS = Glyph(
     zeichen = 'Y', name = "Y",
     striche = listOf(
-        zug(p(280f, OBERLINIE), p(500f, 480f), EIN_PFEIL),
+        zug(p(280f, OBERLINIE), p(500f, MITTELLINIE), EIN_PFEIL),
         Stroke(
             start = p(720f, OBERLINIE),
-            segmente = listOf(Linie(p(500f, 480f)), Linie(p(500f, GRUNDLINIE))),
+            segmente = listOf(Linie(p(500f, MITTELLINIE)), Linie(p(280f, GRUNDLINIE))),
             pfeileBei = listOf(0.28f, 0.76f),
         ),
     ),
