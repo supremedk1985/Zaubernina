@@ -42,6 +42,10 @@ data class BenutzerDaten(
     val kleinschreibung: Boolean = false,
     /** Die eigene Wortliste dieses Kindes (Paket „Eigene"). */
     val eigeneWoerter: List<String> = emptyList(),
+    /** Tägliches Übungs-Zeitlimit in Minuten, 0 = kein Limit. */
+    val limitMinuten: Int = 0,
+    /** Heute schon geübte Sekunden (zählt nur im Vordergrund mit gewähltem Kind). */
+    val heuteSekunden: Int = 0,
     val sterne: Int = 0,
     /** Richtige Rechenaufgaben insgesamt — alle [AUFGABEN_JE_STERN] gibt es einen Stern. */
     val rechenRichtig: Int = 0,
@@ -75,6 +79,12 @@ private val SCHLUESSEL_GENAUIGKEIT = stringPreferencesKey("genauigkeit")
 private val ALT_EIGENE = stringPreferencesKey("eigene_woerter")
 
 private fun kEigene(id: Int) = stringPreferencesKey("u${id}_eigene")
+private fun kLimit(id: Int) = intPreferencesKey("u${id}_limit_minuten")
+private fun kZeitSek(id: Int) = intPreferencesKey("u${id}_zeit_sekunden")
+private fun kZeitTag(id: Int) = stringPreferencesKey("u${id}_zeit_tag")
+
+/** Der heutige Tag als Text — der Zähler gehört immer genau zu einem Datum. */
+private fun heutigerTag(): String = java.time.LocalDate.now().toString()
 
 // Schlüssel je Benutzer. DataStore kennt keine Tabellen — die Benutzer-ID steckt im Namen.
 private fun kName(id: Int) = stringPreferencesKey("u${id}_name")
@@ -113,6 +123,10 @@ class FortschrittSpeicher(private val context: Context) {
                     klasse = lese(p[kKlasse(id)], Klasse.VORSCHULE),
                     kleinschreibung = p[kKlein(id)] ?: false,
                     eigeneWoerter = (p[kEigene(id)] ?: "").split(",").filter { it.isNotBlank() },
+                    limitMinuten = p[kLimit(id)] ?: 0,
+                    // Ein Zähler von gestern zählt nicht mehr — beim ersten Tick des
+                    // neuen Tages wird er auch im Speicher zurückgesetzt.
+                    heuteSekunden = if (p[kZeitTag(id)] == heutigerTag()) p[kZeitSek(id)] ?: 0 else 0,
                     sterne = p[kSterne(id)] ?: 0,
                     rechenRichtig = p[kRechen(id)] ?: 0,
                     alphabetIndex = p[kAlphabetIndex(id)] ?: 0,
@@ -188,6 +202,7 @@ class FortschrittSpeicher(private val context: Context) {
             p[SCHLUESSEL_BENUTZER_IDS] = ids.filterNot { it == id }.joinToString(",")
             p.remove(kName(id)); p.remove(kAvatar(id)); p.remove(kPaket(id)); p.remove(kKlasse(id))
             p.remove(kKlein(id)); p.remove(kEigene(id))
+            p.remove(kLimit(id)); p.remove(kZeitSek(id)); p.remove(kZeitTag(id))
             p.remove(kSterne(id)); p.remove(kRechen(id))
             p.remove(kAlphabetIndex(id)); p.remove(kAlphabetRunden(id))
             Paket.entries.forEach { paket ->
@@ -267,6 +282,20 @@ class FortschrittSpeicher(private val context: Context) {
 
     suspend fun setzeEigeneWoerter(benutzerId: Int, woerter: List<String>) {
         context.speicher.edit { it[kEigene(benutzerId)] = woerter.joinToString(",") }
+    }
+
+    suspend fun setzeZeitlimit(benutzerId: Int, minuten: Int) {
+        context.speicher.edit { it[kLimit(benutzerId)] = minuten }
+    }
+
+    /** Zählt geübte Sekunden auf den heutigen Tag; ein Datumswechsel setzt zurück. */
+    suspend fun zaehleUebungszeit(benutzerId: Int, sekunden: Int) {
+        context.speicher.edit { p ->
+            val heute = heutigerTag()
+            val bisher = if (p[kZeitTag(benutzerId)] == heute) p[kZeitSek(benutzerId)] ?: 0 else 0
+            p[kZeitTag(benutzerId)] = heute
+            p[kZeitSek(benutzerId)] = bisher + sekunden
+        }
     }
 
     suspend fun setzeThema(thema: Thema) {

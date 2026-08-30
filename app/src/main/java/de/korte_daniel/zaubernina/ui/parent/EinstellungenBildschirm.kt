@@ -35,7 +35,10 @@ import de.korte_daniel.zaubernina.data.BenutzerDaten
 import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Klasse
 import de.korte_daniel.zaubernina.domain.Paket
+import de.korte_daniel.zaubernina.domain.ZEITLIMIT_STUFEN_MINUTEN
 import de.korte_daniel.zaubernina.domain.bereinigeWort
+import de.korte_daniel.zaubernina.domain.geuebteMinuten
+import de.korte_daniel.zaubernina.domain.zeitlimitName
 import de.korte_daniel.zaubernina.domain.woerterFuer
 import de.korte_daniel.zaubernina.data.grundschrift.glyph
 import de.korte_daniel.zaubernina.logic.Genauigkeit
@@ -64,6 +67,7 @@ fun EinstellungenBildschirm(
     onPaketWechsel: (Paket) -> Unit,
     onKlasseWechsel: (Klasse) -> Unit,
     onKleinschreibungWechsel: (Boolean) -> Unit,
+    onZeitlimitWechsel: (Int) -> Unit,
     onWortHinzu: (String) -> Unit,
     onWortWeg: (String) -> Unit,
     onBenutzerNeu: (String, Avatar) -> Unit,
@@ -137,6 +141,27 @@ fun EinstellungenBildschirm(
                 gewaehlt = aktiverBenutzer.kleinschreibung,
                 onClick = { onKleinschreibungWechsel(true) },
             )
+        }
+
+        // ───────── Zeitlimit ─────────
+        Abschnitt("ZEITLIMIT", farben.schriftSchwach)
+        ZauberText(
+            text = "${aktiverBenutzer.benutzer.name} hat heute " +
+                "${geuebteMinuten(aktiverBenutzer.heuteSekunden)} Minuten geübt. " +
+                "Ist das Limit erreicht, verabschiedet sich die App freundlich bis morgen.",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            ZEITLIMIT_STUFEN_MINUTEN.forEach { minuten ->
+                Wahlzeile(
+                    titel = zeitlimitName(minuten),
+                    beschreibung = if (minuten == 0) "Üben ohne Uhr" else "Danach ist für heute Schluss",
+                    gewaehlt = minuten == aktiverBenutzer.limitMinuten,
+                    onClick = { onZeitlimitWechsel(minuten) },
+                )
+            }
         }
 
         // ───────── Eigene Wörter ─────────

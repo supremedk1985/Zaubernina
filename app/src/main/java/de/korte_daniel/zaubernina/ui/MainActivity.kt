@@ -30,10 +30,12 @@ import de.korte_daniel.zaubernina.domain.levelFuer
 import de.korte_daniel.zaubernina.domain.sterneFuerAlphabetRunde
 import de.korte_daniel.zaubernina.domain.sterneFuerZahl
 import de.korte_daniel.zaubernina.domain.woerterFuer
+import de.korte_daniel.zaubernina.domain.zeitVorbei
 import de.korte_daniel.zaubernina.domain.zifferFuer
 import de.korte_daniel.zaubernina.ui.level.AlphabetFertigBildschirm
 import de.korte_daniel.zaubernina.ui.level.GeschafftBildschirm
 import de.korte_daniel.zaubernina.ui.level.ReiseBildschirm
+import de.korte_daniel.zaubernina.ui.level.ZeitVorbeiBildschirm
 import de.korte_daniel.zaubernina.ui.level.ZaehlBildschirm
 import de.korte_daniel.zaubernina.ui.parent.EinstellungenBildschirm
 import de.korte_daniel.zaubernina.ui.parent.Elternschloss
@@ -99,6 +101,27 @@ private fun Zaubernina() {
     // Der aktive Benutzer und seine Reise. Solange die Ablage noch lädt oder niemand
     // gewählt ist, bleibt die App auf dem Startbildschirm.
     val aktiver = aktiverId?.let { zustand.daten(it) }
+
+    // ───────── Zeitlimit ─────────
+    // Gezählt wird nur, während ein Kind angemeldet ist und in seinem Teil der App
+    // steckt — Startbildschirm, Rechenschloss und Elternbereich zählen nicht. Der
+    // Zehn-Sekunden-Takt hält die Schreiblast klein; mehr als zehn Sekunden können
+    // beim Beenden also nicht verloren gehen.
+    val zaehltGerade = aktiver != null &&
+        ansicht !is Ansicht.Start && ansicht !is Ansicht.Schloss && ansicht !is Ansicht.Einstellungen
+    val lebenszyklus = androidx.compose.ui.platform.LocalLifecycleOwner.current
+    LaunchedEffect(aktiverId, zaehltGerade) {
+        if (!zaehltGerade) return@LaunchedEffect
+        val id = aktiverId ?: return@LaunchedEffect
+        while (true) {
+            kotlinx.coroutines.delay(10_000)
+            // Im Hintergrund (Home-Taste, Bildschirm aus) steht die Uhr.
+            if (lebenszyklus.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.RESUMED)) {
+                speicher.zaehleUebungszeit(id, 10)
+            }
+        }
+    }
+    val limitErreicht = aktiver != null && zeitVorbei(aktiver.limitMinuten, aktiver.heuteSekunden)
     val woerter = aktiver?.let { woerterFuer(it.paket, it.eigeneWoerter) } ?: emptyList()
     // Die Level tragen das Wort gleich in der gewünschten Schreibweise — Reise, Üben
     // und Jubel zeigen es dann überall gleich. Gezählt wird nur die Levelnummer, der
@@ -114,7 +137,20 @@ private fun Zaubernina() {
                 .drawBehind { drawRect(farben.hintergrundPinsel(size)) },
         ) {
             Box(modifier = Modifier.fillMaxSize().systemBarsPadding()) {
-                when (val jetzt = ansicht) {
+                val gesperrt = limitErreicht && aktiver != null &&
+                    ansicht !is Ansicht.Start && ansicht !is Ansicht.Schloss && ansicht !is Ansicht.Einstellungen
+                if (gesperrt) {
+                    ZeitVorbeiBildschirm(
+                        name = aktiver!!.benutzer.name,
+                        avatar = aktiver.benutzer.avatar,
+                        onZurKinderwahl = {
+                            aktiverId = null
+                            ansicht = Ansicht.Start
+                        },
+                        onElternbereich = { ansicht = Ansicht.Schloss },
+                        vorleser = vorleser,
+                    )
+                } else when (val jetzt = ansicht) {
                     is Ansicht.Start -> StartBildschirm(
                         benutzer = zustand.benutzer,
                         onWaehlen = { id ->
@@ -283,6 +319,7 @@ private fun Zaubernina() {
                                 onPaketWechsel = { neu -> bereich.launch { speicher.setzePaket(aktiver.benutzer.id, neu) } },
                                 onKlasseWechsel = { neu -> bereich.launch { speicher.setzeKlasse(aktiver.benutzer.id, neu) } },
                                 onKleinschreibungWechsel = { neu -> bereich.launch { speicher.setzeKleinschreibung(aktiver.benutzer.id, neu) } },
+                                onZeitlimitWechsel = { neu -> bereich.launch { speicher.setzeZeitlimit(aktiver.benutzer.id, neu) } },
                                 onWortHinzu = { wort ->
                                     bereich.launch { speicher.setzeEigeneWoerter(aktiver.benutzer.id, aktiver.eigeneWoerter + wort) }
                                 },
