@@ -29,10 +29,23 @@ class ZeitlimitTest {
     }
 
     @Test
-    fun `die Stufen beginnen mit Aus und steigen an`() {
-        assertEquals(0, ZEITLIMIT_STUFEN_MINUTEN.first())
-        assertEquals(ZEITLIMIT_STUFEN_MINUTEN.sorted(), ZEITLIMIT_STUFEN_MINUTEN)
+    fun `die Eingabe wird streng geprueft`() {
+        assertEquals(15, bereinigeZeitlimit("15"))
+        assertEquals(15, bereinigeZeitlimit(" 15 "))
+        assertEquals(1, bereinigeZeitlimit("1"))
+        assertEquals(240, bereinigeZeitlimit("240"))
+        assertEquals(null, bereinigeZeitlimit(""))
+        assertEquals(null, bereinigeZeitlimit("0"))
+        assertEquals(null, bereinigeZeitlimit("241"))
+        assertEquals(null, bereinigeZeitlimit("-5"))
+        assertEquals(null, bereinigeZeitlimit("abc"))
+        assertEquals(null, bereinigeZeitlimit("1,5"))
+    }
+
+    @Test
+    fun `der Name nennt Minuten in richtiger Zahl`() {
         assertEquals("Kein Limit", zeitlimitName(0))
+        assertEquals("1 Minute am Tag", zeitlimitName(1))
         assertEquals("15 Minuten am Tag", zeitlimitName(15))
     }
 }

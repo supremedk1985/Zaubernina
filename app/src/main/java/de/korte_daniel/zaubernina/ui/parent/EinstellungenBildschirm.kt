@@ -35,8 +35,8 @@ import de.korte_daniel.zaubernina.data.BenutzerDaten
 import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Klasse
 import de.korte_daniel.zaubernina.domain.Paket
-import de.korte_daniel.zaubernina.domain.ZEITLIMIT_STUFEN_MINUTEN
 import de.korte_daniel.zaubernina.domain.bereinigeWort
+import de.korte_daniel.zaubernina.domain.bereinigeZeitlimit
 import de.korte_daniel.zaubernina.domain.geuebteMinuten
 import de.korte_daniel.zaubernina.domain.zeitlimitName
 import de.korte_daniel.zaubernina.domain.woerterFuer
@@ -82,6 +82,8 @@ fun EinstellungenBildschirm(
     var neuerAvatar by remember { mutableStateOf(Avatar.MOND) }
     var neuesWort by remember { mutableStateOf("") }
     var wortFehler by remember { mutableStateOf(false) }
+    var limitEingabe by remember { mutableStateOf("") }
+    var limitFehler by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -146,22 +148,79 @@ fun EinstellungenBildschirm(
         // ───────── Zeitlimit ─────────
         Abschnitt("ZEITLIMIT", farben.schriftSchwach)
         ZauberText(
-            text = "${aktiverBenutzer.benutzer.name} hat heute " +
-                "${geuebteMinuten(aktiverBenutzer.heuteSekunden)} Minuten geübt. " +
-                "Ist das Limit erreicht, verabschiedet sich die App freundlich bis morgen.",
+            text = "Minuten am Tag, 1 bis 240 — leer lassen heißt: kein Limit. " +
+                "${aktiverBenutzer.benutzer.name} hat heute " +
+                "${geuebteMinuten(aktiverBenutzer.heuteSekunden)} Minuten geübt.",
             groesse = 13.sp,
             farbe = farben.schriftSchwach,
             modifier = Modifier.padding(bottom = 8.dp),
         )
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            ZEITLIMIT_STUFEN_MINUTEN.forEach { minuten ->
-                Wahlzeile(
-                    titel = zeitlimitName(minuten),
-                    beschreibung = if (minuten == 0) "Üben ohne Uhr" else "Danach ist für heute Schluss",
-                    gewaehlt = minuten == aktiverBenutzer.limitMinuten,
-                    onClick = { onZeitlimitWechsel(minuten) },
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                .background(farben.flaeche)
+                .padding(horizontal = 14.dp, vertical = 9.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ZauberText(
+                text = "Aktuell: ${zeitlimitName(aktiverBenutzer.limitMinuten)}",
+                groesse = 15.sp,
+                farbe = farben.schrift,
+                modifier = Modifier.weight(1f),
+            )
+            if (aktiverBenutzer.limitMinuten > 0) {
+                ZauberText(
+                    text = "aufheben",
+                    groesse = 13.sp,
+                    farbe = Color(0xFFE06A6A),
+                    modifier = Modifier.clickable {
+                        limitEingabe = ""
+                        onZeitlimitWechsel(0)
+                    },
                 )
             }
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.padding(top = 8.dp),
+        ) {
+            Eingabefeld(
+                wert = limitEingabe,
+                hinweis = "Minuten, z. B. 20 …",
+                onWert = { neu ->
+                    // Nur Ziffern, drei Stellen reichen für 240.
+                    limitEingabe = neu.filter { it.isDigit() }.take(3)
+                    limitFehler = false
+                },
+                modifier = Modifier.weight(1f),
+            )
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(farben.ecke * 0.7f))
+                    .background(farben.akzent)
+                    .clickable {
+                        val minuten = bereinigeZeitlimit(limitEingabe)
+                        if (minuten != null) {
+                            onZeitlimitWechsel(minuten)
+                            limitEingabe = ""
+                            limitFehler = false
+                        } else {
+                            limitFehler = true
+                        }
+                    }
+                    .padding(horizontal = 18.dp, vertical = 12.dp),
+            ) {
+                ZauberText("Setzen", 15.sp, farben.aufAkzent, FontWeight.SemiBold)
+            }
+        }
+        if (limitFehler) {
+            ZauberText(
+                text = "Bitte eine Zahl von 1 bis 240 eingeben.",
+                groesse = 13.sp,
+                farbe = Color(0xFFE06A6A),
+                modifier = Modifier.padding(top = 6.dp),
+            )
         }
 
         // ───────── Eigene Wörter ─────────

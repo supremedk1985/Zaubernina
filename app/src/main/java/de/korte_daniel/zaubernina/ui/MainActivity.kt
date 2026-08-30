@@ -107,7 +107,11 @@ private fun Zaubernina() {
     // steckt — Startbildschirm, Rechenschloss und Elternbereich zählen nicht. Der
     // Zehn-Sekunden-Takt hält die Schreiblast klein; mehr als zehn Sekunden können
     // beim Beenden also nicht verloren gehen.
-    val zaehltGerade = aktiver != null &&
+    // Auf dem Für-heute-ist-Schluss-Bildschirm steht die Uhr AUCH — sonst zählt eine
+    // offen liegende App munter weiter und der Elternbereich behauptet Übungszeit,
+    // die nie stattfand (so gesehen beim Testen: „91 Minuten geübt").
+    val limitErreicht = aktiver != null && zeitVorbei(aktiver.limitMinuten, aktiver.heuteSekunden)
+    val zaehltGerade = aktiver != null && !limitErreicht &&
         ansicht !is Ansicht.Start && ansicht !is Ansicht.Schloss && ansicht !is Ansicht.Einstellungen
     val lebenszyklus = androidx.compose.ui.platform.LocalLifecycleOwner.current
     LaunchedEffect(aktiverId, zaehltGerade) {
@@ -121,7 +125,6 @@ private fun Zaubernina() {
             }
         }
     }
-    val limitErreicht = aktiver != null && zeitVorbei(aktiver.limitMinuten, aktiver.heuteSekunden)
     val woerter = aktiver?.let { woerterFuer(it.paket, it.eigeneWoerter) } ?: emptyList()
     // Die Level tragen das Wort gleich in der gewünschten Schreibweise — Reise, Üben
     // und Jubel zeigen es dann überall gleich. Gezählt wird nur die Levelnummer, der
