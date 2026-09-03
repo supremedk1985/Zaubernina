@@ -10,6 +10,8 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import de.korte_daniel.zaubernina.domain.Avatar
 import de.korte_daniel.zaubernina.domain.Benutzer
+import de.korte_daniel.zaubernina.domain.Fremdsprache
+import de.korte_daniel.zaubernina.domain.Spiel
 import de.korte_daniel.zaubernina.domain.Klasse
 import de.korte_daniel.zaubernina.domain.Paket
 import de.korte_daniel.zaubernina.domain.ALPHABET
@@ -54,6 +56,19 @@ data class BenutzerDaten(
     /** Wie oft das ganze Alphabet schon durchgeschrieben wurde. */
     val alphabetRunden: Int = 0,
     val staende: Map<Paket, Spielstand> = emptyMap(),
+    // ───── seit 0.2: die Unterspiele ─────
+    /** Richtige Aufgaben je Spiel (Hören, Lesen, Sprachen) — alle [AUFGABEN_JE_STERN] ein Stern. */
+    val spielRichtig: Map<Spiel, Int> = emptyMap(),
+    /** Fehler je Aufgabe, Schlüssel „SPIEL/aufgabe" — der Einblick der Eltern: was hakt. */
+    val spielFehler: Map<String, Int> = emptyMap(),
+    /** Zu Ende vorgelesene Geschichten und die Minuten dabei. */
+    val geschichtenGelesen: Int = 0,
+    val vorleseMinuten: Int = 0,
+    /** Wörter, bei denen beim Vorlesen die Hilfe angetippt wurde, mit Häufigkeit. */
+    val wortHilfen: Map<String, Int> = emptyMap(),
+    val sprache: Fremdsprache = Fremdsprache.ENGLISCH,
+    val silbenFaerbung: Boolean = true,
+    val lieblingstier: Tier = Tier.PINGUIN,
 ) {
     fun stand(paket: Paket): Spielstand = staende[paket] ?: Spielstand()
     val aktuellerStand: Spielstand get() = stand(paket)
@@ -98,6 +113,28 @@ private fun kAlphabetIndex(id: Int) = intPreferencesKey("u${id}_alphabet_index")
 private fun kAlphabetRunden(id: Int) = intPreferencesKey("u${id}_alphabet_runden")
 private fun kGeschafft(id: Int, paket: Paket) = intPreferencesKey("u${id}_${paket.name}_geschafft")
 private fun kZahlen(id: Int, paket: Paket) = intPreferencesKey("u${id}_${paket.name}_zahlen")
+// seit 0.2
+private fun kSpielRichtig(id: Int, spiel: Spiel) = intPreferencesKey("u${id}_spiel_${spiel.name}_richtig")
+private fun kSpielFehler(id: Int) = stringPreferencesKey("u${id}_spiel_fehler")
+private fun kGeschichten(id: Int) = intPreferencesKey("u${id}_geschichten")
+private fun kVorleseMinuten(id: Int) = intPreferencesKey("u${id}_vorlese_minuten")
+private fun kWortHilfen(id: Int) = stringPreferencesKey("u${id}_wort_hilfen")
+private fun kSprache(id: Int) = stringPreferencesKey("u${id}_sprache")
+private fun kSilben(id: Int) = booleanPreferencesKey("u${id}_silben_faerbung")
+private fun kTier(id: Int) = stringPreferencesKey("u${id}_lieblingstier")
+
+/**
+ * Eine Zählkarte als Text: „wort=3;haus=1". DataStore kennt keine Tabellen; Schlüssel dürfen
+ * deshalb weder ; noch = enthalten — die Aufrufer geben nur Wörter und Enum-Namen hinein.
+ */
+private fun kodiere(karte: Map<String, Int>): String =
+    karte.entries.filter { it.key.isNotBlank() }.joinToString(";") { "${it.key.replace(';', ' ').replace('=', ' ')}=${it.value}" }
+
+private fun dekodiere(text: String?): Map<String, Int> =
+    (text ?: "").split(";").mapNotNull { eintrag ->
+        val i = eintrag.lastIndexOf('=')
+        if (i <= 0) null else eintrag.substring(0, i).takeIf { it.isNotBlank() }?.let { it to (eintrag.substring(i + 1).toIntOrNull() ?: return@mapNotNull null) }
+    }.toMap()
 
 // Die Schlüssel der Ein-Benutzer-Fassung — nur noch für die Wanderung beim ersten Start.
 private val ALT_GESCHAFFT = intPreferencesKey("geschaffte_level")
@@ -137,6 +174,14 @@ class FortschrittSpeicher(private val context: Context) {
                             zahlen = p[kZahlen(id, paket)] ?: 0,
                         )
                     },
+                    spielRichtig = Spiel.entries.associateWith { p[kSpielRichtig(id, it)] ?: 0 },
+                    spielFehler = dekodiere(p[kSpielFehler(id)]),
+                    geschichtenGelesen = p[kGeschichten(id)] ?: 0,
+                    vorleseMinuten = p[kVorleseMinuten(id)] ?: 0,
+                    wortHilfen = dekodiere(p[kWortHilfen(id)]),
+                    sprache = lese(p[kSprache(id)], Fremdsprache.ENGLISCH),
+                    silbenFaerbung = p[kSilben(id)] ?: true,
+                    lieblingstier = lese(p[kTier(id)], Tier.PINGUIN),
                 )
             },
             thema = lese(p[SCHLUESSEL_THEMA], Thema.NACHTHIMMEL),
@@ -208,7 +253,59 @@ class FortschrittSpeicher(private val context: Context) {
             Paket.entries.forEach { paket ->
                 p.remove(kGeschafft(id, paket)); p.remove(kZahlen(id, paket))
             }
+            entferneSpielstandNeu(p, id)
+            p.remove(kSprache(id)); p.remove(kSilben(id)); p.remove(kTier(id))
         }
+    }
+
+    private fun entferneSpielstandNeu(p: androidx.datastore.preferences.core.MutablePreferences, id: Int) {
+        Spiel.entries.forEach { p.remove(kSpielRichtig(id, it)) }
+        p.remove(kSpielFehler(id)); p.remove(kGeschichten(id)); p.remove(kVorleseMinuten(id)); p.remove(kWortHilfen(id))
+    }
+
+    // ───────── Unterspiele (seit 0.2) ─────────
+
+    /** Eine richtige Aufgabe in [spiel]. Alle [AUFGABEN_JE_STERN] gibt es einen Stern. */
+    suspend fun spielRichtig(benutzerId: Int, spiel: Spiel) {
+        context.speicher.edit { p ->
+            val neu = (p[kSpielRichtig(benutzerId, spiel)] ?: 0) + 1
+            p[kSpielRichtig(benutzerId, spiel)] = neu
+            if (neu % AUFGABEN_JE_STERN == 0) p[kSterne(benutzerId)] = (p[kSterne(benutzerId)] ?: 0) + 1
+        }
+    }
+
+    /** Ein Fehler bei [aufgabe] in [spiel] — nur für den Einblick der Eltern, das Kind sieht nichts. */
+    suspend fun spielFehler(benutzerId: Int, spiel: Spiel, aufgabe: String) {
+        context.speicher.edit { p ->
+            val karte = dekodiere(p[kSpielFehler(benutzerId)]).toMutableMap()
+            val schluessel = "${spiel.name}/$aufgabe"
+            karte[schluessel] = (karte[schluessel] ?: 0) + 1
+            p[kSpielFehler(benutzerId)] = kodiere(karte)
+        }
+    }
+
+    /** Eine Geschichte zu Ende vorgelesen: ein Stern, Minuten und Hilfe-Wörter gemerkt. */
+    suspend fun geschichteGelesen(benutzerId: Int, minuten: Int, hilfen: Map<String, Int>) {
+        context.speicher.edit { p ->
+            p[kGeschichten(benutzerId)] = (p[kGeschichten(benutzerId)] ?: 0) + 1
+            p[kVorleseMinuten(benutzerId)] = (p[kVorleseMinuten(benutzerId)] ?: 0) + minuten
+            p[kSterne(benutzerId)] = (p[kSterne(benutzerId)] ?: 0) + 1
+            val karte = dekodiere(p[kWortHilfen(benutzerId)]).toMutableMap()
+            hilfen.forEach { (wort, n) -> karte[wort] = (karte[wort] ?: 0) + n }
+            p[kWortHilfen(benutzerId)] = kodiere(karte)
+        }
+    }
+
+    suspend fun setzeSprache(benutzerId: Int, sprache: Fremdsprache) {
+        context.speicher.edit { it[kSprache(benutzerId)] = sprache.name }
+    }
+
+    suspend fun setzeSilbenFaerbung(benutzerId: Int, an: Boolean) {
+        context.speicher.edit { it[kSilben(benutzerId)] = an }
+    }
+
+    suspend fun setzeLieblingstier(benutzerId: Int, tier: Tier) {
+        context.speicher.edit { it[kTier(benutzerId)] = tier.name }
     }
 
     // ───────── Spielstand ─────────
@@ -317,6 +414,7 @@ class FortschrittSpeicher(private val context: Context) {
                 p.remove(kGeschafft(benutzerId, paket))
                 p.remove(kZahlen(benutzerId, paket))
             }
+            entferneSpielstandNeu(p, benutzerId)
         }
     }
 }

@@ -21,7 +21,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.platform.LocalContext
 import de.korte_daniel.zaubernina.data.FortschrittSpeicher
+import de.korte_daniel.zaubernina.data.GESCHICHTEN
 import de.korte_daniel.zaubernina.data.Zustand
+import de.korte_daniel.zaubernina.domain.Spiel
+import de.korte_daniel.zaubernina.ui.geschichte.GeschichteWahlBildschirm
+import de.korte_daniel.zaubernina.ui.geschichte.VorleseBildschirm
+import de.korte_daniel.zaubernina.ui.hub.BaldBildschirm
+import de.korte_daniel.zaubernina.ui.hub.HubBildschirm
+import de.korte_daniel.zaubernina.ui.theme.LocalMasse
+import de.korte_daniel.zaubernina.ui.theme.rememberMasse
 import de.korte_daniel.zaubernina.domain.ALPHABET
 import de.korte_daniel.zaubernina.domain.alphabetBuchstabe
 import de.korte_daniel.zaubernina.domain.alphabetRundeVoll
@@ -62,6 +70,17 @@ class MainActivity : ComponentActivity() {
 private sealed interface Ansicht {
     /** Wer übt heute? Immer der erste Bildschirm — Daniels Vorgabe. */
     data object Start : Ansicht
+
+    /** Die Startseite des gewählten Kindes mit den Spiel-Kacheln (seit 0.2). */
+    data object Hub : Ansicht
+
+    /** Vorlesegeschichte: erst die Zahnräder, dann das Buch. */
+    data object GeschichteWahl : Ansicht
+    data class Vorlesen(val geschichteId: String, val laenge: Int) : Ansicht
+
+    /** Ein Spiel, das noch gebaut wird. */
+    data class Bald(val spiel: Spiel) : Ansicht
+
     data object Reise : Ansicht
     data class Ueben(val level: Int) : Ansicht
     data class Geschafft(val level: Int, val neueSterne: Int) : Ansicht
@@ -133,6 +152,7 @@ private fun Zaubernina() {
     val stand = aktiver?.aktuellerStand
 
     ZauberTheme(zustand.thema) {
+      CompositionLocalProvider(LocalMasse provides rememberMasse()) {
         val farben = ZauberTheme.farben
         Box(
             modifier = Modifier
@@ -158,9 +178,71 @@ private fun Zaubernina() {
                         benutzer = zustand.benutzer,
                         onWaehlen = { id ->
                             aktiverId = id
-                            ansicht = Ansicht.Reise
+                            ansicht = Ansicht.Hub
                         },
                     )
+
+                    is Ansicht.Hub -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            HubBildschirm(
+                                kind = aktiver,
+                                vorleser = vorleser,
+                                onSpiel = { spiel ->
+                                    ansicht = when (spiel) {
+                                        Spiel.SCHREIBEN -> Ansicht.Reise
+                                        Spiel.RECHNEN -> Ansicht.Rechnen
+                                        Spiel.GESCHICHTE -> Ansicht.GeschichteWahl
+                                        Spiel.HOEREN, Spiel.LESEN, Spiel.SPRACHEN -> Ansicht.Bald(spiel)
+                                    }
+                                },
+                                onKindWechseln = {
+                                    aktiverId = null
+                                    ansicht = Ansicht.Start
+                                },
+                                onElternbereich = { ansicht = Ansicht.Schloss },
+                            )
+                        }
+                    }
+
+                    is Ansicht.Bald -> BaldBildschirm(spiel = jetzt.spiel, onZurueck = { ansicht = Ansicht.Hub })
+
+                    is Ansicht.GeschichteWahl -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            GeschichteWahlBildschirm(
+                                lieblingstier = aktiver.lieblingstier,
+                                vorleser = vorleser,
+                                onStart = { geschichte, laenge ->
+                                    bereich.launch { speicher.setzeLieblingstier(aktiver.benutzer.id, geschichte.tier) }
+                                    ansicht = Ansicht.Vorlesen(geschichte.id, laenge)
+                                },
+                                onZurueck = { ansicht = Ansicht.Hub },
+                            )
+                        }
+                    }
+
+                    is Ansicht.Vorlesen -> {
+                        val geschichte = GESCHICHTEN.firstOrNull { it.id == jetzt.geschichteId }
+                        if (aktiver == null || geschichte == null) {
+                            ansicht = Ansicht.Hub
+                        } else {
+                            VorleseBildschirm(
+                                geschichte = geschichte,
+                                laenge = jetzt.laenge,
+                                leserName = aktiver.benutzer.name,
+                                silbenFaerben = aktiver.silbenFaerbung,
+                                vorleser = vorleser,
+                                onZurueck = { ansicht = Ansicht.GeschichteWahl },
+                                onFertig = { minuten, hilfen ->
+                                    bereich.launch { speicher.geschichteGelesen(aktiver.benutzer.id, minuten, hilfen) }
+                                    ansicht = Ansicht.Hub
+                                },
+                            )
+                        }
+                    }
 
                     is Ansicht.Reise -> {
                         if (aktiver == null || stand == null) {
@@ -180,10 +262,9 @@ private fun Zaubernina() {
                                 onAlphabet = { ansicht = Ansicht.Alphabet },
                                 onElternbereich = { ansicht = Ansicht.Schloss },
                                 onRechnen = { ansicht = Ansicht.Rechnen },
-                                onBenutzerWechsel = {
-                                    aktiverId = null
-                                    ansicht = Ansicht.Start
-                                },
+                                // Seit 0.2 führt der Weg zurück auf die Startseite des Kindes,
+                                // nicht mehr zur Kinderwahl — dort kann man weiter wechseln.
+                                onBenutzerWechsel = { ansicht = Ansicht.Hub },
                             )
                         }
                     }
@@ -286,7 +367,7 @@ private fun Zaubernina() {
                                 genauigkeit = zustand.genauigkeit,
                                 richtigBisher = aktiver.rechenRichtig,
                                 onRichtig = { bereich.launch { speicher.rechenaufgabeRichtig(aktiver.benutzer.id) } },
-                                onZurueck = { ansicht = Ansicht.Reise },
+                                onZurueck = { ansicht = Ansicht.Hub },
                             )
                         }
                     }
@@ -304,7 +385,7 @@ private fun Zaubernina() {
 
                     is Ansicht.Schloss -> Elternschloss(
                         onGeoeffnet = { ansicht = Ansicht.Einstellungen },
-                        onAbbrechen = { ansicht = Ansicht.Reise },
+                        onAbbrechen = { ansicht = Ansicht.Hub },
                     )
 
                     is Ansicht.Einstellungen -> {
@@ -342,12 +423,13 @@ private fun Zaubernina() {
                                 onFortschrittZuruecksetzen = {
                                     bereich.launch { speicher.fortschrittZuruecksetzen(aktiver.benutzer.id) }
                                 },
-                                onSchliessen = { ansicht = Ansicht.Reise },
+                                onSchliessen = { ansicht = Ansicht.Hub },
                             )
                         }
                     }
                 }
             }
         }
+      }
     }
 }

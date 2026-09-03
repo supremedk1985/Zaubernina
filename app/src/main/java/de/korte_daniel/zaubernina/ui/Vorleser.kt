@@ -22,8 +22,9 @@ import java.util.Locale
 class Vorleser(context: Context) {
 
     private var bereit = false
-    private var gemerkt: String? = null
+    private var gemerkt: Pair<String, Locale>? = null
     private var stimme: TextToSpeech? = null
+    private var aktuelleSprache: Locale = Locale.GERMAN
 
     init {
         stimme = TextToSpeech(context) { status ->
@@ -35,19 +36,36 @@ class Vorleser(context: Context) {
                 // Etwas langsamer als Erwachsenentempo: die Zuhörerin ist fünf.
                 s.setSpeechRate(0.85f)
                 bereit = true
-                gemerkt?.let { sprich(it) }
+                gemerkt?.let { (text, sprache) -> sprich(text, sprache) }
                 gemerkt = null
             }
         }
     }
 
-    /** Spricht [text] sofort und bricht dafür ab, was gerade noch gesprochen wird. */
-    fun sprich(text: String) {
-        if (bereit) {
-            stimme?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "zaubernina")
+    /**
+     * Spricht [text] sofort und bricht dafür ab, was gerade noch gesprochen wird — in
+     * [sprache] (Vorgabe Deutsch). Fehlt die Sprache auf dem Gerät, spricht die deutsche
+     * Stimme den Text; das klingt schief, ist aber besser als Stille (Sprachen-Spiel).
+     */
+    fun sprich(text: String, sprache: Locale = Locale.GERMAN) {
+        val s = stimme
+        if (bereit && s != null) {
+            if (sprache != aktuelleSprache) {
+                val ergebnis = s.setLanguage(sprache)
+                aktuelleSprache = if (ergebnis >= TextToSpeech.LANG_AVAILABLE) sprache else {
+                    s.setLanguage(Locale.GERMAN); Locale.GERMAN
+                }
+            }
+            s.speak(text, TextToSpeech.QUEUE_FLUSH, null, "zaubernina")
         } else {
-            gemerkt = text
+            gemerkt = text to sprache
         }
+    }
+
+    /** Ob das Gerät eine Stimme für [sprache] hat — der Elternbereich zeigt das an. */
+    fun kannSprechen(sprache: Locale): Boolean {
+        val s = stimme ?: return false
+        return bereit && s.isLanguageAvailable(sprache) >= TextToSpeech.LANG_AVAILABLE
     }
 
     fun schliessen() {

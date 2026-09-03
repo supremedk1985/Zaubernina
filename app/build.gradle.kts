@@ -15,8 +15,8 @@ android {
         applicationId = "de.korte_daniel.zaubernina"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1"
+        versionCode = 2
+        versionName = "0.2"
     }
 
     buildTypes {
@@ -93,6 +93,21 @@ dependencies {
 // Debug-Build: der ist rund siebenmal so groß und nur für den Emulator gedacht.
 // Auf fremden Rechnern tut die Aufgabe nichts.
 val nexusWebroot = file("/opt/stacks/web/html")
+
+// Auf nexus: kein Build, solange der Android-Emulator läuft (Regel aus CurruBike, nach dem
+// Vorfall vom 03.09.2026: Build neben Emulator hungerte den Container aus, das Haus-DNS stand).
+// pgrep -x auf den Prozessnamen, NICHT -f: das träfe die eigene Shell.
+gradle.taskGraph.whenReady {
+    if (nexusWebroot.isDirectory) {
+        val emulatorLaeuft = runCatching {
+            ProcessBuilder("pgrep", "-x", "qemu-system-x86").start().waitFor() == 0
+        }.getOrDefault(false)
+        if (emulatorLaeuft) {
+            throw GradleException("ABBRUCH: Der Android-Emulator läuft. Erst 'emulator-currubike stop', dann bauen.")
+        }
+    }
+}
+
 val veroeffentlicheApk = tasks.register<Copy>("veroeffentlicheApk") {
     onlyIf { nexusWebroot.isDirectory }
     from(layout.buildDirectory.file("outputs/apk/minified/app-minified.apk"))
