@@ -75,6 +75,8 @@ fun EinstellungenBildschirm(
     onFortschrittZuruecksetzen: () -> Unit,
     onSchliessen: () -> Unit,
     modifier: Modifier = Modifier,
+    onSilbenFaerbungWechsel: (Boolean) -> Unit = {},
+    vorleser: de.korte_daniel.zaubernina.ui.Vorleser? = null,
 ) {
     val farben = ZauberTheme.farben
     var loeschenBestaetigen by remember { mutableStateOf(false) }
@@ -290,7 +292,14 @@ fun EinstellungenBildschirm(
         }
 
         // ───────── Rechnen ─────────
-        Abschnitt("RECHNEN", farben.schriftSchwach)
+        Abschnitt("KLASSENSTUFE", farben.schriftSchwach)
+        ZauberText(
+            text = "Bestimmt die Rechenaufgaben UND welche Spiele auf der Startseite stehen: " +
+                "Vorschule hört Anlaute und zählt, 1. und 2. Klasse lesen Silben, rechnen mit Zahlenstrahl und lernen Sprachen.",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Klasse.entries.forEach { klasse ->
                 Wahlzeile(
@@ -423,6 +432,40 @@ fun EinstellungenBildschirm(
         }
 
         // ───────── Fortschritt ─────────
+        // ───────── Lesen und Vorlesen ─────────
+        Abschnitt("LESEN", farben.schriftSchwach)
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Wahlzeile(
+                titel = "Silben zweifarbig",
+                beschreibung = "Wie in der Fibel: Pin-gu-in in Wechselfarbe - hilft Leseanfängern",
+                gewaehlt = aktiverBenutzer.silbenFaerbung,
+                onClick = { onSilbenFaerbungWechsel(true) },
+            )
+            Wahlzeile(
+                titel = "Einfarbig",
+                beschreibung = "Wenn das Kind flüssig liest",
+                gewaehlt = !aktiverBenutzer.silbenFaerbung,
+                onClick = { onSilbenFaerbungWechsel(false) },
+            )
+        }
+
+        // ───────── Sprachen: hat das Gerät die Stimmen? ─────────
+        Abschnitt("SPRACHEN", farben.schriftSchwach)
+        val stimmen = de.korte_daniel.zaubernina.domain.Fremdsprache.entries.map { s ->
+            val da = vorleser?.kannSprechen(java.util.Locale.forLanguageTag(s.sprachkennung)) == true
+            "${s.anzeigename}: ${if (da) "Stimme vorhanden" else "keine Stimme auf diesem Gerät"}"
+        }
+        ZauberText(
+            text = stimmen.joinToString(" · ") + ". Fehlt eine Stimme, spricht die deutsche - das klingt schief. " +
+                "Abhilfe: in den Android-Einstellungen unter Sprachausgabe die Sprache herunterladen.",
+            groesse = 13.sp,
+            farbe = farben.schriftSchwach,
+        )
+
+        // ───────── Einblick: was klappt, was hakt ─────────
+        Abschnitt("EINBLICK: ${aktiverBenutzer.benutzer.name.uppercase()}", farben.schriftSchwach)
+        Einblick(aktiverBenutzer)
+
         Abschnitt("FORTSCHRITT VON ${aktiverBenutzer.benutzer.name.uppercase()}", farben.schriftSchwach)
         ZauberText(
             text = "${aktiverBenutzer.aktuellerStand.geschafft} Level im aktuellen Paket · " +
@@ -477,6 +520,65 @@ fun EinstellungenBildschirm(
             farbe = farben.schriftSchwach,
             modifier = Modifier.padding(bottom = 16.dp),
         )
+    }
+}
+
+/**
+ * Der Einblick der Eltern: nicht Punkte, sondern was Mühe macht. Je Spiel die richtigen
+ * Aufgaben und die häufigsten Fehler; beim Vorlesen die Wörter, bei denen die Hilfe
+ * angetippt wurde. Das Kind sieht diese Zahlen nirgends (Leitplanke).
+ */
+@Composable
+private fun Einblick(daten: BenutzerDaten) {
+    val farben = ZauberTheme.farben
+    val spiele = listOf(
+        de.korte_daniel.zaubernina.domain.Spiel.HOEREN to "Hören (Anlaute)",
+        de.korte_daniel.zaubernina.domain.Spiel.LESEN to "Lesen (Silben)",
+        de.korte_daniel.zaubernina.domain.Spiel.SPRACHEN to "Sprachen",
+        de.korte_daniel.zaubernina.domain.Spiel.RECHNEN to "Rechnen",
+    )
+    var etwasDa = false
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        spiele.forEach { (spiel, name) ->
+            val richtig = if (spiel == de.korte_daniel.zaubernina.domain.Spiel.RECHNEN) daten.rechenRichtig else daten.spielRichtig[spiel] ?: 0
+            val fehler = daten.spielFehler.filterKeys { it.startsWith(spiel.name + "/") }
+                .mapKeys { it.key.substringAfter('/').substringAfter(':') }
+                .entries.sortedByDescending { it.value }.take(5)
+            if (richtig == 0 && fehler.isEmpty()) return@forEach
+            etwasDa = true
+            Column {
+                ZauberText("$name: $richtig richtig", 14.sp, farben.schrift, FontWeight.Medium)
+                if (fehler.isNotEmpty()) {
+                    ZauberText(
+                        text = "Schwer: " + fehler.joinToString(", ") { "${it.key} (${it.value}×)" },
+                        groesse = 13.sp,
+                        farbe = farben.schriftSchwach,
+                    )
+                }
+            }
+        }
+        if (daten.geschichtenGelesen > 0 || daten.wortHilfen.isNotEmpty()) {
+            etwasDa = true
+            Column {
+                ZauberText(
+                    text = "Vorlesen: ${daten.geschichtenGelesen} Geschichten, ${daten.vorleseMinuten} Minuten",
+                    groesse = 14.sp,
+                    farbe = farben.schrift,
+                    gewicht = FontWeight.Medium,
+                )
+                val schwer = daten.wortHilfen.entries.sortedByDescending { it.value }.take(8)
+                if (schwer.isNotEmpty()) {
+                    ZauberText(
+                        text = "Hilfe gebraucht bei: " + schwer.joinToString(", ") { "${it.key} (${it.value}×)" },
+                        groesse = 13.sp,
+                        farbe = farben.schriftSchwach,
+                    )
+                }
+            }
+        }
+        if (!etwasDa) {
+            ZauberText("Noch nichts gespielt - hier steht dann, was gut klappt und was Mühe macht.", 13.sp, farben.schriftSchwach)
+        }
     }
 }
 

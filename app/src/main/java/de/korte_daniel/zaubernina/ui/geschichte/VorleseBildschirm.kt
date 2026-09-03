@@ -1,6 +1,10 @@
 package de.korte_daniel.zaubernina.ui.geschichte
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +39,6 @@ import de.korte_daniel.zaubernina.ui.components.EmojiText
 import de.korte_daniel.zaubernina.ui.components.GrosserKnopf
 import de.korte_daniel.zaubernina.ui.components.Kopfzeile
 import de.korte_daniel.zaubernina.ui.components.Sternreihe
-import de.korte_daniel.zaubernina.ui.components.ZurueckKnopf
 import de.korte_daniel.zaubernina.ui.theme.LocalZauberSchrift
 import de.korte_daniel.zaubernina.ui.theme.ZauberMasse
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
@@ -136,7 +139,16 @@ fun VorleseBildschirm(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (seite > 0) {
-                    ZurueckKnopf(onClick = { seite-- })
+                    // Bewusst KEIN zweiter Pfeil wie oben links (der beendet) - eine Seite
+                    // zurück ist ein kleiner Knopf mit Buchsymbol.
+                    Box(
+                        modifier = Modifier
+                            .size(m.dp(64))
+                            .clip(RoundedCornerShape(farben.ecke * 1.4f))
+                            .background(farben.flaeche)
+                            .clickable { seite-- },
+                        contentAlignment = Alignment.Center,
+                    ) { ZauberText("◀", m.sp(20), farben.schriftSchwach) }
                 }
                 GrosserKnopf(
                     text = when {

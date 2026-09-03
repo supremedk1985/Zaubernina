@@ -16,10 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import de.korte_daniel.zaubernina.data.BenutzerDaten
 import de.korte_daniel.zaubernina.ui.components.AvatarBild
+import de.korte_daniel.zaubernina.ui.theme.ZauberMasse
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
 
@@ -35,44 +34,45 @@ fun StartBildschirm(
     modifier: Modifier = Modifier,
 ) {
     val farben = ZauberTheme.farben
+    val m = ZauberMasse.aktuell
 
     Column(
-        modifier = modifier.fillMaxSize().padding(24.dp),
+        modifier = modifier.fillMaxSize().padding(m.dp(24)),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ZauberText(
             text = "Zaubernina",
-            groesse = 34.sp,
+            groesse = m.sp(34),
             farbe = farben.schrift,
             gewicht = FontWeight.Bold,
-            modifier = Modifier.padding(top = 48.dp),
+            modifier = Modifier.padding(top = m.dp(48)),
         )
         ZauberText(
             text = "Wer übt heute?",
-            groesse = 19.sp,
+            groesse = m.sp(19),
             farbe = farben.schriftSchwach,
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = m.dp(10)),
         )
 
         Box(modifier = Modifier.weight(0.35f))
 
         Column(
-            verticalArrangement = Arrangement.spacedBy(22.dp),
+            verticalArrangement = Arrangement.spacedBy(m.dp(22)),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            benutzer.chunked(2).forEach { reihe ->
-                Row(horizontalArrangement = Arrangement.spacedBy(28.dp)) {
+            benutzer.chunked(if (m.weit) 3 else 2).forEach { reihe ->
+                Row(horizontalArrangement = Arrangement.spacedBy(m.dp(28))) {
                     reihe.forEach { daten ->
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .clickable { onWaehlen(daten.benutzer.id) }
-                                .padding(10.dp),
+                                .padding(m.dp(10)),
                         ) {
                             Box(
                                 modifier = Modifier
-                                    .size(110.dp)
+                                    .size(m.dp(110))
                                     .clip(CircleShape)
                                     .background(farben.akzent.copy(alpha = 0.14f)),
                                 contentAlignment = Alignment.Center,
@@ -80,15 +80,15 @@ fun StartBildschirm(
                                 AvatarBild(
                                     avatar = daten.benutzer.avatar,
                                     farbe = farben.akzent,
-                                    modifier = Modifier.size(66.dp),
+                                    modifier = Modifier.size(m.dp(66)),
                                 )
                             }
                             ZauberText(
                                 text = daten.benutzer.name,
-                                groesse = 21.sp,
+                                groesse = m.sp(21),
                                 farbe = farben.schrift,
                                 gewicht = FontWeight.SemiBold,
-                                modifier = Modifier.padding(top = 8.dp),
+                                modifier = Modifier.padding(top = m.dp(8)),
                             )
                         }
                     }

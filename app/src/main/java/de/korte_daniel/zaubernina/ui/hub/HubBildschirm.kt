@@ -25,7 +25,6 @@ import de.korte_daniel.zaubernina.domain.spieleFuer
 import de.korte_daniel.zaubernina.ui.Vorleser
 import de.korte_daniel.zaubernina.ui.components.AvatarBild
 import de.korte_daniel.zaubernina.ui.components.EmojiText
-import de.korte_daniel.zaubernina.ui.components.GrosserKnopf
 import de.korte_daniel.zaubernina.ui.components.SymbolKachel
 import de.korte_daniel.zaubernina.ui.theme.ZauberMasse
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
@@ -113,22 +112,5 @@ fun HubBildschirm(
                 }
             }
         }
-    }
-}
-
-/** Platzhalter, solange ein Spiel noch gebaut wird — ehrlich beschriftet statt leer. */
-@Composable
-fun BaldBildschirm(spiel: Spiel, onZurueck: () -> Unit) {
-    val farben = ZauberTheme.farben
-    val m = ZauberMasse.aktuell
-    Column(
-        modifier = Modifier.fillMaxSize().padding(m.dp(24)),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        EmojiText(spiel.symbol, m.sp(72))
-        ZauberText("Das kommt bald!", m.sp(24), farben.schrift, FontWeight.Bold, Modifier.padding(top = m.dp(16)))
-        ZauberText(spiel.beschreibung, m.sp(16), farben.schriftSchwach, modifier = Modifier.padding(top = m.dp(6), bottom = m.dp(28)))
-        GrosserKnopf("Zurück", onZurueck)
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -80,7 +81,7 @@ fun Kopfzeile(
     ) {
         ZurueckKnopf(onClick = onZurueck)
         ZauberText(titel, m.sp(16), farben.schriftSchwach)
-        Box(modifier = Modifier.size(m.dp(48)), contentAlignment = Alignment.Center) { rechts() }
+        Box(modifier = Modifier.widthIn(min = m.dp(48)).height(m.dp(48)), contentAlignment = Alignment.Center) { rechts() }
     }
 }
 

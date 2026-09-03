@@ -36,6 +36,8 @@ import de.korte_daniel.zaubernina.logic.AUFGABEN_JE_STERN
 import de.korte_daniel.zaubernina.logic.Genauigkeit
 import de.korte_daniel.zaubernina.logic.Rechenaufgabe
 import de.korte_daniel.zaubernina.logic.erzeugeRechenaufgabe
+import de.korte_daniel.zaubernina.logic.zerlegeRechenaufgabe
+import de.korte_daniel.zaubernina.ui.Vorleser
 import de.korte_daniel.zaubernina.ui.components.sternPunkte
 import de.korte_daniel.zaubernina.ui.theme.ZauberText
 import de.korte_daniel.zaubernina.ui.theme.ZauberTheme
@@ -57,6 +59,8 @@ fun RechnenBildschirm(
     onRichtig: () -> Unit,
     onZurueck: () -> Unit,
     modifier: Modifier = Modifier,
+    vorleser: Vorleser? = null,
+    onFehler: (String) -> Unit = {},
 ) {
     val farben = ZauberTheme.farben
     var aufgabe by remember { mutableStateOf(erzeugeRechenaufgabe(klasse)) }
@@ -150,6 +154,16 @@ fun RechnenBildschirm(
             }
         } else {
             ZauberText(aufgabe.anzeige, 64.sp, farben.schrift, FontWeight.Bold)
+            // Der Zahlenstrahl (seit 0.2): Mathe fällt Lea schwer - die Startzahl ist immer
+            // markiert, die Sprünge kommen nach dem ersten Fehler, über die Zehn in zwei Bögen.
+            zerlegeRechenaufgabe(aufgabe.anzeige)?.let { schritt ->
+                Zahlenstrahl(
+                    bis = if (klasse == Klasse.KLASSE_1) 10 else 20,
+                    schritt = schritt,
+                    zeigeSpruenge = falschGetippt != null,
+                    modifier = Modifier.fillMaxWidth().padding(top = 18.dp),
+                )
+            }
         }
 
         Box(modifier = Modifier.weight(0.5f))
@@ -182,6 +196,8 @@ fun RechnenBildschirm(
                                 schreiben = true
                             } else {
                                 falschGetippt = wert
+                                onFehler(aufgabe.anzeige.ifEmpty { "Menge ${aufgabe.menge}" })
+                                zerlegeRechenaufgabe(aufgabe.anzeige)?.let { vorleser?.sprich(it.hinweis()) }
                             }
                         },
                     contentAlignment = Alignment.Center,

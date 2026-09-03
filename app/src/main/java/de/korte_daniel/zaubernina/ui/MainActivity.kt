@@ -26,8 +26,14 @@ import de.korte_daniel.zaubernina.data.Zustand
 import de.korte_daniel.zaubernina.domain.Spiel
 import de.korte_daniel.zaubernina.ui.geschichte.GeschichteWahlBildschirm
 import de.korte_daniel.zaubernina.ui.geschichte.VorleseBildschirm
-import de.korte_daniel.zaubernina.ui.hub.BaldBildschirm
+import de.korte_daniel.zaubernina.data.WORTTHEMEN
+import de.korte_daniel.zaubernina.domain.Fremdsprache
+import de.korte_daniel.zaubernina.logic.AnlautQuelle
+import de.korte_daniel.zaubernina.logic.LeseQuelle
+import de.korte_daniel.zaubernina.logic.SprachenQuelle
 import de.korte_daniel.zaubernina.ui.hub.HubBildschirm
+import de.korte_daniel.zaubernina.ui.spiel.AuswahlSpielBildschirm
+import de.korte_daniel.zaubernina.ui.spiel.SprachenStartBildschirm
 import de.korte_daniel.zaubernina.ui.theme.LocalMasse
 import de.korte_daniel.zaubernina.ui.theme.rememberMasse
 import de.korte_daniel.zaubernina.domain.ALPHABET
@@ -78,8 +84,11 @@ private sealed interface Ansicht {
     data object GeschichteWahl : Ansicht
     data class Vorlesen(val geschichteId: String, val laenge: Int) : Ansicht
 
-    /** Ein Spiel, das noch gebaut wird. */
-    data class Bald(val spiel: Spiel) : Ansicht
+    /** Die Auswahl-Spiele: Anlaute hören, Silben lesen, Sprachen. */
+    data object Hoeren : Ansicht
+    data object Lesen : Ansicht
+    data object SprachenWahl : Ansicht
+    data class Sprachen(val sprache: Fremdsprache, val themaKennung: String) : Ansicht
 
     data object Reise : Ansicht
     data class Ueben(val level: Int) : Ansicht
@@ -194,7 +203,9 @@ private fun Zaubernina() {
                                         Spiel.SCHREIBEN -> Ansicht.Reise
                                         Spiel.RECHNEN -> Ansicht.Rechnen
                                         Spiel.GESCHICHTE -> Ansicht.GeschichteWahl
-                                        Spiel.HOEREN, Spiel.LESEN, Spiel.SPRACHEN -> Ansicht.Bald(spiel)
+                                        Spiel.HOEREN -> Ansicht.Hoeren
+                                        Spiel.LESEN -> Ansicht.Lesen
+                                        Spiel.SPRACHEN -> Ansicht.SprachenWahl
                                     }
                                 },
                                 onKindWechseln = {
@@ -206,7 +217,53 @@ private fun Zaubernina() {
                         }
                     }
 
-                    is Ansicht.Bald -> BaldBildschirm(spiel = jetzt.spiel, onZurueck = { ansicht = Ansicht.Hub })
+                    is Ansicht.Hoeren, is Ansicht.Lesen -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            val spiel = if (jetzt is Ansicht.Hoeren) Spiel.HOEREN else Spiel.LESEN
+                            val quelle = remember(spiel) { if (spiel == Spiel.HOEREN) AnlautQuelle() else LeseQuelle() }
+                            AuswahlSpielBildschirm(
+                                quelle = quelle,
+                                richtigBisher = aktiver.spielRichtig[spiel] ?: 0,
+                                vorleser = vorleser,
+                                onRichtig = { bereich.launch { speicher.spielRichtig(aktiver.benutzer.id, spiel) } },
+                                onFehler = { kennung -> bereich.launch { speicher.spielFehler(aktiver.benutzer.id, spiel, kennung) } },
+                                onZurueck = { ansicht = Ansicht.Hub },
+                            )
+                        }
+                    }
+
+                    is Ansicht.SprachenWahl -> {
+                        if (aktiver == null) {
+                            ansicht = Ansicht.Start
+                        } else {
+                            SprachenStartBildschirm(
+                                sprache = aktiver.sprache,
+                                vorleser = vorleser,
+                                onSprache = { neu -> bereich.launch { speicher.setzeSprache(aktiver.benutzer.id, neu) } },
+                                onStart = { sprache, thema -> ansicht = Ansicht.Sprachen(sprache, thema.kennung) },
+                                onZurueck = { ansicht = Ansicht.Hub },
+                            )
+                        }
+                    }
+
+                    is Ansicht.Sprachen -> {
+                        val thema = WORTTHEMEN.firstOrNull { it.kennung == jetzt.themaKennung }
+                        if (aktiver == null || thema == null) {
+                            ansicht = Ansicht.Hub
+                        } else {
+                            val quelle = remember(jetzt) { SprachenQuelle(jetzt.sprache, thema) }
+                            AuswahlSpielBildschirm(
+                                quelle = quelle,
+                                richtigBisher = aktiver.spielRichtig[Spiel.SPRACHEN] ?: 0,
+                                vorleser = vorleser,
+                                onRichtig = { bereich.launch { speicher.spielRichtig(aktiver.benutzer.id, Spiel.SPRACHEN) } },
+                                onFehler = { kennung -> bereich.launch { speicher.spielFehler(aktiver.benutzer.id, Spiel.SPRACHEN, "${jetzt.sprache.name}:$kennung") } },
+                                onZurueck = { ansicht = Ansicht.SprachenWahl },
+                            )
+                        }
+                    }
 
                     is Ansicht.GeschichteWahl -> {
                         if (aktiver == null) {
@@ -368,6 +425,8 @@ private fun Zaubernina() {
                                 richtigBisher = aktiver.rechenRichtig,
                                 onRichtig = { bereich.launch { speicher.rechenaufgabeRichtig(aktiver.benutzer.id) } },
                                 onZurueck = { ansicht = Ansicht.Hub },
+                                vorleser = vorleser,
+                                onFehler = { aufgabe -> bereich.launch { speicher.spielFehler(aktiver.benutzer.id, Spiel.RECHNEN, aufgabe) } },
                             )
                         }
                     }
@@ -423,6 +482,8 @@ private fun Zaubernina() {
                                 onFortschrittZuruecksetzen = {
                                     bereich.launch { speicher.fortschrittZuruecksetzen(aktiver.benutzer.id) }
                                 },
+                                onSilbenFaerbungWechsel = { an -> bereich.launch { speicher.setzeSilbenFaerbung(aktiver.benutzer.id, an) } },
+                                vorleser = vorleser,
                                 onSchliessen = { ansicht = Ansicht.Hub },
                             )
                         }
